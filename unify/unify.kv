@@ -1,5 +1,26 @@
-#:kivy 1.8.0
+#:kivy 1.8
 
-Button:
-    text: 'Hello World'
 
+BoxLayout:
+        orientation: 'vertical'
+        Label:
+                id: "Title"
+                text: "Title"
+                size_hint: 1, .2
+        ScreenManager:
+                id: sm
+                size_hint: 1, .6
+                on_current_screen:
+                        idx = app.screen_names.index('match')
+        GridLayout:
+                cols: 3
+                size_hint: 1, .2
+                Button:
+                        text: "Button 4"
+                        on_release: app.go_screen(0)
+                Button:
+                        text: "Button 5"
+                        on_release: app.go_screen(1)
+                Button:
+                        text: "Button 6"
+                        on_release: app.go_screen(2)

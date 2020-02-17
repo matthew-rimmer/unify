@@ -1,0 +1,105 @@
+#:import utils kivy.utils
+
+<UnifyScreen>
+    BoxLayout:
+        # Main background colour
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#eddff7")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        orientation: "vertical"
+        padding: 10, 15
+
+
+        # Display the user's photos as a carousel
+        GridLayout:
+            rows: 1
+            size_hint: 2, 2
+            pos_hint: {"center_x": 0.5}
+
+            Carousel:
+                direction: 'right'
+                AsyncImage:
+                    source: 'http://placehold.it/480x270.png&text=slide-1.png'
+
+                AsyncImage:
+                    source: 'http://placehold.it/480x270.png&text=slide-2.png'
+
+                AsyncImage:
+                    source: 'http://placehold.it/480x270.png&text=slide-3.png'
+
+
+        # Display the user's name
+        # Retrieve from database
+        Label:
+            text: "Full Name"
+            font_size: 15
+            bold: True
+            color: 0,0,0,1
+            size_hint: 0.5, 0.5
+            pos_hint: {"center_x": 0.5}
+
+
+        # Display the user's introduction
+        # Retrieve from database
+        Label:
+            text: "This is a bit about me."
+            text_size: root.width, None
+            color: 0, 0, 0, 1
+            size: self.texture_size
+            padding: 10, 10
+
+
+        # Display the user's interest tags
+        # Retrieve from database
+        GridLayout:
+            cols: 3
+            spacing: 10
+
+            Button:
+                text: "#Interest 1"
+
+            Button:
+                text: "#Interest 2"
+
+            Button:
+                text: "Interest 3"
+
+            Button:
+                text: "Interest 4"
+
+            Button:
+                text: "Interest 5"
+
+            Button:
+                text: "#Interest 6"
+
+
+        # Display the user's Instagram photos
+        # Instagram API
+        Label:
+            text: "Instagram"
+            color: 0,0,0,1
+            text_size: self.size
+            halign: 'left'
+
+
+        # Display the user's Spotify artists
+        # Spotify API
+        Label:
+            text: "Spotify - Favourite Artists"
+            color: 0,0,0,1
+            text_size: self.size
+            halign: 'left'
+
+
+        # Display the user's LinkedIn url
+        # Retrieve link from database
+        Label:
+            text: "LinkedIn"
+            color: 0,0,0,1
+            text_size: self.size
+            halign: 'left'

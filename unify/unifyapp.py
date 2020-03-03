@@ -3,10 +3,22 @@ from kivy.uix.screenmanager import Screen
 from kivy.animation import Animation
 from kivy.properties import NumericProperty, StringProperty, BooleanProperty
 from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout  
+
+
 from os.path import dirname, join
+from random import sample
+from string import ascii_lowercase
+
+
+class RV(BoxLayout):
+    def populate(self):
+        self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+
 
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
+
 
 class UnifyApp(App):
     """Unify base kivy app
@@ -15,7 +27,6 @@ class UnifyApp(App):
     """
     
     index = NumericProperty(-1)
-    
 
     # Build creates and gets the available screens, loads them from the, 
     # the data/screens folders, sets it to the zero index screen
@@ -36,7 +47,8 @@ class UnifyApp(App):
         self.index = idx # set the current screen index
         screen = self.load_screen(self.index) # build the screen kv form
         sm = self.root.ids.sm 
-        sm.switch_to(screen, direction='left') # switch the screeb
+        sm.switch_to(screen, direction='left') # switch the screen
+        #self.populate()
         
     
     def load_screen(self, index):

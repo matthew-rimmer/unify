@@ -1,8 +1,17 @@
 #:kivy 1.8
+#:import utils kivy.utils
 
 
 BoxLayout:
         orientation: 'vertical'
+        
+        # Main background colour
+        canvas:
+                Color:
+                        rgb: utils.get_color_from_hex("#eddff7")
+                Rectangle:
+                        size: self.size
+                        pos: self.pos      
         Label:
                 id: "Title"
                 text: "Title"
@@ -14,13 +23,13 @@ BoxLayout:
                         idx = app.screen_names.index('match')
         GridLayout:
                 cols: 3
-                size_hint: 1, .2
-                Button:
-                        text: "Button 4"
+                size_hint: 1, .1
+                ImageButton:
+                        source: "icons/profile_icon.png"
                         on_release: app.go_screen(0)
-                Button:
-                        text: "Button 5"
+                ImageButton:
+                        source: "icons/find_icon.png"
                         on_release: app.go_screen(1)
-                Button:
-                        text: "Button 6"
+                ImageButton:
+                        source: "icons/message_icon.png"
                         on_release: app.go_screen(2)

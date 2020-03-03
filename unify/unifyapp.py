@@ -4,9 +4,14 @@ from kivy.animation import Animation
 from kivy.properties import NumericProperty, StringProperty, BooleanProperty
 from kivy.lang import Builder
 from os.path import dirname, join
+from kivy.uix.button import ButtonBehavior
+from kivy.uix.image import Image
 
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
+    
+class ImageButton(ButtonBehavior, Image):
+    pass
 
 class UnifyApp(App):
     """Unify base kivy app

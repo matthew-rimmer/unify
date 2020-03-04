@@ -1,0 +1,33 @@
+UnifyScreen:
+	ScrollView:
+        	BoxLayout:
+           	 #Adding background color and size
+            		canvas:
+	        	orientation: "vertical"
+                	height: 700
+            		padding: 10
+			
+                		Color:
+                    			rgb: utils.get_color_from_hex("#D8BFD8")
+                		Rectangle:
+                    			size: self.size
+                    			pos: self.pos
+				
+
+                        ScrollView:
+                        #scrolling set of images of unmessaged matches
+                        #Database stuff
+                        do_scroll_x: True
+                        do_scroll_y: False
+                        canvas:
+                        orientation: horizontal
+                        height: 200
+                        padding 10
+                		AsyncImage:
+                    		        source:
+
+                		AsyncImage:
+                    			source:
+
+                		AsyncImage:
+                    			source:

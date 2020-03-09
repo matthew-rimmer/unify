@@ -1,0 +1,63 @@
+# Register user
+<Register>
+    FloatLayout:
+        # Main background colour
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#D8BFD8")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    # Request data from user to save to the database (First Name, Surname, Uni Email + Password)
+        GridLayout:
+            cols: 2
+            padding: 20
+            spacing: 20
+            size_hint: 1, 0.5
+            pos_hint: {"top": 0.7}
+
+            # First name field
+            Label:
+                text: "First name:"
+            TextInput:
+                id: firstName
+                multiline: False
+
+            # Surname field
+            Label:
+                text: "Surname:"
+            TextInput:
+                id: surname
+                multiline: False
+
+            # Uni Email field
+            Label:
+                text: "University \n email address:"
+                halign: 'center'
+            TextInput:
+                id: uniEmail
+                multiline: False
+
+            # Password field
+            Label:
+                text: "Password:"
+            TextInput:
+                id: password
+                password: True
+                multiline: False
+
+            RoundedButton:
+                text: "Cancel"
+                size_hint: 1, 0.5
+                on_release:
+                    app.root.current = "initial_screen"
+                    root.manager.transition.direction = 'right'
+
+            RoundedButton:
+                id: regDetails
+                text: "Register"
+                size_hint: 0.5, 1
+                on_release:
+                    app.root.current = "profile_creation"
+                    root.manager.transition.direction = 'left'

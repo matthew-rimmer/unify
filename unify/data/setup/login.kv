@@ -1,0 +1,39 @@
+# User login
+<Login>
+    FloatLayout:
+        # Main background colour
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#D8BFD8")
+            Rectangle:
+                size: self.size
+                pos:  self.pos
+
+    # Email and Password fields
+        BoxLayout:
+            orientation: "vertical"
+            height: 160
+            size_hint_y: None
+
+            pos_hint: {"center_x": 0.5, "top": 0.6}
+            padding: 10
+            spacing: 10
+
+            TextInput:
+                hint_text: "University Email Address"
+                multiline: False
+            TextInput:
+                hint_text: "Password"
+                password: True
+                multiline: False
+            RoundedButton:
+                id: authenticate
+                text: "Sign In"
+                on_release:
+                    app.root.current = "main"
+                    root.manager.transition.direction = 'left'
+            RoundedButton:
+                text: "Cancel"
+                on_release:
+                    app.root.current = "initial_screen"
+                    root.manager.transition.direction = 'right'

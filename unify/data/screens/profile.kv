@@ -1,141 +1,101 @@
+<Profile>
+    ScrollView
+    	BoxLayout:
+	        orientation: "vertical"
+                size_hint_y: None
+                height: dp(600)
+                padding: dp(8)
+
+
+	        # Display the user's photos as a carousel
+                Carousel:
+                	direction: 'right'
+
+                	AsyncImage:
+                    		source: 'http://placehold.it/480x270.png&text=slide-1.png'
+
+                	AsyncImage:
+                    		source: 'http://placehold.it/480x270.png&text=slide-2.png'
+
+                	AsyncImage:
+                    		source: 'http://placehold.it/480x270.png&text=slide-3.png'
+
+
+		# Display the user's name
+                # Retrieve from database
+            	Label:
+                	text: "Full Name"
+                	font_size: dp(15)
+                	bold: True
+                	color: 0,0,0,1
+                	size_hint: 0.5, 0.5
+                	pos_hint: {"center_x": 0.5}
+
+
+               # Display the user's 'About Me' message
+               # Retrieve from database
+            	Label:
+                	text: "This is a bit about me."
+                	text_size: root.width, None
+                	color: 0, 0, 0, 1
+                	size: self.texture_size
+                	padding: dp(10), dp(10)
+
+
+              # Display the user's interest tags
+              # Retrieve from database
+            	GridLayout:
+                	cols: 3
+                	spacing: dp(10)
+                	size_hint: 1, 0.6
+
+                	OutlinedButton:
+                    		text: "#Course"
+
+                	OutlinedButton:
+                    		text: "#Interest 1"
+
+                	OutlinedButton:
+                    		text: "#Interest 2"
+
+                	OutlinedButton:
+                    		text: "#Interest 3"
+
+                	OutlinedButton:
+                    		text: "#Interest 4"
+
+                	OutlinedButton:
+                    		text: "#Interest 5"
+
+
+              # Display the user's Instagram photos
+              # Instagram API
+            	Label:
+                	text: "Instagram"
+                	color: 0,0,0,1
+                	text_size: self.size
+                	halign: 'left'
+
+
+              # Display the user's Spotify artists
+              # Spotify API
+            	Label:
+                	text: "Spotify - Favourite Artists"
+                	color: 0,0,0,1
+                	text_size: self.size
+                	halign: 'left'
+
+
+              # Display the user's LinkedIn url
+              # Retrieve link from database
+            	Label:
+                	text: "LinkedIn"
+                	color: 0,0,0,1
+                	text_size: self.size
+                	halign: 'left'
+
 UnifyScreen:
-	ScrollView:
-        	BoxLayout:
-           	 # Main background colour
-            		canvas:
-                		Color:
-                    			rgb: utils.get_color_from_hex("#D8BFD8")
-                		Rectangle:
-                    			size: self.size
-                    			pos: self.pos
-				
-	        	orientation: "vertical"
-            		size_hint_y: None
-                	height: 700
-            		padding: 10
-			
-			
-			# Display the user's photos as a carousel
-            		Carousel:
-                        	direction: 'right'
-
-                		AsyncImage:
-                    			source: 'http://placehold.it/480x270.png&text=slide-1.png'
-
-                		AsyncImage:
-                    			source: 'http://placehold.it/480x270.png&text=slide-2.png'
-
-                		AsyncImage:
-                    			source: 'http://placehold.it/480x270.png&text=slide-3.png'
-			
-			
-		        # Display the user's name
-                        # Retrieve from database
-                        Label:
-                		text: "Full Name"
-                		font_size: 15
-                		bold: True
-                		color: 0,0,0,1
-                                size_hint: 0.5, 0.5
-                		pos_hint: {"center_x": 0.5}
-			
-			
-		        # Display the user's 'About Me' message
-                        # Retrieve from database
-               		Label:
-                		text: "This is a bit about me."
-                		text_size: root.width, None
-                		color: 0, 0, 0, 1
-                		size: self.texture_size
-                		padding: 10, 10
-			
-			
-		        # Display the user's interest tags
-                        # Retrieve from database
-             		GridLayout:
-                		cols: 3
-                		spacing: 10
-                		size_hint: 1, 0.6
-
-                		OutlinedButton:
-                    			text: "#Course"
-
-                		OutlinedButton:
-                    			text: "#Interest 1"
-
-                		OutlinedButton:
-                    			text: "#Interest 2"
-
-                		OutlinedButton:
-                    			text: "#Interest 3"
-
-                		OutlinedButton:
-                    			text: "#Interest 4"
-
-                		OutlinedButton:
-                    			text: "#Interest 5"
-			
-			
-			# Display the user's Instagram photos
-            	 	# Instagram API
-            		Label:
-                		text: "Instagram"
-                		color: 0,0,0,1
-                		text_size: self.size
-                		halign: 'left'
-			
-			
-			# Display the user's Spotify artists
-            		# Spotify API
-            		Label:
-                		text: "Spotify - Favourite Artists"
-                		color: 0,0,0,1
-                		text_size: self.size
-                		halign: 'left'
+  Profile:
 
 
-            		# Display the user's LinkedIn url
-            		# Retrieve link from database
-            		Label:
-                		text: "LinkedIn"
-                		color: 0,0,0,1
-                		text_size: self.size
-                		halign: 'left'
-				
-				
-# Code for RoundedButton & OutlinedButton adapted from Youtuber 'Samuel Courses'
-# Available at https://www.youtube.com/watch?v=Xv57jB_Xvqo
-<RoundedButton@Button>
-	background_color: (0,0,0,0)
-    	background_normal: ''
-    	back_color: (21, 3, 3, 0.4)
-    	border_radius: [11]
-
-    	canvas.before:
-        	Color:
-            		rgba: self.back_color
-        	RoundedRectangle:
-            		size: self.size
-            		pos: self.pos
-            		radius: self.border_radius
-			
-<OutlinedButton@Button>
-    	background_color: (0,0,0,0)
-    	background_normal: ''
-    	back_color: (0, 0, 128, 0.2)
-    	border_radius: 5
-    	color: (0,0,0,1)
-
-    	canvas.before:
-        	Color:
-            	rgba: self.back_color
-        	Line:                  # pos x, pos y, width, height, radius
-            	rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
-            	width: 0.9
-
-				
-				
-					
-		
-		
-	
+ 

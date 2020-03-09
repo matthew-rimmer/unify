@@ -3,15 +3,59 @@ from kivy.uix.screenmanager import Screen
 from kivy.animation import Animation
 from kivy.properties import NumericProperty, StringProperty, BooleanProperty
 from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout  
+
+
 from os.path import dirname, join
-from kivy.uix.button import ButtonBehavior
+from random import sample
+from string import ascii_lowercase
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
+
+
+# Initial page shown when app is first downloaded
+class Initial(Screen):
+    pass
+
+
+# Login class
+class Login(Screen):
+    pass
+
+
+# Register class
+class Register(Screen):
+    pass
+
+
+# ProfileCreation class
+class ProfileCreation(Screen):
+    pass
+
+
+# Class for the profile, find & message sections
+class MainSections(Screen):
+    pass
+
+
+class RV(BoxLayout):
+    def populate(self):
+        self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+
 
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
     
+    
+# Profile class
+class Profile(Screen):
+    pass
+
+
+# Acts like a button & an image
 class ImageButton(ButtonBehavior, Image):
     pass
+    
 
 class UnifyApp(App):
     """Unify base kivy app
@@ -20,10 +64,9 @@ class UnifyApp(App):
     """
     
     index = NumericProperty(-1)
-    
 
-    # Build creates and gets the available screens, loads them from the, 
-    # the data/screens folders, sets it to the zero index screen
+    # Build creates and gets the available screens, loads them from, 
+    # the data/screens folder, sets it to the zero index screen
     def build(self):
         self.screens = {} # Empty screen list
         self.available_screens = sorted([
@@ -40,8 +83,9 @@ class UnifyApp(App):
     def go_screen(self, idx):
         self.index = idx # set the current screen index
         screen = self.load_screen(self.index) # build the screen kv form
-        sm = self.root.ids.sm 
-        sm.switch_to(screen, direction='left') # switch the screeb
+        sm = self.root.ids.main.ids.sm
+        sm.switch_to(screen, direction='left') # switch the screen
+        #self.populate()
         
     
     def load_screen(self, index):

@@ -1,0 +1,83 @@
+# User profile creation
+<ProfileCreation>
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+
+        # Main background colour
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#D8BFD8")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text: "Create Your Profile"
+            font_size: 20
+            bold: True
+            text_size: self.size
+            halign: "left"
+
+        # Upload pictures - save image url
+        Label:
+            id: photos
+            text: "Choose your photos:"
+            halign: "center"
+            text_size: root.width, None
+
+
+        # Fill in 'About Me' section
+        Label:
+            text: "What should be in your 'About Me'?"
+            halign: "center"
+            text_size: root.width, None
+        TextInput:
+            id: aboutMe
+            multiline: True
+
+
+        # Provide interest tags to populate buttons
+        Label:
+            text: "What uni course do you study?"
+            halign: "center"
+            text_size: root.width, None
+        TextInput:
+            id: course
+            multiline: False
+
+        Label:
+            text: "Tell us your interests:"
+            halign: "center"
+            text_size: root.width, None
+        TextInput:
+            id: interestTags
+            multiline: True
+
+
+        # Link Instagram
+        Label:
+            text: "Connect your Instagram:"
+
+
+        # Link Spotify
+        Label:
+            text: "Connect your Spotify:"
+
+
+        # Provide LinkedIn URL
+        Label:
+            text: "LinkedIn URL:"
+        TextInput:
+            id: linkedIn
+            multiline: False
+
+        RoundedButton:
+            id: profileCreate
+            text: "Create Profile"
+            pos_hint: {"center_x": 0.5}
+            size_hint: 0.5, 0.8
+            on_release:
+                app.root.current = "main"
+                root.manager.transition.direction = 'left'

@@ -1,35 +1,97 @@
 #:kivy 1.8
 #:import utils kivy.utils
 
+#:import utils kivy.utils
+#:include data/setup/initial.kv
+#:include data/setup/login.kv
+#:include data/setup/register.kv
+#:include data/setup/profile_creation.kv
 
-BoxLayout:
+ScreenManager:
+    Initial:
+        name: "initial_screen"
+        id: initial_screen
+
+    Login:
+        name: "login_screen"
+        id: login_screen
+
+    Register:
+        name: "register_screen"
+        id: register_screen
+
+    ProfileCreation:
+        name: "profile_creation"
+        id: profile_creation
+
+    MainSections:
+        name: "main"
+        id: main
+
+<MainSections>
+    BoxLayout:
         orientation: 'vertical'
-        
+
         # Main background colour
         canvas:
-                Color:
-                        rgb: utils.get_color_from_hex("#eddff7")
-                Rectangle:
-                        size: self.size
-                        pos: self.pos      
+            Color:
+                rgb: utils.get_color_from_hex("#eddff7")
+            Rectangle:
+                size: self.size
+                pos: self.pos
         Label:
-                id: "Title"
-                text: "Title"
-                size_hint: 1, .2
+            id: "Title"
+            text: "Title"
+            size_hint: 1, .2
+
         ScreenManager:
-                id: sm
-                size_hint: 1, .6
-                on_current_screen:
-                        idx = app.screen_names.index('match')
+            id: sm
+            size_hint: 1, .6
+            on_current_screen:
+                idx = app.screen_names.index('match')
+
         GridLayout:
-                cols: 3
-                size_hint: 1, .1
-                ImageButton:
-                        source: "data/icons/profile_icon.png"
-                        on_release: app.go_screen(0)
-                ImageButton:
-                        source: "data/icons/find_icon.png"
-                        on_release: app.go_screen(1)
-                ImageButton:
-                        source: "data/icons/message_icon.png"
-                        on_release: app.go_screen(2)
+            cols: 3
+            size_hint: 1, .05
+            ImageButton:
+                source: "data/icons/profile_icon.png"
+                on_release: app.go_screen(2)
+            ImageButton:
+                source: "data/icons/find_icon.png"
+                on_release: app.go_screen(0)
+            ImageButton:
+                source: "data/icons/message_icon.png"
+                on_release: app.go_screen(1)
+
+
+# Code for RoundedButton & OutlinedButton adapted from Youtuber 'Samuel Courses'
+# Available at https://www.youtube.com/watch?v=Xv57jB_Xvqo
+
+<RoundedButton@Button>
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (192, 192, 192, 0.3)
+    border_radius: [11]
+    color: (0,0,0,1)
+
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: self.border_radius
+
+<OutlinedButton@Button>
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (0, 0, 128, 0.2)
+    border_radius: 5
+    color: (0,0,0,1)
+
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        Line:                   # pos x, pos y, width, height, radius
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 0.9

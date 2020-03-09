@@ -1,3 +1,44 @@
-UnifyScreen:
+<Row@BoxLayout>:
+	orientation: 'horizontal'
+	canvas.before:
+		Color:
+			rgba: 0.5, 0.5, 0.5, 1
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	value: ''
 	Button:
-		text: 'Match'
+		text: "Image Placeholder"
+	Label:
+		text: root.value
+	Label:
+		text: "Test tags"
+	
+		
+
+<RV>:
+	orientation: 'vertical'
+	rv: rv
+	id: nice
+	Button:
+		size_hint_y: None
+		text: "Pop"
+		height: dp(108)
+		on_press: root.populate()
+	RecycleView:
+		id: rv
+		scroll_type: ['bars', 'content']
+		scroll_wheel_distance: dp(114)
+		bar_width: dp(10)
+		viewclass: 'Row'
+		RecycleBoxLayout:
+			default_size: None, dp(56)
+			default_size_hint: 1, None
+			size_hint_y: None
+			height: self.minimum_height
+			orientation: 'vertical'
+			spacing: dp(2)
+
+UnifyScreen:
+	RV:
+		id: anice

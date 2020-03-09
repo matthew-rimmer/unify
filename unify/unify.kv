@@ -1,4 +1,5 @@
 #:kivy 1.8
+#:import utils kivy.utils
 
 #:import utils kivy.utils
 #:include data/setup/initial.kv
@@ -38,7 +39,6 @@ ScreenManager:
             Rectangle:
                 size: self.size
                 pos: self.pos
-
         Label:
             id: "Title"
             text: "Title"
@@ -95,4 +95,3 @@ ScreenManager:
         Line:                   # pos x, pos y, width, height, radius
             rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
             width: 0.9
-  

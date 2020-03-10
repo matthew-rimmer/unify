@@ -13,7 +13,14 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 
 
-# Initial page shown when app is first downloaded
+import json
+
+j = '{"data":  { "Description": "description here", "First_Name": "John", "Instagram_Link": null, "Last_Name": "Doe", "Profile_Picture": null, "Twitther_Link": null}}'
+
+class ProfilePayload(object):
+	def __init__(self,j):
+		self.__dict__ = json.loads(j)
+#Initial page shown when app is first downloaded
 class Initial(Screen):
     pass
 
@@ -41,7 +48,8 @@ class MainSections(Screen):
 class RV(BoxLayout):
     def populate(self):
         self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-
+        p = ProfilePayload(j)
+        self.rv.data.append({'value' : p.data["First_Name"]}) 
 
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
@@ -94,6 +102,9 @@ class UnifyApp(App):
                 return self.screens[index]
         screen = Builder.load_file(self.available_screens[index]) # build the screen
         return screen
+
+
+
 
 # main
 if __name__ == '__main__':

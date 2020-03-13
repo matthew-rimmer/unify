@@ -20,6 +20,24 @@ j = '{"data":  { "Description": "description here", "First_Name": "John", "Insta
 class ProfilePayload(object):
 	def __init__(self,j):
 		self.__dict__ = json.loads(j)
+		
+class FindFriendPayload(object):
+	def __init__(self, j):
+		self.__dict__ = json.loads(j)
+		
+class LoginPayload(object):
+	def __init__(self,j):
+		self._dict_ = json.loads(j)
+
+class SignUpPayload(object):
+	def __init__(self,j):
+		self.__dict__ = json.loads(j)
+
+class EventPayload(object):
+	def __init__(self,j):
+		self.__dict__=json.loads(j)
+
+		
 #Initial page shown when app is first downloaded
 class Initial(Screen):
     pass

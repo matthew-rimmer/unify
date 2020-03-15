@@ -13,13 +13,46 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 
 
+import requests
 import json
+import jwt
+from datetime import datetime
+import time
 
-j = '{"data":  { "Description": "description here", "First_Name": "John", "Instagram_Link": null, "Last_Name": "Doe", "Profile_Picture": null, "Twitther_Link": null}}'
+#This generates a json token for each request
+now = datetime.now()
+date_time_string = now.strftime("%Y-%m-%d %H:%M:%S")
+date_time = date_time_string
+date_order = '%Y-%m-%d %H:%M:%S'
+iat = int(time.mktime(time.strptime(date_time, date_order))) #issued at
+nbf = int(time.mktime(time.strptime(date_time, date_order))) - 1 #not before
+exp = int(time.mktime(time.strptime(date_time, date_order))) + 20 #expires
+signature = "secret"
+
+json_token = jwt.encode({"iat": iat, "nbf": nbf, "exp":exp}, signature, algorithm='HS256').decode('utf-8')
+
+header = {"content-type": "application/json", "Authorization": "jwt {}".format(json_token)}
+http_link = 'http://api.unifyapp.xyz:3828'
+
+applicationRoutes = {
+   'create_user' : '/user/create/', # POST, PATCH
+   'user_control' : '/user/'        # GET, PUT, DELETE
+}
+
+
+
+#j = '{"data":  { "Description": "description here", "First_Name": "John", "Instagram_Link": null, "Last_Name": "Doe", "Profile_Picture": null, "Twitther_Link": null}}'
+j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
 
 class ProfilePayload(object):
 	def __init__(self,j):
-		self.__dict__ = json.loads(j)
+		response = requests.post(
+		http_link + applicationRoutes['create_user'] + j["User_ID"],
+		json = j, 
+		headers = header
+	)
+	self.__dict__ = response.text #might be this -- response.json()
+	#self.__dict__ = json.loads(j)
 		
 class FindFriendPayload(object):
 	def __init__(self, j):

@@ -45,7 +45,7 @@ applicationRoutes = {
 
 
 		
-j = {"User_ID":"Temp123","Friend_ID":"Wall123"} #Find friend payload layout
+#j = {"User_ID":"Temp123","Friend_ID":"Wall123"} #Find friend payload layout
 class FindFriendPayload(object):
 	def __init__(self,j):
 		response = requests.get(
@@ -57,7 +57,7 @@ class FindFriendPayload(object):
 		
 		
 #Profile payload not needed, because the login payload will return the profile is the user_id and password are correct
-j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout
+#j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout
 class LoginPayload(object): 
 	def __init__(self,j):
 		response = requests.get(
@@ -69,7 +69,7 @@ class LoginPayload(object):
 
 	
 #Sign up payload layout
-j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
+#j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
 class SignUpPayload(object):
 	def __init__(self,j):
 		response = requests.post(
@@ -80,7 +80,7 @@ class SignUpPayload(object):
 	self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
 
 	
-j = {"User_ID":"Temp123","Event_ID":"CS123"} #Event payload layout
+#j = {"User_ID":"Temp123","Event_ID":"CS123"} #Event payload layout
 class EventPayload(object):
 	def __init__(self,j):
 		response = requests.get(

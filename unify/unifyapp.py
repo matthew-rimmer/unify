@@ -81,11 +81,17 @@ class SignUpPayload(object):
 	def __init__(self,j):
 		self.__dict__ = json.loads(j)
 
+j = {"Event_ID":"CS123","User_ID":"Temp123"} #Event payload layout
 class EventPayload(object):
 	def __init__(self,j):
-		self.__dict__=json.loads(j)
+		response = requests.get(
+		http_link + applicationRoutes['user_control'] + j["User_ID"], 
+		data = j, 
+		headers = header
+	)
+	self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
-		
+
 #Initial page shown when app is first downloaded
 class Initial(Screen):
     pass

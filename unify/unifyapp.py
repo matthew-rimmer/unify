@@ -42,8 +42,10 @@ applicationRoutes = {
 
 
 #j = '{"data":  { "Description": "description here", "First_Name": "John", "Instagram_Link": null, "Last_Name": "Doe", "Profile_Picture": null, "Twitther_Link": null}}'
-j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
 
+
+#Profile payload layout
+j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
 class ProfilePayload(object):
 	def __init__(self,j):
 		response = requests.post(
@@ -51,16 +53,22 @@ class ProfilePayload(object):
 		json = j, 
 		headers = header
 	)
-	self.__dict__ = response.text #might be this -- response.json()
-	#self.__dict__ = json.loads(j)
+	self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
 		
 class FindFriendPayload(object):
 	def __init__(self, j):
 		self.__dict__ = json.loads(j)
 		
+		
+j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout
 class LoginPayload(object):
 	def __init__(self,j):
-		self._dict_ = json.loads(j)
+		response = requests.get(
+		http_link + applicationRoutes['user_control'] + j["User_ID"], 
+		data = j, 
+		headers = header
+	)
+	self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
 class SignUpPayload(object):
 	def __init__(self,j):

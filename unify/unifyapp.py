@@ -55,9 +55,16 @@ class ProfilePayload(object):
 	)
 	self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
 		
+		
+j = {"User_ID":"Temp123","Friend_ID":"Wall123"} #Find friend payload layout
 class FindFriendPayload(object):
 	def __init__(self, j):
-		self.__dict__ = json.loads(j)
+		response = requests.get(
+		http_link + applicationRoutes['user_control'] + j["User_ID"], 
+		data = j, 
+		headers = header
+	)
+	self._dict_ = response.text #might be this -- response.json() or json.loads(j)		
 		
 		
 j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout

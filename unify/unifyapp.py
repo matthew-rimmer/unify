@@ -56,7 +56,7 @@ class FindFriendPayload(object):
 	self._dict_ = response.text #might be this -- response.json() or json.loads(j)		
 		
 		
-#Profile payload not needed, because the login payload will return the profile is the user_id and password are correct
+#Profile payload not needed, because the login payload will return the profile if the user_id and password are correct
 #j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout
 class LoginPayload(object): 
 	def __init__(self,j):

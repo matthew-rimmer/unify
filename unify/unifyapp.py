@@ -79,6 +79,7 @@ class SignUpPayload(object):
 	)
 	self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
 
+	
 j = {"User_ID":"Temp123","Event_ID":"CS123"} #Event payload layout
 class EventPayload(object):
 	def __init__(self,j):

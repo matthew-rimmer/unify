@@ -1,101 +1,99 @@
-<Profile>
-    ScrollView
-    	BoxLayout:
-	        orientation: "vertical"
-                size_hint_y: None
-                height: dp(600)
-                padding: dp(8)
+<Profile>:
+	ScrollView:
+		BoxLayout:
+			orientation: "vertical"
+			size_hint_y: None
+			height: dp(600)
+			padding: dp(8)
 
 
-	        # Display the user's photos as a carousel
-                Carousel:
-                	direction: 'right'
+	       		# Display the user's photos as a carousel
+			Carousel:
+				direction: 'right'
 
-                	AsyncImage:
-                    		source: 'http://placehold.it/480x270.png&text=slide-1.png'
-
-                	AsyncImage:
-                    		source: 'http://placehold.it/480x270.png&text=slide-2.png'
-
-                	AsyncImage:
-                    		source: 'http://placehold.it/480x270.png&text=slide-3.png'
+				AsyncImage:
+					source: 'http://placehold.it/480x270.png&text=slide-1.png'
+				AsyncImage:
+					source: 'http://placehold.it/480x270.png&text=slide-2.png'
+				AsyncImage:
+					source: 'http://placehold.it/480x270.png&text=slide-3.png'
 
 
 		# Display the user's name
                 # Retrieve from database
-            	Label:
-                	text: "Full Name"
-                	font_size: dp(15)
-                	bold: True
-                	color: 0,0,0,1
-                	size_hint: 0.5, 0.5
-                	pos_hint: {"center_x": 0.5}
-
-
-               # Display the user's 'About Me' message
-               # Retrieve from database
-            	Label:
-                	text: "This is a bit about me."
-                	text_size: root.width, None
-                	color: 0, 0, 0, 1
-                	size: self.texture_size
-                	padding: dp(10), dp(10)
-
-
-              # Display the user's interest tags
-              # Retrieve from database
-            	GridLayout:
-                	cols: 3
-                	spacing: dp(10)
-                	size_hint: 1, 0.6
-
-                	OutlinedButton:
-                    		text: "#Course"
-
-                	OutlinedButton:
-                    		text: "#Interest 1"
-
-                	OutlinedButton:
-                    		text: "#Interest 2"
-
-                	OutlinedButton:
-                    		text: "#Interest 3"
-
-                	OutlinedButton:
-                    		text: "#Interest 4"
-
-                	OutlinedButton:
-                    		text: "#Interest 5"
-
-
-              # Display the user's Instagram photos
-              # Instagram API
-            	Label:
-                	text: "Instagram"
-                	color: 0,0,0,1
-                	text_size: self.size
-                	halign: 'left'
-
-
-              # Display the user's Spotify artists
-              # Spotify API
-            	Label:
-                	text: "Spotify - Favourite Artists"
-                	color: 0,0,0,1
-                	text_size: self.size
-                	halign: 'left'
-
-
-              # Display the user's LinkedIn url
-              # Retrieve link from database
-            	Label:
-                	text: "LinkedIn"
-                	color: 0,0,0,1
-                	text_size: self.size
-                	halign: 'left'
-
+			Label:
+				text: "Full Name"
+				font_size: dp(15)
+				bold: True
+				color: 0,0,0,1
+				size_hint: 0.5, 0.5
+				pos_hint: {"center_x": 0.5}
+	
+			# Display the user's 'About Me' message
+			# Retrieve from database
+			Label:
+				text: "This is a bit about me."
+				text_size: root.width, None
+				color: 0, 0, 0, 1
+				size: self.texture_size
+				padding: dp(10), dp(10)
+	
+	
+       	      	# Display the user's interest tags
+       	       	# Retrieve from database
+			GridLayout:
+				cols: 3
+				spacing: dp(10)
+				size_hint: 1, 0.6
+	
+				OutlinedButton:
+					text: "#Course"
+	
+				OutlinedButton:
+					text: "#Interest 1"
+	
+				OutlinedButton:
+					text: "#Interest 2"
+	
+				OutlinedButton:
+					text: "#Interest 3"
+	
+				OutlinedButton:
+					text: "#Interest 4"
+	
+				OutlinedButton:
+					text: "#Interest 5"
+	
+	
+       	       # Display the user's Instagram photos
+       	       # Instagram API
+			Label:
+				text: "Instagram"
+				color: 0,0,0,1
+				text_size: self.size
+				halign: 'left'
+	
+	
+       	       # Display the user's Spotify artists
+       	       # Spotify API
+			Label:
+				text: "Spotify - Favourite Artists"
+				color: 0,0,0,1
+				text_size: self.size
+				halign: 'left'
+	
+	
+       	       # Display the user's LinkedIn url
+       	       # Retrieve link from database
+			Label:
+				text: "LinkedIn"
+				color: 0,0,0,1
+				text_size: self.size
+				halign: 'left'
+	
 UnifyScreen:
 	Profile:
+		id: ProfileScreen
 
 
  

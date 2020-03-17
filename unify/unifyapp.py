@@ -4,7 +4,7 @@ from kivy.animation import Animation
 from kivy.properties import NumericProperty, StringProperty, BooleanProperty
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout  
-
+from kivy.uix.carousel import Carousel
 
 from os.path import dirname, join
 from random import sample

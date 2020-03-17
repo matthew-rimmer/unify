@@ -52,8 +52,8 @@ class FindFriendPayload(object):
 		http_link + applicationRoutes['user_control'] + j["User_ID"], 
 		data = j, 
 		headers = header
-	)
-	self._dict_ = response.text #might be this -- response.json() or json.loads(j)		
+		)
+		self._dict_ = response.text #might be this -- response.json() or json.loads(j)		
 		
 		
 #Profile payload not needed, because the login payload will return the profile if the user_id and password are correct
@@ -64,8 +64,8 @@ class LoginPayload(object):
 		http_link + applicationRoutes['user_control'] + j["User_ID"], 
 		data = j, 
 		headers = header
-	)
-	self._dict_ = response.text #might be this -- response.json() or json.loads(j)
+		)
+		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
 
 	
@@ -79,8 +79,8 @@ class SignUpPayload(object):
 		http_link + applicationRoutes['create_user'] + j["User_ID"],
 		json = j, 
 		headers = header
-	)
-	self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
+		)
+		self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
 
 	
 #j = {"User_ID":"Temp123","Event_ID":"CS123"} #Event payload layout
@@ -90,8 +90,8 @@ class EventPayload(object):
 		http_link + applicationRoutes['user_control'] + j["User_ID"], 
 		data = j, 
 		headers = header
-	)
-	self._dict_ = response.text #might be this -- response.json() or json.loads(j)
+		)
+		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
 
 #Initial page shown when app is first downloaded

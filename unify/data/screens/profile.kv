@@ -19,54 +19,57 @@
 					source: 'http://placehold.it/480x270.png&text=slide-3.png'
 
 
-		# Display the user's name
-                # Retrieve from database
+			# Display the user's name
+                	# Retrieve from database
 			Label:
-				text: "Full Name"
+				id: fullname
+				text: ''
 				font_size: dp(15)
 				bold: True
 				color: 0,0,0,1
 				size_hint: 0.5, 0.5
 				pos_hint: {"center_x": 0.5}
+				
 	
 			# Display the user's 'About Me' message
 			# Retrieve from database
 			Label:
-				text: "This is a bit about me."
+				id: description
+				text: ''
 				text_size: root.width, None
 				color: 0, 0, 0, 1
 				size: self.texture_size
 				padding: dp(10), dp(10)
 	
 	
-       	      	# Display the user's interest tags
-       	       	# Retrieve from database
+       	      		# Display the user's interest tags
+       	       		# Retrieve from database
 			GridLayout:
 				cols: 3
 				spacing: dp(10)
 				size_hint: 1, 0.6
 	
 				OutlinedButton:
-					text: "#Course"
+					text: ''
 	
 				OutlinedButton:
-					text: "#Interest 1"
+					text: ''
 	
 				OutlinedButton:
-					text: "#Interest 2"
+					text: ''
 	
 				OutlinedButton:
-					text: "#Interest 3"
+					text: ''
 	
 				OutlinedButton:
-					text: "#Interest 4"
+					text: ''
 	
 				OutlinedButton:
-					text: "#Interest 5"
+					text: ''
 	
 	
-       	       # Display the user's Instagram photos
-       	       # Instagram API
+       	       		# Display the user's Instagram photos
+       	       		# Instagram API
 			Label:
 				text: "Instagram"
 				color: 0,0,0,1
@@ -74,23 +77,43 @@
 				halign: 'left'
 	
 	
-       	       # Display the user's Spotify artists
-       	       # Spotify API
+       	       		# Display the user's Spotify artists
+       	       		# Spotify API
 			Label:
 				text: "Spotify - Favourite Artists"
 				color: 0,0,0,1
 				text_size: self.size
 				halign: 'left'
+				
+			
+			# Display the user's Twitter
+                        # Retrieve link from database
+                        Label:
+                                text: "Twitter"
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'left'
 	
 	
-       	       # Display the user's LinkedIn url
-       	       # Retrieve link from database
+       	       		# Display the user's LinkedIn url
+       	       		# Retrieve link from database
 			Label:
+				id: linked_in
 				text: "LinkedIn"
 				color: 0,0,0,1
 				text_size: self.size
 				halign: 'left'
-	
+				
+				
+			# Access the settings
+                	RoundedButton:
+                    		text: "Settings"
+                    		pos_hint: {"center_x": 0.5}
+                    		size_hint: 0.3, 0.3
+                    		on_release:
+                        app.go_screen(0)
+				
+					
 UnifyScreen:
 	Profile:
 		id: ProfileScreen

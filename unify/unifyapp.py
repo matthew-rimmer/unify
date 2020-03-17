@@ -67,6 +67,9 @@ class LoginPayload(object):
 	)
 	self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
+
+	
+# THE POST REQUEST DOESN'T CURRENTLY WORK!
 	
 #Sign up payload layout
 #j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}

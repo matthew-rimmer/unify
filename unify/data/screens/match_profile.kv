@@ -1,0 +1,133 @@
+<MatchProfile>
+        ScrollView:
+                BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(800)
+                        padding: dp(8)
+
+                        # Display the user's photos as a carousel
+                        Carousel:
+                                direction: 'right'
+
+                                AsyncImage:
+                                        source: 'http://placehold.it/480x270.png&text=slide-1.png'
+
+                                AsyncImage:
+                                        source: 'http://placehold.it/480x270.png&text=slide-2.png'
+
+                                AsyncImage:
+                                        source: 'http://placehold.it/480x270.png&text=slide-3.png'
+
+
+                        # Display the user's name
+                        # Retrieve from database
+                        Label:
+                                id: fullname
+                                text: 'Full Name'
+                                font_size: dp(15)
+                                bold: True
+                                color: 0,0,0,1
+                                size_hint: 0.5, 0.5
+                                pos_hint: {"center_x": 0.5}
+
+
+                        # Display the user's 'About Me' message
+                        # Retrieve from database
+                        Label:
+                                id: description
+                                text: 'Description'
+                                text_size: root.width, None
+                                color: 0, 0, 0, 1
+                                size: self.texture_size
+                                padding: dp(10), dp(10)
+
+
+                        # Display the user's interest tags
+                        # Retrieve from database
+                        GridLayout:
+                                cols: 3
+                                spacing: dp(10)
+                                size_hint: 1, 0.6
+
+                                OutlinedButton:
+                                        id: interest_tags
+                                        text: ''
+
+                                OutlinedButton:
+                                        text: ''
+
+                                OutlinedButton:
+                                        text: ''
+
+                                OutlinedButton:
+                                        text: ''
+
+                                OutlinedButton:
+                                        text: ''
+
+                                OutlinedButton:
+                                        text: ''
+
+
+                        # Display the user's Instagram photos
+                        # Instagram API
+                        Label:
+                                text: "Instagram"
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'left'
+
+
+                        # Display the user's Spotify artists
+                        # Spotify API
+                        Label:
+                                text: "Spotify - Favourite Artists"
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'left'
+
+
+                        # Display the user's Twitter
+                        # Retrieve link from database
+                        Label:
+                                text: "Twitter"
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'left'
+
+
+                        # Display the user's LinkedIn url
+                        # Retrieve link from database
+                        Label:
+                                id: linked_in
+                                text: "LinkedIn"
+                                color: 0,0,0,1
+                                text_size: self.size
+                                halign: 'left'
+
+                        BoxLayout:
+                                orientation: 'horizontal'
+                                size_hint: 1, 0.8
+                                padding: dp(20)
+                                spacing: dp (10)
+
+                                RoundedButton:
+                                        id: add_match
+                                        text: "Add"
+                                        on_release:
+
+                                RoundedButton:
+                                        id: remove_match
+                                        text: "Pass"
+                                        on_release:
+
+                        RoundedButton:
+                                id: report_user
+                                text: "Report User"
+                                pos_hint: {"center_x": 0.5}
+                                size_hint:  0.4, 0.3
+                                on_release: app.go_screen(7)
+
+UnifyScreen:
+        MatchProfile:

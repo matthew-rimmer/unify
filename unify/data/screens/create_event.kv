@@ -1,0 +1,90 @@
+<CreateEvent>
+        ScrollView:
+                BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(600)
+                        padding: dp(20)
+                        spacing: dp(10)
+
+                        # Upload event image - save image url
+                        Label:
+                                text: "Choose an event photo:"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+
+
+                        # Name of event
+                        Label:
+                                text: "What is the name of the event?"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+                        TextInput:
+                                id: eventname
+                                multiline: False
+
+
+                        # Event description
+                        Label:
+                                text: "What is the event all about?"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+                        TextInput:
+                                id: event_description
+                                multiline: True
+                                size_hint: (1, None)
+                                height: dp(80)
+
+
+                        # Event time and date
+                        Label:
+                                text: "When is the date and time of the event?"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+                        TextInput:
+                                id: datetime
+                                multiline: False
+
+
+                        # Event location
+                        Label:
+                                text: "Where is the location of the event?"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+                        TextInput:
+                                id: location
+                                multiline: False
+
+
+                        # Maximum number of students for event
+                        Label:
+                                text: "What is the maximum number of students that can attend the event?"
+                                halign: "center"
+                                text_size: root.width, None
+                                color: 0,0,0,1
+                        TextInput:
+                                id: max_users
+                                multiline: False
+
+
+                        RoundedButton:
+                                id: create
+                                text: "Create Event"
+                                pos_hint: {"center_x": 0.5}
+                                size_hint: 0.5, 0.8
+                                on_release: app.go_screen(8)
+
+                        Label:
+                                text: "P.S. once you are done here you will be shown exactly how users will see your event"
+                                halign: "center"
+                                text_size: root.width, None
+                                font_size: dp(12)
+                                padding: dp(20), (20)
+
+UnifyScreen:
+        CreateEvent:

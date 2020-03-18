@@ -1,5 +1,4 @@
 #:kivy 1.8
-#:import utils kivy.utils
 
 #:import utils kivy.utils
 #:include data/setup/initial.kv
@@ -40,7 +39,7 @@ ScreenManager:
                 size: self.size
                 pos: self.pos
         Label:
-            id: "Title"
+            id: title
             text: "Title"
             size_hint: 1, .2
 
@@ -54,14 +53,17 @@ ScreenManager:
             cols: 3
             size_hint: 1, .05
             ImageButton:
+                # icon made by Smashicons from www.flaticon.com
                 source: "data/icons/profile_icon.png"
-                on_release: app.go_screen(2)
+                on_release: app.go_screen(5)
             ImageButton:
+                # icon made by Freepik from www.flaticon.com
                 source: "data/icons/find_icon.png"
-                on_release: app.go_screen(0)
+                on_release: app.go_screen(3)
             ImageButton:
-                source: "data/icons/message_icon.png"
-                on_release: app.go_screen(1)
+                # icon made by iconixar from www.flaticon.com
+                source: "data/icons/events_icon.png"
+                on_release: app.go_screen(2)
 
 
 # Code for RoundedButton & OutlinedButton adapted from Youtuber 'Samuel Courses'

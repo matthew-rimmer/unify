@@ -94,7 +94,7 @@ class EventPayload(object):
 		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
 
-#Initial page shown when app is first downloaded
+# Initial page shown when app is first downloaded
 class Initial(Screen):
     pass
 
@@ -109,12 +109,12 @@ class Register(Screen):
     pass
 
 
-# ProfileCreation class
+# Profile creation class
 class ProfileCreation(Screen):
     pass
 
 
-# Class for the profile, find & message sections
+# Class for the profile, find & event sections
 class MainSections(Screen):
     pass
 
@@ -125,12 +125,48 @@ class RV(BoxLayout):
         p = ProfilePayload(j)
         self.rv.data.append({'value' : p.data["First_Name"]}) 
 
+	
+class MatchProfile(Screen):
+    pass
+
+
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
     
     
 # Profile class
 class Profile(Screen):
+    pass
+
+
+# Events class
+class Events(Screen):
+    def getText(self):
+        return "Click [ref=here][color=800080]here[/color][/ref] to create your own event!"
+
+
+# Create event class
+class CreateEvent(Screen):
+    pass
+
+
+# View event class
+class ViewEvent(Screen):
+    pass
+
+
+# Settings class
+class AppSettings(Screen):
+    pass
+
+
+# Report event class
+class ReportEvent(Screen):
+    pass
+
+
+# Report user class
+class ReportUser(Screen):
     pass
 
 
@@ -152,11 +188,12 @@ class UnifyApp(App):
     def build(self):
         self.screens = {} # Empty screen list
         self.available_screens = sorted([
-            'message','match','profile']) # Explicitly sets the available screens
+            'app_settings', 'create_event', 'events', 'match', 'match_profile', 'profile',
+	    'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
         self.screen_names = self.available_screens 
         curdir = dirname(__file__)
         self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-        self.go_screen(0) # goto screen 0
+        self.go_screen(3) # goto screen 3 (match)
         
         #print(len(self.available_screens))
         

@@ -211,8 +211,9 @@ class UnifyApp(App):
         # print('loading screen')
         if index in self.screens:
                 return self.screens[index]
-        screen = Builder.load_file(self.available_screens[index]) # build the screen
-        return screen
+        else:
+                self.screens[index] = screen = Builder.load_file(self.available_screens[index]) # build the screen
+                return screen
 
 
 

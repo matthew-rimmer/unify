@@ -1,36 +1,36 @@
 <Initial>:
-        FloatLayout:
-                # Main background colour
-                canvas:
-                        Color:
-                                rgb: utils.get_color_from_hex("#D8BFD8")
-                        Rectangle:
-                                size: self.size
-                                pos: self.pos
+	FloatLayout:
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#D8BFD8")
+			Rectangle:
+				size: self.size
+				pos: self.pos
 
-                # Display the Unify logo
-                GridLayout:
-                        rows: 1
-                        pos_hint: {"center_x": 0.5, "top": 0.9}
-                        size_hint: 0.8, 0.5
-                        Image:
-                                source: "data/icons/Logo.png"
+		# Display the Unify logo
+		GridLayout:
+			rows: 1
+			pos_hint: {"center_x": 0.5, "top": 0.9}
+			size_hint: 0.8, 0.5
+			Image:
+				source: "data/icons/Logo.png"
 
-                # Display the 'Login' & 'Register' buttons
-                GridLayout:
-                        cols: 2
-                        pos_hint: {"center_x": 0.5, "top": 0.4}
-                        size_hint: 0.8, 0.06
-                        spacing: dp(5)
+		# Display the 'Login' & 'Register' buttons
+		GridLayout:
+			cols: 2
+			pos_hint: {"center_x": 0.5, "top": 0.4}
+			size_hint: 0.8, 0.06
+			spacing: dp(5)
 
-                        RoundedButton:
-                                text: "Login"
-                                on_release:
-                                        app.root.current = "login_screen"
-                                        root.manager.transition.direction = 'left'
+			RoundedButton:
+				text: "Login"
+				on_release:
+					app.root.current = "login_screen"
+					root.manager.transition.direction = 'left'
 
-                        RoundedButton:
-                                text: "Register"
-                                on_release:
-                                        app.root.current = "register_screen"
-                                        root.manager.transition.direction = 'left'
+			RoundedButton:
+				text: "Register"
+				on_release:
+					app.root.current = "register_screen"
+					root.manager.transition.direction = 'left'

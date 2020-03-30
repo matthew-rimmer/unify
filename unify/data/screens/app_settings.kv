@@ -1,51 +1,47 @@
 <AppSettings>
-        BoxLayout:
-                orientation: 'vertical'
-                padding: dp(20)
-                spacing: dp(10)
+	BoxLayout:
+		orientation: 'vertical'
+		padding: dp(20)
+		spacing: dp(10)
 
-                # Change photos
-                Label:
-                        text: "Change your photos:"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-
-
-                # Update description
-                Label:
-                        text: "Update 'About Me' description:"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                TextInput:
-                        id: new_description
-                        multiline: True
+		# Change photos
+		Label:
+			text: "Change your photos:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 
 
-                # Update interest tags
-                Label:
-                        text: "Update interest tags:"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                TextInput:
-                        id: new_tags
-                        multiline: True
+		# Update description
+		Label:
+			text: "Update 'About Me' description:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+		TextInput:
+			id: new_description
+			multiline: True
 
 
-                # Submit new data & update database
-                RoundedButton:
-                        id: update
-                        text: "Update Profile"
-                        pos_hint: {"center_x": 0.5}
-                        size_hint: 0.5, 0.6
-                        on_release: app.go_screen(6)
+		# Update interest tags
+		Label:
+			text: "Update interest tags:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+		TextInput:
+			id: new_tags
+			multiline: True
+
+
+		# Submit new data & update database
+		RoundedButton:
+			id: update
+			text: "Update Profile"
+			pos_hint: {"center_x": 0.5}
+			size_hint: 0.5, 0.6
+			on_release: app.go_screen(6)
 
 UnifyScreen:
-        AppSettings:
-
-
-
-
+	AppSettings:
 

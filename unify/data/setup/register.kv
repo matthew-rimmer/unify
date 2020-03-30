@@ -1,79 +1,79 @@
 <Register>
-        FloatLayout:
-                # Main background colour
-                canvas:
-                        Color:
-                                rgb: utils.get_color_from_hex("#D8BFD8")
-                        Rectangle:
-                                size: self.size
-                                pos: self.pos
+	FloatLayout:
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#D8BFD8")
+			Rectangle:
+				size: self.size
+				pos: self.pos
 
-                # Request data from user to save to the database (First Name, Surname, Uni Email + Password)
-                GridLayout:
-                        cols: 2
-                        padding: dp(20)
-                        spacing: dp(20)
-                        size_hint: 1, 0.5
-                        pos_hint: {"top": 0.7}
+		# Request data from user to save to the database (First Name, Surname, Uni Email + Password)
+		GridLayout:
+			cols: 2
+			padding: dp(20)
+			spacing: dp(20)
+			size_hint: 1, 0.5
+			pos_hint: {"top": 0.7}
 
-                        # First name field
-                        Label:
-                                text: "First name:"
-                                color: 0,0,0,1
-                        TextInput:
-                                id: firstname
-                                multiline: False
-
-
-                        # Last name field
-                        Label:
-                                text: "Last name:"
-                                color: 0,0,0,1
-                        TextInput:
-                                id: lastname
-                                multiline: False
+			# First name field
+			Label:
+				text: "First name:"
+				color: 0,0,0,1
+			TextInput:
+				id: firstname
+				multiline: False
 
 
-                        # Date of birth field
-                        Label:
-                                text: "Date of Birth \n (dd/mm/yyyy):"
-                                halign: 'center'
-                                color: 0,0,0,1
-                        TextInput:
-                                id: dob
-                                multiline: False
+			# Last name field
+			Label:
+				text: "Last name:"
+				color: 0,0,0,1
+			TextInput:
+				id: lastname
+				multiline: False
 
 
-                        # Uni Email field
-                        Label:
-                                text: "University \n email address:"
-                                halign: 'center'
-                                color: 0,0,0,1
-                        TextInput:
-                                id: uni_email
-                                multiline: False
+			# Date of birth field
+			Label:
+				text: "Date of Birth \n (dd/mm/yyyy):"
+				halign: 'center'
+				color: 0,0,0,1
+			TextInput:
+				id: dob
+				multiline: False
 
 
-                        # Password field
-                        Label:
-                                text: "Password:"
-                                color: 0,0,0,1
-                        TextInput:
-                                id: password
-                                password: True
-                                multiline: False
+			# Uni Email field
+			Label:
+				text: "University \n email address:"
+				halign: 'center'
+				color: 0,0,0,1
+			TextInput:
+				id: uni_email
+				multiline: False
 
 
-                        RoundedButton:
-                                text: "Cancel"
-                                on_release:
-                                        app.root.current = "initial_screen"
-                                        root.manager.transition.direction = 'right'
+			# Password field
+			Label:
+				text: "Password:"
+				color: 0,0,0,1
+			TextInput:
+				id: password
+				password: True
+				multiline: False
 
 
-                        RoundedButton:
-                                id: reg_details
-                                text: "Register"
-                                on_release:
-                                        app.root.current = "profile_creation"
-                                        root.manager.transition.direction = 'left'
+			RoundedButton:
+				text: "Cancel"
+				on_release:
+					app.root.current = "initial_screen"
+					root.manager.transition.direction = 'right'
+
+
+			RoundedButton:
+				id: reg_details
+				text: "Register"
+				on_release:
+					app.root.current = "profile_creation"
+					root.manager.transition.direction = 'left'

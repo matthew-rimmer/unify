@@ -1,121 +1,149 @@
 <Profile>:
 	ScrollView:
-		BoxLayout:
-			orientation: "vertical"
-			size_hint_y: None
-			height: dp(600)
-			padding: dp(8)
+                bar_width: dp(5)
+
+                GridLayout:
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: dp(15)
+                        spacing: dp(15)
 
 
-	       		# Display the user's photos as a carousel
-			Carousel:
-				direction: 'right'
+                        # Display the user's photos as a carousel
+                        BoxLayout:
+                                orientation: 'vertical'
+                                size_hint_y: None
+                                height: dp(200)
 
-				AsyncImage:
-					source: 'http://placehold.it/480x270.png&text=slide-1.png'
-				AsyncImage:
-					source: 'http://placehold.it/480x270.png&text=slide-2.png'
-				AsyncImage:
-					source: 'http://placehold.it/480x270.png&text=slide-3.png'
+                                Carousel:
+                                        direction: 'right'
+                                        loop: True
+
+                                        AsyncImage:
+                                                source: 'http://placehold.it/480x270.png&text=slide-1.png'
+                                                
+
+                                        AsyncImage:
+                                                source: 'http://placehold.it/480x270.png&text=slide-2.png'
+                                                
+
+                                        AsyncImage:
+                                                source: 'http://placehold.it/480x270.png&text=slide-3.png'
+                                                
 
 
-			# Display the user's name
-                	# Retrieve from database
-			Label:
-				id: fullname
-				text: ''
-				font_size: dp(15)
-				bold: True
-				color: 0,0,0,1
-				size_hint: 0.5, 0.5
-				pos_hint: {"center_x": 0.5}
-				
-	
-			# Display the user's 'About Me' message
-			# Retrieve from database
-			Label:
-				id: description
-				text: ''
-				text_size: root.width, None
-				color: 0, 0, 0, 1
-				size: self.texture_size
-				padding: dp(10), dp(10)
-	
-	
-       	      		# Display the user's interest tags
-       	       		# Retrieve from database
-			GridLayout:
-				cols: 3
-				spacing: dp(10)
-				size_hint: 1, 0.6
-	
-				OutlinedButton:
-					text: ''
-	
-				OutlinedButton:
-					text: ''
-	
-				OutlinedButton:
-					text: ''
-	
-				OutlinedButton:
-					text: ''
-	
-				OutlinedButton:
-					text: ''
-	
-				OutlinedButton:
-					text: ''
-	
-	
-       	       		# Display the user's Instagram photos
-       	       		# Instagram API
-			Label:
-				text: "Instagram"
-				color: 0,0,0,1
-				text_size: self.size
-				halign: 'left'
-	
-	
-       	       		# Display the user's Spotify artists
-       	       		# Spotify API
-			Label:
-				text: "Spotify - Favourite Artists"
-				color: 0,0,0,1
-				text_size: self.size
-				halign: 'left'
-				
-			
-			# Display the user's Twitter
+                        # Display the user's name
+                        # Retrieve from database
+                        Label:
+                                id: fullname
+                                text: "Full Name"   
+                                font_size: dp(17)
+                                bold: True
+                                color: 0,0,0,1
+
+
+                        # Display the user's 'About Me' message
+                        # Retrieve from database
+                        Label:
+                                id: description
+                                text: "About Me"    
+                                font_size: dp(15)
+                                color: 0, 0, 0, 1
+                                size_hint_x: 1
+                                size_hint_y: None
+                                text_size: self.width, None
+
+
+                        # Display the user's interest tags
+                        # Retrieve from database
+                        GridLayout:
+                                cols: 3
+                                size_hint_x: 1
+                                size_hint_y: None
+                                height: dp(55)
+                                spacing: dp(10)
+
+                                OutlinedButton:
+                                        id: interest_tags
+                                        text: "#Tag"
+
+                                OutlinedButton:
+                                        text: "#Tag"
+
+                                OutlinedButton:
+                                        text: "#Tag"
+
+                                OutlinedButton:
+                                        text: "#Tag"
+
+                                OutlinedButton:
+                                        text: "#Tag"
+
+                                OutlinedButton:
+                                        text: "#Tag"
+
+
+                        # Display the user's Instagram photos
+                        # Instagram API
+                        Label:
+                                text: "Instagram"
+                                color: 0,0,0,1
+                                size_hint_x: 1
+                                size_hint_y: None
+                                text_size: self.width, None
+
+
+                        # Display the user's Spotify artists
+                        # Spotify API
+                        Label:
+                                text: "Spotify - Favourite Artists"
+                                color: 0,0,0,1
+                                size_hint_x: 1
+                                size_hint_y: None
+                                text_size: self.width, None
+
+
+                        # Display the user's Twitter
                         # Retrieve link from database
                         Label:
                                 text: "Twitter"
                                 color: 0,0,0,1
-                                text_size: self.size
-                                halign: 'left'
-	
-	
-       	       		# Display the user's LinkedIn url
-       	       		# Retrieve link from database
-			Label:
-				id: linked_in
-				text: "LinkedIn"
-				color: 0,0,0,1
-				text_size: self.size
-				halign: 'left'
-				
-				
-			# Access the settings
-                	RoundedButton:
-                    		text: "Settings"
-                    		pos_hint: {"center_x": 0.5}
-                    		size_hint: 0.3, 0.3
-                    		on_release: app.go_screen(0)
-				
-					
+                                size_hint_x: 1
+                                size_hint_y: None
+                                text_size: self.width, None
+
+
+                        # Display the user's LinkedIn url
+                        # Retrieve link from database
+                        Label:
+                                text: root.getText()
+                                markup: True
+                                color: 0,0,0,1
+                                size_hint_x: 1
+                                size_hint_y: None
+                                text_size: self.width, None
+                                on_ref_press: root.urlLink(*args)
+
+                        GridLayout:
+                                cols: 2
+                                size_hint_x: 1
+                                size_hint_y: None
+                                height: dp(25)
+                                spacing: dp(20)
+
+                                # Access the friends list
+                                RoundedButton:
+                                        text: "My Friends"
+                                        on_release: app.go_screen(3)
+
+
+                                # Access the settings
+                                RoundedButton:
+                                        text: "Settings"
+                                        on_release: app.go_screen(0)
+
 UnifyScreen:
-	Profile:
-		id: ProfileScreen
+        Profile:
+                id: ProfileScreen
 
-
- 

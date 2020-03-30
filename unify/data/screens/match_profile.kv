@@ -1,159 +1,157 @@
 <MatchProfile>:
-        ScrollView:
-                bar_width: dp(5)
+	ScrollView:
+		bar_width: dp(5)
 
-                GridLayout:
-                        cols: 1
-                        size_hint_y: None
-                        height: self.minimum_height
-                        padding: dp(15)
-                        spacing: dp(15)
-
-
-                        # Display the user's photos as a carousel
-                        BoxLayout:
-                                orientation: 'vertical'
-                                size_hint_y: None
-                                height: dp(200)
-
-                                Carousel:
-                                        direction: 'right'
-                                        loop: True
-
-                                        AsyncImage:
-                                                source: 'http://placehold.it/480x270.png&text=slide-1.png'
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: self.minimum_height
+			padding: dp(15)
+			spacing: dp(15)
 
 
-                                        AsyncImage:
-                                                source: 'http://placehold.it/480x270.png&text=slide-2.png'
+			# Display the user's photos as a carousel
+			BoxLayout:
+				orientation: 'vertical'
+				size_hint_y: None
+				height: dp(200)
+
+				Carousel:
+					direction: 'right'
+					loop: True
+
+					AsyncImage:
+						source: 'http://placehold.it/480x270.png&text=slide-1.png'
 
 
-                                        AsyncImage:
-                                                source: 'http://placehold.it/480x270.png&text=slide-3.png'
+					AsyncImage:
+						source: 'http://placehold.it/480x270.png&text=slide-2.png'
+
+
+					AsyncImage:
+						source: 'http://placehold.it/480x270.png&text=slide-3.png'
 
 
 
-                        # Display the user's name
-                        # Retrieve from database
-                        Label:
-                                id: fullname
-                                text: "Full Name"
-                                font_size: dp(17)
-                                bold: True
-                                color: 0,0,0,1
+			# Display the user's name
+			# Retrieve from database
+			Label:
+				id: fullname
+				text: "Full Name"
+				font_size: dp(17)
+				bold: True
+				color: 0,0,0,1
 
 
-                        # Display the user's 'About Me' message
-                        # Retrieve from database
-                        Label:
-                                id: description
-                                text: "About Me"
-                                font_size: dp(15)
-                                color: 0, 0, 0, 1
-                                size_hint_x: 1
-                                size_hint_y: None
-                                text_size: self.width, None
+			# Display the user's 'About Me' message
+			# Retrieve from database
+			Label:
+				id: description
+				text: "About Me"
+				font_size: dp(15)
+				color: 0, 0, 0, 1
+				size_hint_x: 1
+				size_hint_y: None
+				text_size: self.width, None
 
 
-                        # Display the user's interest tags
-                        # Retrieve from database
-                        GridLayout:
-                                cols: 3
-                                size_hint_x: 1
-                                size_hint_y: None
-                                height: dp(55)
-                                spacing: dp(10)
+			# Display the user's interest tags
+			# Retrieve from database
+			GridLayout:
+				cols: 3
+				size_hint_x: 1
+				size_hint_y: None
+				height: dp(55)
+				spacing: dp(10)
 
-                                OutlinedButton:
-                                        id: interest_tags
-                                        text: "#Tag"
+				OutlinedButton:
+					id: interest_tags
+					text: "#Tag"
 
-                                OutlinedButton:
-                                        text: "#Tag"
+				OutlinedButton:
+					text: "#Tag"
 
-                                OutlinedButton:
-                                        text: "#Tag"
+				OutlinedButton:
+					text: "#Tag"
 
-                                OutlinedButton:
-                                        text: "#Tag"
+				OutlinedButton:
+					text: "#Tag"
 
-                                OutlinedButton:
-                                        text: "#Tag"
+				OutlinedButton:
+					text: "#Tag"
 
-                                OutlinedButton:
-                                        text: "#Tag"
-
-
-                        # Display the user's Instagram photos
-                        # Instagram API
-                        Label:
-                                text: "Instagram"
-                                color: 0,0,0,1
-                                size_hint_x: 1
-                                size_hint_y: None
-                                text_size: self.width, None
+				OutlinedButton:
+					text: "#Tag"
 
 
-                        # Display the user's Spotify artists
-                        # Spotify API
-                        Label:
-                                text: "Spotify - Favourite Artists"
-                                color: 0,0,0,1
-                                size_hint_x: 1
-                                size_hint_y: None
-                                text_size: self.width, None
+			# Display the user's Instagram photos
+			# Instagram API
+			Label:
+				text: "Instagram"
+				color: 0,0,0,1
+				size_hint_x: 1
+				size_hint_y: None
+				text_size: self.width, None
 
 
-                        # Display the user's Twitter
-                        # Retrieve link from database
-                        Label:
-                                text: "Twitter"
-                                color: 0,0,0,1
-                                size_hint_x: 1
-                                size_hint_y: None
-                                text_size: self.width, None
+			# Display the user's Spotify artists
+			# Spotify API
+			Label:
+				text: "Spotify - Favourite Artists"
+				color: 0,0,0,1
+				size_hint_x: 1
+				size_hint_y: None
+				text_size: self.width, None
 
 
-                        # Display the user's LinkedIn url
-                        # Retrieve link from database
-                        Label:
-                                text: root.getText()
-                                markup: True
-                                color: 0,0,0,1
-                                size_hint_x: 1
-                                size_hint_y: None
-                                text_size: self.width, None
-                                on_ref_press: root.urlLink(*args)
+			# Display the user's Twitter
+			# Retrieve link from database
+			Label:
+				text: "Twitter"
+				color: 0,0,0,1
+				size_hint_x: 1
+				size_hint_y: None
+				text_size: self.width, None
 
 
-                        GridLayout:
-                                cols: 2
-                                size_hint_x: 1
-                                size_hint_y: None
-                                height: dp(25)
-                                spacing: dp(20)
-
-                                # Access the friends list
-                                RoundedButton:
-                                        id: add_match
-                                        text: "Add"
-                                        on_release:
+			# Display the user's LinkedIn url
+			# Retrieve link from database
+			Label:
+				text: root.getText()
+				markup: True
+				color: 0,0,0,1
+				size_hint_x: 1
+				size_hint_y: None
+				text_size: self.width, None
+				on_ref_press: root.urlLink(*args)
 
 
-                                # Access the settings
-                                RoundedButton:
-                                        id: remove_match
-                                        text: "Pass"
-                                        on_release:
+			GridLayout:
+				cols: 2
+				size_hint_x: 1
+				size_hint_y: None
+				height: dp(25)
+				spacing: dp(20)
 
-                        RoundedButton:
-                                id: report_user
-                                text: "Report User"
-                                size_hint_y: None
-                                height: dp(25)
-                                on_release: app.go_screen(8)
+				# Access the friends list
+				RoundedButton:
+					id: add_match
+					text: "Add"
+					on_release:
+
+
+				# Access the settings
+				RoundedButton:
+					id: remove_match
+					text: "Pass"
+					on_release:
+
+			RoundedButton:
+				id: report_user
+				text: "Report User"
+				size_hint_y: None
+				height: dp(25)
+				on_release: app.go_screen(8)
 
 UnifyScreen:
-        MatchProfile:
-                         
-               
+	MatchProfile:

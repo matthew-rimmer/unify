@@ -8,62 +8,62 @@
 
 ScreenManager:
     Initial:
-        name: "initial_screen"
-        id: initial_screen
+	name: "initial_screen"
+	id: initial_screen
 
     Login:
-        name: "login_screen"
-        id: login_screen
+	name: "login_screen"
+	id: login_screen
 
     Register:
-        name: "register_screen"
-        id: register_screen
+	name: "register_screen"
+	id: register_screen
 
     ProfileCreation:
-        name: "profile_creation"
-        id: profile_creation
+	name: "profile_creation"
+	id: profile_creation
 
     MainSections:
-        name: "main"
-        id: main
+	name: "main"
+	id: main
 
 <MainSections>
     BoxLayout:
-        orientation: 'vertical'
+	orientation: 'vertical'
 
-        # Main background colour
-        canvas:
-            Color:
-                rgb: utils.get_color_from_hex("#eddff7")
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        Label:
-            id: title
-            text: "Title"
-            size_hint: 1, .2
+	# Main background colour
+	canvas:
+	    Color:
+		rgb: utils.get_color_from_hex("#eddff7")
+	    Rectangle:
+		size: self.size
+		pos: self.pos
+	Label:
+	    id: title
+	    text: "Title"
+	    size_hint: 1, .2
 
-        ScreenManager:
-            id: sm
-            size_hint: 1, .6
-            on_current_screen:
-                idx = app.screen_names.index('match')
+	ScreenManager:
+	    id: sm
+	    size_hint: 1, .6
+	    on_current_screen:
+		idx = app.screen_names.index('match')
 
-        GridLayout:
-            cols: 3
-            size_hint: 1, .05
-            ImageButton:
-                # icon made by Smashicons from www.flaticon.com
-                source: "data/icons/profile_icon.png"
-                on_release: app.go_screen(6)
-            ImageButton:
-                # icon made by Freepik from www.flaticon.com
-                source: "data/icons/find_icon.png"
-                on_release: app.go_screen(4)
-            ImageButton:
-                # icon made by iconixar from www.flaticon.com
-                source: "data/icons/events_icon.png"
-                on_release: app.go_screen(2)
+	GridLayout:
+	    cols: 3
+	    size_hint: 1, .05
+	    ImageButton:
+		# icon made by Smashicons from www.flaticon.com
+		source: "data/icons/profile_icon.png"
+		on_release: app.go_screen(6)
+	    ImageButton:
+		# icon made by Freepik from www.flaticon.com
+		source: "data/icons/find_icon.png"
+		on_release: app.go_screen(4)
+	    ImageButton:
+		# icon made by iconixar from www.flaticon.com
+		source: "data/icons/events_icon.png"
+		on_release: app.go_screen(2)
 
 
 # Code for RoundedButton & OutlinedButton adapted from Youtuber 'Samuel Courses'
@@ -77,12 +77,12 @@ ScreenManager:
     color: (0,0,0,1)
 
     canvas.before:
-        Color:
-            rgba: self.back_color
-        RoundedRectangle:
-            size: self.size
-            pos: self.pos
-            radius: self.border_radius
+	Color:
+	    rgba: self.back_color
+	RoundedRectangle:
+	    size: self.size
+	    pos: self.pos
+	    radius: self.border_radius
 
 <OutlinedButton@Button>
     background_color: (0,0,0,0)
@@ -92,8 +92,8 @@ ScreenManager:
     color: (0,0,0,1)
 
     canvas.before:
-        Color:
-            rgba: self.back_color
-        Line:                   # pos x, pos y, width, height, radius
-            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
-            width: 0.9
+	Color:
+	    rgba: self.back_color
+	Line:                   # pos x, pos y, width, height, radius
+	    rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+	    width: 0.9

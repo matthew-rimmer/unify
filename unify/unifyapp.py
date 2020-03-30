@@ -131,12 +131,20 @@ class RV(BoxLayout):
 
 	
 class MatchProfile(Screen):
-    pass
+    def getText(self):
+        return "View LinkedIn [ref=profile][color=800080]profile[/color][/ref] "
+
+    # Opens LinkedIn profile in the browser
+    def urlLink(self, instance, ref):
+        _dict = {"profile": "https://www.linkedin.com/"}
+
+        # Opens new tab in browser
+        webbrowser.open(_dict[ref], new=1)
 
 
 class UnifyScreen(Screen):
     fullscreen = BooleanProperty(False)
-    
+
     
 # Profile class
 class Profile(Screen):
@@ -150,14 +158,14 @@ class Profile(Screen):
         # Opens new tab in browser
         webbrowser.open(_dict[ref], new=1)
 	
-	
-#Friends class
+		
+# Friends class
 class Friends(BoxLayout):
     pass
-	
+		
 	
 # Events class
-class Events(Screen):
+class Events(BoxLayout):
     def getText(self):
         return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 

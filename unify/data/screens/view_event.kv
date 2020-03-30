@@ -3,7 +3,7 @@
                 BoxLayout:
                         orientation: "vertical"
                         size_hint_y: None
-                        height: dp(450)
+                        height: dp(600)
                         padding: dp(8)
                         spacing: dp(6)
 
@@ -12,6 +12,8 @@
                         AsyncImage:
                                 id: eventimage
                                 source: 'http://placehold.it/480x270.png&text=slide-1.png'
+				size_hint_y: None
+                                height: dp(180)
 
 
                         # Display the event name
@@ -51,22 +53,33 @@
                         # Event date & time
                         # Event location
                         GridLayout:
-                                rows: 2
+                                cols: 2
+				size_hint_y: None
+				height: dp(70)
                                 spacing: dp(10)
-                                size_hint: 1, 1
-                                padding: 10
 
-                                OutlinedButton:
+				Image:
+                                        # icon made by Freepik from www.flaticon.com
+                                        source: 'data/icons/date_time.png'
+
+                                Label:
                                         id: datetime
-                                        halign: 'center'
-                                        text: 'Date & Time:'
-                                        font_size: dp(12)
+                                        text:'dd/mm/yyyy 00:00'
+                                        font_size: dp(15)
+                                        color: 0, 0, 0, 1
+                                        text_size: self.width, None
 
-                                OutlinedButton:
+                                Image:
+                                        # icon made by DinosoftLabs from www.flaticon.com
+                                        source: 'data/icons/location.png'
+
+                                Label:
                                         id: location
-                                        halign: 'center'
-                                        text: 'Location:'
-                                        font_size: dp(12)
+                                        text: 'Location'
+                                        font_size: dp(15)
+                                        color: 0, 0, 0, 1
+                                        text_size: self.width, None
+
 
                         RoundedButton:
                                 id: attend
@@ -80,7 +93,7 @@
                                 text: "Report Event"
                                 pos_hint: {"center_x": 0.5}
                                 size_hint:  0.4, 0.3
-                                on_release: app.go_screen(6)
+                                on_release: app.go_screen(7)
 
 UnifyScreen:
         ViewEvent:

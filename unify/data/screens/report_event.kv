@@ -1,66 +1,66 @@
 <ReportEvent>
-        BoxLayout:
-                orientation: 'vertical'
-                padding: dp(20)
-                spacing: dp(10)
+	BoxLayout:
+		orientation: 'vertical'
+		padding: dp(20)
+		spacing: dp(10)
 
-                Label:
-                        text: "Please select your reason \n for reporting this event:"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                        pos_hint: {"top": 0.9}
-
-
-                # Four choices total
-                CheckBox:
-                        active: False
-                        color: 0,0,0,1
-                Label:
-                        text: "1) Objectionable content on the event's page"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
+		Label:
+			text: "Please select your reason \n for reporting this event:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+			pos_hint: {"top": 0.9}
 
 
-                CheckBox:
-                        active: False
-                        color: 0,0,0,1
-                Label:
-                        text: "2) Fears over the safety of the event"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
+		# Four choices total
+		CheckBox:
+			active: False
+			color: 0,0,0,1
+		Label:
+			text: "1) Objectionable content on the event's page"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 
 
-                CheckBox:
-                        active: False
-                        color: 0,0,0,1
-                Label:
-                        text: "3) Fraud and deception"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
+		CheckBox:
+			active: False
+			color: 0,0,0,1
+		Label:
+			text: "2) Fears over the safety of the event"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 
 
-                Label:
-                        text: "4) Other"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                TextInput:
-                        multiline:True
-                        size_hint: (1, None)
-                        height: dp(70)
+		CheckBox:
+			active: False
+			color: 0,0,0,1
+		Label:
+			text: "3) Fraud and deception"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 
 
-                # Submit report
-                RoundedButton:
-                        id: report_event
-                        text: "Submit"
-                        pos_hint: {"center_x": 0.5}
-                        size_hint: 0.5, 0.6
-                        on_release: app.go_screen(4)
+		Label:
+			text: "4) Other"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+		TextInput:
+			multiline:True
+			size_hint: (1, None)
+			height: dp(70)
+
+
+		# Submit report
+		RoundedButton:
+			id: report_event
+			text: "Submit"
+			pos_hint: {"center_x": 0.5}
+			size_hint: 0.5, 0.6
+			on_release: app.go_screen(4)
 
 UnifyScreen:
-        ReportEvent:
+	ReportEvent:

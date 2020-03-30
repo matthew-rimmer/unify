@@ -235,7 +235,7 @@ class UnifyApp(App):
     def build(self):
         self.screens = {} # Empty screen list
         self.available_screens = sorted([	
-            'app_settings', 'create_event', 'events', 'friends', 'match', 'match_profile', 'profile',
+            'app_settings', 'create_event', 'eventFind', 'friends', 'match', 'match_profile', 'profile',
 	    'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
         self.screen_names = self.available_screens 
         curdir = dirname(__file__)

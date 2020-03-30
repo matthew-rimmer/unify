@@ -12,6 +12,10 @@ from string import ascii_lowercase
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 
+from kivy.uix.button import Button
+from kivy.uix.behaviors.touchripple import TouchRippleBehavior
+from kivy.clock import Clock
+import webbrowser
 
 import requests
 import json
@@ -136,13 +140,26 @@ class UnifyScreen(Screen):
     
 # Profile class
 class Profile(Screen):
+    def getText(self):
+        return "View LinkedIn [ref=profile][color=800080]profile[/color][/ref] "
+
+    # Opens LinkedIn profile in the browser
+    def urlLink(self, instance, ref):
+        _dict = {"profile": "https://www.linkedin.com/"}
+
+        # Opens new tab in browser
+        webbrowser.open(_dict[ref], new=1)
+	
+	
+#Friends class
+class Friends(BoxLayout):
     pass
-
-
+	
+	
 # Events class
 class Events(Screen):
     def getText(self):
-        return "Click [ref=here][color=800080]here[/color][/ref] to create your own event!"
+        return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
 
 # Create event class
@@ -170,6 +187,36 @@ class ReportUser(Screen):
     pass
 
 
+# Code for RoundedButton adapted from Youtuber 'Daniel kolim'
+# Available at https://www.youtube.com/watch?v=lo6KFW2kt84
+class RoundedButton(TouchRippleBehavior, Button):
+    def on_touch_down(self, touch):
+        collide_point = self.collide_point(touch.x, touch.y)
+        if collide_point:
+            touch.grab(self)
+
+            self.background_color[3] = 0
+
+            self.ripple_show(touch)
+
+            self.dispatch('on_press')
+            return True
+        return False
+
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            touch.ungrab(self)
+            self.ripple_fade()
+
+            def defer_release(dt):
+                self.dispatch('on_release')
+
+            Clock.schedule_once(defer_release, self.ripple_duration_out)
+            return True
+        return False
+
+
 # Acts like a button & an image
 class ImageButton(ButtonBehavior, Image):
     pass
@@ -187,13 +234,13 @@ class UnifyApp(App):
     # the data/screens folder, sets it to the zero index screen
     def build(self):
         self.screens = {} # Empty screen list
-        self.available_screens = sorted([
-            'app_settings', 'create_event', 'events', 'match', 'match_profile', 'profile',
+        self.available_screens = sorted([	
+            'app_settings', 'create_event', 'events', 'friends', 'match', 'match_profile', 'profile',
 	    'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
         self.screen_names = self.available_screens 
         curdir = dirname(__file__)
         self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-        self.go_screen(3) # goto screen 3 (match)
+        self.go_screen(4) # goto match screen 
         
         #print(len(self.available_screens))
         

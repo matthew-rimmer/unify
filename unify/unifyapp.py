@@ -100,179 +100,213 @@ class EventPayload(object):
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
-    pass
+	pass
 
 
 # Login class
 class Login(Screen):
-    pass
+	pass
 
 
 # Register class
 class Register(Screen):
-    pass
+	pass
 
 
 # Profile creation class
 class ProfileCreation(Screen):
-    pass
+	def select(self, *args):
+		try:
+			print(args[1][0])
+
+		except:
+			pass
+
 
 
 # Class for the profile, find & event sections
 class MainSections(Screen):
-    pass
+	pass
 
 
 class RV(BoxLayout):
-    def populate(self):
-        self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-        p = ProfilePayload(j)
-        self.rv.data.append({'value' : p.data["First_Name"]}) 
+	def populate(self):
+		self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+		#p = ProfilePayload(j)
+		#self.rv.data.append({'value' : p.data["First_Name"]}) 
 
 	
 class MatchProfile(Screen):
-    def getText(self):
-        return "View LinkedIn [ref=profile][color=800080]profile[/color][/ref] "
+	def getText(self):
+		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
 
-    # Opens LinkedIn profile in the browser
-    def urlLink(self, instance, ref):
-        _dict = {"profile": "https://www.linkedin.com/"}
+	# Opens LinkedIn profile in the browser
+	def urlLink(self, instance, ref):
+		_dict = {"profile": "https://www.linkedin.com/"}
 
-        # Opens new tab in browser
-        webbrowser.open(_dict[ref], new=1)
+		# Opens new tab in browser
+		webbrowser.open(_dict[ref], new=1)
 
 
 class UnifyScreen(Screen):
-    fullscreen = BooleanProperty(False)
+	fullscreen = BooleanProperty(False)
 
-    
+	
 # Profile class
 class Profile(Screen):
-    def getText(self):
-        return "View LinkedIn [ref=profile][color=800080]profile[/color][/ref] "
+	def getText(self):
+		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
 
-    # Opens LinkedIn profile in the browser
-    def urlLink(self, instance, ref):
-        _dict = {"profile": "https://www.linkedin.com/"}
+	# Opens LinkedIn profile in the browser
+	def urlLink(self, instance, ref):
+		_dict = {"profile": "https://www.linkedin.com/"}
 
-        # Opens new tab in browser
-        webbrowser.open(_dict[ref], new=1)
+		# Opens new tab in browser
+		webbrowser.open(_dict[ref], new=1)
 	
 		
 # Friends class
 class Friends(BoxLayout):
-    pass
+	pass
 		
 	
 # Events class
 class Events(BoxLayout):
-    def getText(self):
-        return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
+	def getText(self):
+		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
 
 # Create event class
 class CreateEvent(Screen):
-    pass
+	pass
 
 
 # View event class
 class ViewEvent(Screen):
-    pass
+	pass
 
 
 # Settings class
 class AppSettings(Screen):
-    pass
+	pass
 
 
 # Report event class
 class ReportEvent(Screen):
-    pass
+	pass
 
 
 # Report user class
 class ReportUser(Screen):
-    pass
+	pass
 
 
 # Code for RoundedButton adapted from Youtuber 'Daniel kolim'
 # Available at https://www.youtube.com/watch?v=lo6KFW2kt84
 class RoundedButton(TouchRippleBehavior, Button):
-    def on_touch_down(self, touch):
-        collide_point = self.collide_point(touch.x, touch.y)
-        if collide_point:
-            touch.grab(self)
+	def on_touch_down(self, touch):
+		collide_point = self.collide_point(touch.x, touch.y)
+		if collide_point:
+			touch.grab(self)
 
-            self.background_color[3] = 0
+			self.background_color[3] = 0
 
-            self.ripple_show(touch)
+			self.ripple_show(touch)
 
-            self.dispatch('on_press')
-            return True
-        return False
+			self.dispatch('on_press')
+			return True
+		return False
 
 
-    def on_touch_up(self, touch):
-        if touch.grab_current is self:
-            touch.ungrab(self)
-            self.ripple_fade()
+	def on_touch_up(self, touch):
+		if touch.grab_current is self:
+			touch.ungrab(self)
+			self.ripple_fade()
 
-            def defer_release(dt):
-                self.dispatch('on_release')
+			def defer_release(dt):
+				self.dispatch('on_release')
 
-            Clock.schedule_once(defer_release, self.ripple_duration_out)
-            return True
-        return False
+			Clock.schedule_once(defer_release, self.ripple_duration_out)
+			return True
+		return False
 
 
 # Acts like a button & an image
 class ImageButton(ButtonBehavior, Image):
-    pass
-    
+	pass
+	
 
 class UnifyApp(App):
-    """Unify base kivy app
+	"""Unify base kivy app
 
-    See unify,kv for kivy widget definition
-    """
-    
-    index = NumericProperty(-1)
+	See unify,kv for kivy widget definition
+	"""
+	
+	index = NumericProperty(-1)
 
-    # Build creates and gets the available screens, loads them from, 
-    # the data/screens folder, sets it to the zero index screen
-    def build(self):
-        self.screens = {} # Empty screen list
-        self.available_screens = sorted([	
-            'app_settings', 'create_event', 'eventFind', 'friends', 'match', 'match_profile', 'profile',
-	    'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
-        self.screen_names = self.available_screens 
-        curdir = dirname(__file__)
-        self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-        self.go_screen(4) # goto match screen 
-        
-        #print(len(self.available_screens))
-        
-        return self.root
+	# Build creates and gets the available screens, loads them from, 
+	# the data/screens folder, sets it to the zero index screen
+	def build(self):
+		self.screens = {} # Empty screen list
+		self.available_screens = sorted([	
+			'app_settings', 'create_event', 'eventFind', 'friends', 'match', 'match_profile', 'profile',
+		'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
+		self.screen_names = self.available_screens 
+		curdir = dirname(__file__)
+		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
+		self.go_screen(4) # goto match screen 
+		
+		#print(len(self.available_screens))
+		
+		return self.root
 
-    def go_screen(self, idx):
-        self.index = idx # set the current screen index
-        screen = self.load_screen(self.index) # build the screen kv form
-        sm = self.root.ids.main.ids.sm
-        sm.switch_to(screen, direction='left') # switch the screen
-        #self.populate()
-        
-    
-    def load_screen(self, index):
-        # print('loading screen')
-        if index in self.screens:
-                return self.screens[index]
-        else:
-                self.screens[index] = screen = Builder.load_file(self.available_screens[index]) # build the screen
-                return screen
+	def go_screen(self, idx):
+		self.index = idx # set the current screen index
+		screen = self.load_screen(self.index) # build the screen kv form
+		sm = self.root.ids.main.ids.sm
+		sm.switch_to(screen, direction='left') # switch the screen
+		#self.populate()
 
-
-
+		if self.index == 0:
+			title = self.root.ids.main.ids.title
+			title.text = "Settings"
+		elif self.index == 1:
+			title = self.root.ids.main.ids.title
+			title.text = "Create Event"
+		elif self.index == 2:
+			title = self.root.ids.main.ids.title
+			title.text = "Find Events"
+		elif self.index == 3:
+			title = self.root.ids.main.ids.title
+			title.text = "My Friends"
+		elif self.index == 4:
+			title = self.root.ids.main.ids.title
+			title.text = "Find Friends"
+		elif self.index == 5:
+			title = self.root.ids.main.ids.title
+			title.text = "Student's Profile"
+		elif self.index == 6:
+			title = self.root.ids.main.ids.title
+			title.text = "My Profile"
+		elif self.index == 7:
+			title = self.root.ids.main.ids.title
+			title.text = "Report an Event"
+		elif self.index == 8:
+			title = self.root.ids.main.ids.title
+			title.text = "Report a User"
+		elif self.index == 9:
+			title = self.root.ids.main.ids.title
+			title.text = "View Event"
+		
+	
+	def load_screen(self, index):
+		# print('loading screen')
+		if index in self.screens:
+				return self.screens[index]
+		else:
+				self.screens[index] = screen = Builder.load_file(self.available_screens[index]) # build the screen
+				return screen
 
 # main
 if __name__ == '__main__':
-        UnifyApp().run()
+		UnifyApp().run()

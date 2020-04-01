@@ -1,87 +1,134 @@
-<ProfileCreation>
-        BoxLayout:
-                orientation: "vertical"
-                padding: dp(20)
-                spacing: dp(10)
+<ProfileCreation>:
+	GridLayout:
+		cols: 1
+		padding: dp(15)
+		spacing: dp(15)
 
-                # Main background colour
-                canvas:
-                        Color:
-                                rgb: utils.get_color_from_hex("#D8BFD8")
-                        Rectangle:
-                                size: self.size
-                                pos: self.pos
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#D8BFD8")
+			Rectangle:
+				size: self.size
+				pos: self.pos
 
-                Label:
-                        text: "Create Your Profile"
-                        font_size: 20
-                        bold: True
-                        text_size: self.size
-                        halign: "left"
-
-
-                # Upload pictures - save image url
-                Label:
-                        text: "Choose your photos:"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
+		Label:
+			text: "Create Your Profile"
+			font_size: 20
+			bold: True
+			text_size: self.size
+			halign: "left"
+			size_hint_y: None
+			height: dp(20)
 
 
-                # Fill in 'About Me' section
-                Label:
-                        text: "What should be in your 'About Me'?"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                TextInput:
-                        id: description
-                        multiline: True
+		# Upload pictures - save image url
+		Label:
+			text: "Choose your 3 photos:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+			size_hint_y: None
+			height: dp(20)
+
+		GridLayout:
+			cols: 1
+			canvas.before:
+				Color:
+					rgb: 0.6, 0.5, 0.6
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			FileChooserIconView:
+				size_hint_x: 1
+				size_hint_y: None
+				height: dp(200)
+				on_selection: root.select(*args)
+
+		ScrollView:
+			bar_width: dp(5)
+
+			GridLayout:
+				cols: 1
+				size_hint_x: 1
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(15)
+				spacing: dp(15)
+
+				# Fill in 'About Me' section
+				Label:
+					text: "What should be in your 'About Me'?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: description
+					multiline: True
+					size_hint_y: None
+					height: dp(80)
 
 
-		# Interest tags
-                Label:
-                        text: "Tell us your interests (the 1st one should be your course):"
-                        halign: "center"
-                        text_size: root.width, None
-                        color: 0,0,0,1
-                TextInput:
-                        id: interest_tags
-                        multiline: True
+				# Interest tags
+				Label:
+					text: "University course & interests?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: interest_tags
+					multiline: True
+					size_hint_y: None
+					height: dp(80)
 
 
-                # Link Instagram
-                Label:
-                        text: "Connect your Instagram:"
-                        color: 0,0,0,1
+				# Link Instagram
+				Label:
+					text: "Connect your Instagram:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
 
 
-                # Link Spotify
-                Label:
-                        text: "Connect your Spotify:"
-                        color: 0,0,0,1
+				# Link Spotify
+				Label:
+					text: "Connect your Spotify:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
 
 
-                # Link Twitter
-                Label:
-                        text: "Connect your Twitter:"
-                        color: 0,0,0,1
+				# Link Twitter
+				Label:
+					text: "Connect your Twitter:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
 
 
-                # Provide LinkedIn URL
-                Label:
-                        text: "LinkedIn URL:"
-                        color: 0,0,0,1
-                TextInput:
-                        id: linked_in
-                        multiline: False
+				# Provide LinkedIn URL
+				Label:
+					text: "LinkedIn URL:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: linked_in
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
-                RoundedButton:
-                        id: profileCreate
-                        text: "Create Profile"
-                        pos_hint: {"center_x": 0.5}
-                        size_hint: 0.5, 0.8
-                        on_release:
-                                app.root.current = "main"
-                                root.manager.transition.direction = 'left'
+				RoundedButton:
+					id: profileCreate
+					text: "Create Profile"
+					size_hint_y: None
+					height: dp(25)
+					on_release:
+						app.root.current = "main"
+						root.manager.transition.direction = 'left'

@@ -1,4 +1,16 @@
-<Profile>:
+Profile:
+	img: img
+	img2: img2
+	img3: img3
+	fullname: fullname
+	description: description
+	course: course
+	tag2: tag2
+	tag3: tag3
+	tag4: tag4
+	tag5: tag5
+	tag6: tag6
+
 	ScrollView:
 		bar_width: dp(5)
 
@@ -14,21 +26,24 @@
 			BoxLayout:
 				orientation: 'vertical'
 				size_hint_y: None
-				height: dp(200)
+				height: dp(180)
 
 				Carousel:
 					direction: 'right'
 					loop: True
 
 					AsyncImage:
+						id: img
 						source: 'http://placehold.it/480x270.png&text=slide-1.png'
 						
 
 					AsyncImage:
+						id: img2
 						source: 'http://placehold.it/480x270.png&text=slide-2.png'
 						
 
 					AsyncImage:
+						id: img3
 						source: 'http://placehold.it/480x270.png&text=slide-3.png'
 						
 
@@ -37,7 +52,7 @@
 			# Retrieve from database
 			Label:
 				id: fullname
-				text: "Full Name"   
+				text: ''
 				font_size: dp(17)
 				bold: True
 				color: 0,0,0,1
@@ -47,7 +62,7 @@
 			# Retrieve from database
 			Label:
 				id: description
-				text: "About Me"    
+				text: ''   
 				font_size: dp(15)
 				color: 0, 0, 0, 1
 				size_hint_x: 1
@@ -61,27 +76,50 @@
 				cols: 3
 				size_hint_x: 1
 				size_hint_y: None
-				height: dp(55)
+				height: dp(60)
 				spacing: dp(10)
 
 				OutlinedButton:
-					id: interest_tags
-					text: "#Tag"
+					id: course
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 				OutlinedButton:
-					text: "#Tag"
+					id: tag2
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 				OutlinedButton:
-					text: "#Tag"
+					id: tag3
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 				OutlinedButton:
-					text: "#Tag"
+					id: tag4
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 				OutlinedButton:
-					text: "#Tag"
+					id: tag5
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 				OutlinedButton:
-					text: "#Tag"
+					id: tag6
+					text: ''
+					font_size: dp(13)
+					text_size: self.width, None
+					halign: 'center'
 
 
 			# Display the user's Instagram photos
@@ -143,6 +181,3 @@
 					text: "Settings"
 					on_release: app.go_screen(0)
 
-UnifyScreen:
-	Profile:
-		id: ProfileScreen

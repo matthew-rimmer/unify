@@ -97,6 +97,20 @@ class EventPayload(object):
 		)
 		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
+#TEMPORARY - testing profile ids
+
+k = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",' \
+    ' "Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
+    ' "Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla", ' \
+    '"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!", ' \
+    '"User_Tag": "Chemistry", "User_Tag2": "Archery", "User_Tag3": "Chess", "User_Tag4": "Anime", "User_Tag5": "Jazz",' \
+    ' "User_Tag6": "Terrible Film", "Instagram_Link": null, "Spotify_Link": null, "Twitter_Link": null, '\
+    ' "Linked_In": "https://www.linkedin.com/"}}'
+
+class ProfilePayload(object):
+	def __init__(self, k):
+		self.__dict__ = json.loads(k)
+
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
@@ -137,11 +151,34 @@ class RV(BoxLayout):
 
 	
 class MatchProfile(Screen):
+	def on_pre_enter(self, *args):
+		print("number of match_prof ids = ", len(self.ids))
+		# photos
+		#self.img.source =
+		#self.img2.source =
+		#self.img3.source =
+
+		# full name
+		#self.fullname.text =
+
+		# about me description
+		#self.description.text =
+
+		# interest tags x6
+		#self.course.text = "#" +
+		#self.tag2.text = "#" +
+		#self.tag3.text = "#" +
+		#self.tag4.text = "#" +
+		#self.tag5.text = "#" +
+		#self.tag6.text = "#" +
+
 	def getText(self):
 		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
 
 	# Opens LinkedIn profile in the browser
-	def urlLink(self, instance, ref):
+	def urlLink(self, url, ref):
+		#url =
+		#_dict = {"profile": url}
 		_dict = {"profile": "https://www.linkedin.com/"}
 
 		# Opens new tab in browser
@@ -154,12 +191,37 @@ class UnifyScreen(Screen):
 	
 # Profile class
 class Profile(Screen):
+	def on_pre_enter(self, *args):
+		p = ProfilePayload(k)
+
+		# photos
+		self.img.source = p.data["Profile_Picture"]
+		self.img2.source = p.data["Profile_Picture2"]
+		self.img3.source = p.data["Profile_Picture3"]
+
+		# full name
+		self.fullname.text = p.data["First_Name"] + " " + p.data["Last_Name"]
+
+		# about me description
+		self.description.text = p.data["Description"]
+
+		# interest tags x6
+		self.course.text = "#" + p.data["User_Tag"]
+		self.tag2.text = "#" + p.data["User_Tag2"]
+		self.tag3.text = "#" + p.data["User_Tag3"]
+		self.tag4.text = "#" + p.data["User_Tag4"]
+		self.tag5.text = "#" + p.data["User_Tag5"]
+		self.tag6.text = "#" + p.data["User_Tag6"]
+
 	def getText(self):
 		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
 
 	# Opens LinkedIn profile in the browser
-	def urlLink(self, instance, ref):
-		_dict = {"profile": "https://www.linkedin.com/"}
+	def urlLink(self, url, ref):
+		p = ProfilePayload(k)
+
+		url = p.data["Linked_In"]
+		_dict = {"profile": url}
 
 		# Opens new tab in browser
 		webbrowser.open(_dict[ref], new=1)
@@ -178,7 +240,12 @@ class Events(BoxLayout):
 
 # Create event class
 class CreateEvent(Screen):
-	pass
+	def select(self, *args):
+		try:
+			print(args[1][0])
+
+		except:
+			pass
 
 
 # View event class

@@ -1,90 +1,135 @@
 <CreateEvent>
-	ScrollView:
-		BoxLayout:
-			orientation: "vertical"
+	GridLayout:
+		cols: 1
+		padding: dp(5)
+		spacing: dp(15)
+
+		# Upload event image - save image url
+		Label:
+			text: "Choose an event photo:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 			size_hint_y: None
-			height: dp(600)
-			padding: dp(20)
-			spacing: dp(10)
+			height: dp(20)
 
-			# Upload event image - save image url
-			Label:
-				text: "Choose an event photo:"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
+		GridLayout:
+			cols: 1
+			canvas.before:
+				Color:
+					rgb: 0.6, 0.5, 0.6
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
+			FileChooserIconView:
+				size_hint_x: 1
+				size_hint_y: None
+				height: dp(200)
+				on_selection: root.select(*args)
 
-			# Name of event
-			Label:
-				text: "What is the name of the event?"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
-			TextInput:
-				id: eventname
-				multiline: False
+		ScrollView:
+			bar_width: dp(5)
 
+			GridLayout:
+				cols: 1
+				size_hint_x: 1
+				size_hint_y: None
+				height: self.minimum_height
+				spacing: dp(15)
 
-			# Event description
-			Label:
-				text: "What is the event all about?"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
-			TextInput:
-				id: event_description
-				multiline: True
-				size_hint: (1, None)
-				height: dp(80)
-
-
-			# Event time and date
-			Label:
-				text: "When is the date and time of the event?"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
-			TextInput:
-				id: datetime
-				multiline: False
+				# Name of event
+				Label:
+					text: "What is the name of the event?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: eventname
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
-			# Event location
-			Label:
-				text: "Where is the location of the event?"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
-			TextInput:
-				id: location
-				multiline: False
+				# Event description
+				Label:
+					text: "What is the event all about?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: event_description
+					multiline: True
+					size_hint_y: None
+					height: dp(80)
 
 
-			# Maximum number of students for event
-			Label:
-				text: "What is the maximum number of students that can attend the event?"
-				halign: "center"
-				text_size: root.width, None
-				color: 0,0,0,1
-			TextInput:
-				id: max_users
-				multiline: False
+				# Event time and date
+				Label:
+					text: "When is the date and time of the event?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: datetime
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
-			RoundedButton:
-				id: create
-				text: "Create Event"
-				pos_hint: {"center_x": 0.5}
-				size_hint: 0.5, 0.8
-				on_release: app.go_screen(9)
+				# Event location
+				Label:
+					text: "Where is the location of the event?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: location
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
-			Label:
-				text: "P.S. once you are done here you will be shown exactly how users will see your event"
-				halign: "center"
-				text_size: root.width, None
-				font_size: dp(12)
-				padding: dp(20), (20)
+
+				# Maximum number of students for event
+				Label:
+					text: "Maximum number of students that can attend the event?"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: max_users
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+
+				RoundedButton:
+					id: create
+					text: "Create Event"
+					#size_hint: 0.5, 0.8
+					size_hint_y: None
+					height: dp(20)
+					on_release: app.go_screen(9)
+
+				Label:
+					text: "P.S. once you are done here you will be shown exactly how users will see your event!"
+					halign: "center"
+					text_size: root.width, None
+					font_size: dp(12)
+					color: 128,0,128,1
+					size_hint_y: None
+					height: dp(30)
+					padding: dp(20), (20)
 
 UnifyScreen:
 	CreateEvent:

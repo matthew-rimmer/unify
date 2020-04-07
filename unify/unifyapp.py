@@ -152,7 +152,17 @@ class MatchRecycle(RecycleView):
 
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
 		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+
+
+class EventList(BoxLayout):
+	pass
+
+class EventRecycle(RecycleView):
+
+	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
+		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
 	
+
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
 		print("number of match_prof ids = ", len(self.ids))

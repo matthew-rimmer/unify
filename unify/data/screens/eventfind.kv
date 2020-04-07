@@ -1,0 +1,40 @@
+<EventRow@BoxLayout>:
+	orientation: 'horizontal'
+	canvas.before:
+		Color:
+			rgba: 0.5, 0.5, 0.5, 1
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	value: ''
+	Button:
+		text: "Image Placeholder"
+		on_release: app.go_screen(5)   
+		# REMOVE - currently gives access to match profile & report user for now
+	Label:
+		text: root.value
+		
+
+<EventList>:	
+	orientation: 'vertical'
+	id: nice
+	EventRecycle:
+		id: rvEvent
+
+
+<EventRecycle>:
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'EventRow'
+	RecycleBoxLayout:
+		default_size: None, dp(56)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(2)
+
+UnifyScreen:
+	EventList:
+		id: anice

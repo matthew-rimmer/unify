@@ -15,6 +15,8 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.behaviors.touchripple import TouchRippleBehavior
 from kivy.clock import Clock
+from kivy.uix.recycleview import RecycleView
+
 import webbrowser
 
 import requests
@@ -143,12 +145,13 @@ class MainSections(Screen):
 	pass
 
 
-class RV(BoxLayout):
-	def populate(self):
-		self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-		#p = ProfilePayload(j)
-		#self.rv.data.append({'value' : p.data["First_Name"]}) 
+class MatchList(BoxLayout):
+	pass
 
+class MatchRecycle(RecycleView):
+
+	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
+		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
 	
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
@@ -310,6 +313,7 @@ class UnifyApp(App):
 	"""
 	
 	index = NumericProperty(-1)
+	
 
 	# Build creates and gets the available screens, loads them from, 
 	# the data/screens folder, sets it to the zero index screen

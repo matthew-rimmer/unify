@@ -1,4 +1,10 @@
-<ReportEvent>
+ReportEvent:
+	reason1: reason1
+	reason2: reason2
+	reason3: reason3
+	reason4: reason4
+	report_event: report_event
+
 	BoxLayout:
 		orientation: 'vertical'
 		padding: dp(20)
@@ -14,6 +20,7 @@
 
 		# Four choices total
 		CheckBox:
+			id: reason1
 			active: False
 			color: 0,0,0,1
 		Label:
@@ -24,6 +31,7 @@
 
 
 		CheckBox:
+			id: reason2
 			active: False
 			color: 0,0,0,1
 		Label:
@@ -34,6 +42,7 @@
 
 
 		CheckBox:
+			id: reason3
 			active: False
 			color: 0,0,0,1
 		Label:
@@ -49,6 +58,7 @@
 			text_size: root.width, None
 			color: 0,0,0,1
 		TextInput:
+			id: reason4
 			multiline:True
 			size_hint: (1, None)
 			height: dp(70)
@@ -61,6 +71,3 @@
 			pos_hint: {"center_x": 0.5}
 			size_hint: 0.5, 0.6
 			on_release: app.go_screen(4)
-
-UnifyScreen:
-	ReportEvent:

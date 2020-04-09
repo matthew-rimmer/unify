@@ -90,7 +90,10 @@ ScreenManager:
 			pos: self.pos
 			radius: self.border_radius
 
-<OutlinedButton@Button>
+<OutlinedButton>
+	font_size: dp(13)
+	text_size: self.width, None
+	halign: 'center'
 	background_color: (0,0,0,0)
 	background_normal: ''
 	back_color: (0, 0, 128, 0.2)

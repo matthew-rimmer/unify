@@ -1,4 +1,12 @@
-<ViewEvent>
+ViewEvent:
+        event_img: event_img
+	event_name: event_name
+	description: description
+	datetime: datetime
+	location: location
+	attend: attend
+	report_event: report_event
+
         ScrollView:
                 BoxLayout:
                         orientation: "vertical"
@@ -10,7 +18,7 @@
                         # Display the event photo
                         # Retrieve from database
                         AsyncImage:
-                                id: eventimage
+                                id: event_img
                                 source: 'http://placehold.it/480x270.png&text=slide-1.png'
 				size_hint_y: None
                                 height: dp(180)
@@ -19,7 +27,7 @@
                         # Display the event name
                         # Retrieve from database
                         Label:
-                                id: eventname
+                                id: event_name
                                 text: 'Event Name'
                                 font_size: dp(15)
                                 bold: True
@@ -45,6 +53,7 @@
                                 id: description
                                 text: 'Event Description'
                                 text_size: root.width, None
+                                halign: 'center'
                                 color: 0, 0, 0, 1
                                 size: self.texture_size
                                 padding: dp(10), dp(10)
@@ -64,10 +73,11 @@
 
                                 Label:
                                         id: datetime
-                                        text:'dd/mm/yyyy 00:00'
+                                        text: 'YYYY-MM-DD hh:mm:ss'
                                         font_size: dp(15)
                                         color: 0, 0, 0, 1
                                         text_size: self.width, None
+                                        halign: 'center'
 
                                 Image:
                                         # icon made by DinosoftLabs from www.flaticon.com
@@ -79,6 +89,7 @@
                                         font_size: dp(15)
                                         color: 0, 0, 0, 1
                                         text_size: self.width, None
+                                        halign: 'center'
 
 
                         RoundedButton:
@@ -89,11 +100,8 @@
                                 on_release:
 
                         RoundedButton:
-                                id: reportevent
+                                id: report_event
                                 text: "Report Event"
                                 pos_hint: {"center_x": 0.5}
                                 size_hint:  0.4, 0.3
                                 on_release: app.go_screen(7)
-
-UnifyScreen:
-        ViewEvent:

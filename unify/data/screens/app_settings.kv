@@ -1,8 +1,12 @@
-<AppSettings>
-	BoxLayout:
-		orientation: 'vertical'
-		padding: dp(20)
-		spacing: dp(10)
+AppSettings:
+	new_description: new_description
+	new_tags: new_tags
+	update_profile: update_profile
+
+	GridLayout:
+		cols: 1
+		padding: dp(10)
+		spacing: dp(15)
 
 		# Change photos
 		Label:
@@ -10,38 +14,77 @@
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
+			size_hint_y: None
+			height: dp(10)
+
+		GridLayout:
+			cols: 1
+			canvas.before:
+				Color:
+					rgb: 0.6, 0.5, 0.6
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			FileChooserIconView:
+				size_hint_x: 1
+				size_hint_y: None
+				height: dp(200)
+				multiselect: True
+				on_selection: root.select(*args)
 
 
-		# Update description
-		Label:
-			text: "Update 'About Me' description:"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		TextInput:
-			id: new_description
-			multiline: True
+		ScrollView:
+			bar_width: dp(5)
+
+			GridLayout:
+				cols: 1
+				size_hint_x: 1
+				size_hint_y: None
+				height: self.minimum_height
+				spacing: dp(15)
+
+				# Update description
+				Label:
+					text: "Update 'About Me' description:"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: new_description
+					multiline: True
+					size_hint_y: None
+					height: dp(80)
 
 
-		# Update interest tags
-		Label:
-			text: "Update interest tags:"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		TextInput:
-			id: new_tags
-			multiline: True
+				# Update interest tags
+				Label:
+					text: "Update interest tags: \n (one per line)"
+					halign: "center"
+					text_size: root.width, None
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: new_tags
+					multiline: True
+					size_hint_y: None
+					height: dp(80)
 
 
-		# Submit new data & update database
-		RoundedButton:
-			id: update
-			text: "Update Profile"
-			pos_hint: {"center_x": 0.5}
-			size_hint: 0.5, 0.6
-			on_release: app.go_screen(6)
+				# Submit new data & update database
+				RoundedButton:
+					id: update_profile
+					text: "Update Profile"
+					size_hint_y: None
+					height: dp(25)
+					on_release: app.go_screen(6)
 
-UnifyScreen:
-	AppSettings:
-
+				# Log out
+				RoundedButton:
+					text: "Log Out"
+					size_hint_y: None
+					height: dp(25)
+					on_release: app.root.current = "initial_screen"

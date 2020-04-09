@@ -45,11 +45,6 @@ applicationRoutes = {
    'user_control' : '/user/'        # GET, PUT, DELETE
 }
 
-
-
-#j = '{"data":  { "Description": "description here", "First_Name": "John", "Instagram_Link": null, "Last_Name": "Doe", "Profile_Picture": null, "Twitther_Link": null}}'
-
-
 		
 #j = {"User_ID":"Temp123","Friend_ID":"Wall123"} #Find friend payload layout
 class FindFriendPayload(object):
@@ -99,16 +94,27 @@ class EventPayload(object):
 		)
 		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
-#TEMPORARY - testing profile ids
-
-k = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",' \
+#TEMPORARY - testing profile, match and event ids
+profile = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",' \
     ' "Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
     ' "Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla", ' \
     '"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!", ' \
-    '"User_Tag": "Chemistry", "User_Tag2": "Archery", "User_Tag3": "Chess", "User_Tag4": "Anime", "User_Tag5": "Jazz",' \
-    ' "User_Tag6": "Terrible Film", "Instagram_Link": null, "Spotify_Link": null, "Twitter_Link": null, '\
+    '"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"], "Instagram_Link": null, "Spotify_Link": null, "Twitter_Link": null, '\
     ' "Linked_In": "https://www.linkedin.com/"}}'
 
+match = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",' \
+	' "Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
+	' "Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80", "First_Name": "Austin", ' \
+	' "Last_Name": "Moran", "Description": "Hi there! I am new to the area and could do with more friends.", ' \
+	' "User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], "Instagram_Link": null,' \
+	' "Spotify_Link": null, "Twitter_Link": null, '\
+	' "Linked_In": "https://www.linkedin.com/"}}'
+
+event = '{"data": {"Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
+	' "Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",' \
+	' "Event_Location": "Westmoor Lane, LN1 2JW"}}'
+
+# Temporary
 class ProfilePayload(object):
 	def __init__(self, k):
 		self.__dict__ = json.loads(k)
@@ -119,24 +125,52 @@ class Initial(Screen):
 	pass
 
 
-# Login class
 class Login(Screen):
-	pass
+	def on_pre_leave(self):
+		j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
+		# GET request
+		# user_login = LoginPayload(j)
+		# print(j)
 
 
-# Register class
 class Register(Screen):
-	pass
+	def on_pre_leave(self):
+
+		j = {
+			"User_ID": "Temp123", "Email": self.uni_email.text, "First_Name": self.first_name.text,
+			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, "Password": self.password.text
+		}
+
+		# POST request
+		# user_info = SignUpPayload(j)
+		# print(j)
 
 
-# Profile creation class
 class ProfileCreation(Screen):
 	def select(self, *args):
 		try:
-			print(args[1][0])
+			profile_pictures = {}
+			profile_pictures["pic_one"] = args[1][0]
+			profile_pictures["pic_two"] = args[1][1]
+			profile_pictures["pic_three"] = args[1][2]
+
+			print(profile_pictures)
 
 		except:
 			pass
+
+	def on_pre_leave(self):
+		interest_tags = self.tags.text.splitlines()
+
+		j = {
+			"User_ID": "Temp123", "Picture_Path": "blank", "Description": self.description.text,
+			"User_Tag": interest_tags,
+			"LinkedIn_Link": self.linked_in.text
+		}
+
+		# POST request
+		# user_info = SignUpPayload(j)
+		# print(j)
 
 
 
@@ -157,6 +191,7 @@ class MatchRecycle(RecycleView):
 class EventList(BoxLayout):
 	pass
 
+
 class EventRecycle(RecycleView):
 
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
@@ -165,47 +200,7 @@ class EventRecycle(RecycleView):
 
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
-		print("number of match_prof ids = ", len(self.ids))
-		# photos
-		#self.img.source =
-		#self.img2.source =
-		#self.img3.source =
-
-		# full name
-		#self.fullname.text =
-
-		# about me description
-		#self.description.text =
-
-		# interest tags x6
-		#self.course.text = "#" +
-		#self.tag2.text = "#" +
-		#self.tag3.text = "#" +
-		#self.tag4.text = "#" +
-		#self.tag5.text = "#" +
-		#self.tag6.text = "#" +
-
-	def getText(self):
-		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
-
-	# Opens LinkedIn profile in the browser
-	def urlLink(self, url, ref):
-		#url =
-		#_dict = {"profile": url}
-		_dict = {"profile": "https://www.linkedin.com/"}
-
-		# Opens new tab in browser
-		webbrowser.open(_dict[ref], new=1)
-
-
-class UnifyScreen(Screen):
-	fullscreen = BooleanProperty(False)
-
-	
-# Profile class
-class Profile(Screen):
-	def on_pre_enter(self, *args):
-		p = ProfilePayload(k)
+		p = ProfilePayload(match)
 
 		# photos
 		self.img.source = p.data["Profile_Picture"]
@@ -218,13 +213,59 @@ class Profile(Screen):
 		# about me description
 		self.description.text = p.data["Description"]
 
-		# interest tags x6
-		self.course.text = "#" + p.data["User_Tag"]
-		self.tag2.text = "#" + p.data["User_Tag2"]
-		self.tag3.text = "#" + p.data["User_Tag3"]
-		self.tag4.text = "#" + p.data["User_Tag4"]
-		self.tag5.text = "#" + p.data["User_Tag5"]
-		self.tag6.text = "#" + p.data["User_Tag6"]
+		# interest tags
+		tags = p.data["User_Tag"]
+
+		for x in tags:
+			button = OutlinedButton(text="#" + x)
+			self.tag_grid.add_widget(button)
+			
+	def on_pre_leave(self):
+		self.tag_grid.clear_widgets()
+
+
+	def getText(self):
+		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
+
+	# Opens LinkedIn profile in the browser
+	def urlLink(self, url, ref):
+		p = ProfilePayload(match)
+
+		url = p.data["Linked_In"]
+		_dict = {"profile": url}
+
+		# Opens new tab in browser
+		webbrowser.open(_dict[ref], new=1)
+
+
+class UnifyScreen(Screen):
+	fullscreen = BooleanProperty(False)
+
+	
+class Profile(Screen):
+	def on_pre_enter(self, *args):
+		p = ProfilePayload(profile)
+
+		# photos
+		self.img.source = p.data["Profile_Picture"]
+		self.img2.source = p.data["Profile_Picture2"]
+		self.img3.source = p.data["Profile_Picture3"]
+
+		# full name
+		self.fullname.text = p.data["First_Name"] + " " + p.data["Last_Name"]
+
+		# about me description
+		self.description.text = p.data["Description"]
+
+		# interest tags
+		tags = p.data["User_Tag"]
+
+		for x in tags:
+			button = OutlinedButton(text="#" + x)
+			self.tag_grid.add_widget(button)
+
+	def on_pre_leave(self):
+		self.tag_grid.clear_widgets()
 
 	def getText(self):
 		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
@@ -240,44 +281,142 @@ class Profile(Screen):
 		webbrowser.open(_dict[ref], new=1)
 	
 		
-# Friends class
 class Friends(BoxLayout):
 	pass
-		
-	
-# Events class
-class Events(BoxLayout):
-	def getText(self):
-		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
 
-# Create event class
 class CreateEvent(Screen):
 	def select(self, *args):
 		try:
-			print(args[1][0])
+			event_picture = args[1][0]
 
+			print(event_picture)
 		except:
 			pass
 
+	def on_pre_leave(self):
 
-# View event class
+		j = {
+			"User_ID": "Temp123", "Name": self.event_name.text, "Description": self.description.text,
+			"DateTime": self.datetime.text, "Event_Location": self.location.text
+		}
+
+		# POST request
+		# event_info =
+		# print(j)
+
+
 class ViewEvent(Screen):
-	pass
+	def on_pre_enter(self):
+		p = ProfilePayload(event)
+
+		# event picture
+		self.event_img.source = p.data["Event_Picture"]
+
+		# event name
+		self.event_name.text = p.data["Name"]
+
+		# event creator
+		# self.creator.text =
+
+		# event description
+		self.description.text = p.data["Description"]
+
+		# event date & time
+		self.datetime.text = p.data["DateTime"]
+
+		# event location
+		self.location.text = p.data["Event_Location"]
 
 
-# Settings class
 class AppSettings(Screen):
-	pass
+	def select(self, *args):
+		try:
+			profile_pictures = {}
+			profile_pictures["pic_one"] = args[1][0]
+			profile_pictures["pic_two"] = args[1][1]
+			profile_pictures["pic_three"] = args[1][2]
+
+			print(profile_pictures)
+		except:
+			pass
+
+	def on_pre_leave(self):
+		new_tags = self.new_tags.text.splitlines()
+
+		j = {
+			"User_ID": "Temp123", "Picture_Path": "fill", "Description": self.new_description.text,
+			"User_Tag": new_tags
+		}
+
+		# POST request
+		# new_info =  SignUpPayload(j)
+		# print(j)
 
 
-# Report event class
 class ReportEvent(Screen):
-	pass
+	def on_pre_leave(self):
+
+		report_event_reason = [None, None, None, None]
+		if self.reason1.active:
+			report_event_reason[0] = "Objectionable content on the event's page"
+
+		if self.reason2.active:
+			report_event_reason[1] = "Fears over the safety of the event"
+
+		if self.reason3.active:
+			report_event_reason[2] = "Fraud and deception"
+
+		if self.reason4.text != '':
+			report_event_reason[3] = self.reason4.text
+
+		print(report_event_reason)
+
+		self.reason1.active = False
+		self.reason2.active = False
+		self.reason3.active = False
+		self.reason4.text = ''
+
+		j = {
+			"Reporting_User_ID": "fill", "Reported_Event_ID": "fill", "Report_Reason": report_event_reason
+		}
+
+		# POST request
+		# print(j)
 
 
-# Report user class
 class ReportUser(Screen):
+	def on_pre_leave(self):
+
+		report_reason = [None, None, None, None]
+		if self.reason1.active:
+			report_reason[0] = "Objectionable content in profile"
+
+		if self.reason2.active:
+			report_reason[1] = "Bullying and harrassment through social media"
+
+		if self.reason3.active:
+			report_reason[2] = "Fake profile - student does not exist"
+
+		if self.reason4.text != '':
+			report_reason[3] = self.reason4.text
+
+		print(report_reason)
+
+		self.reason1.active = False
+		self.reason2.active = False
+		self.reason3.active = False
+		self.reason4.text = ''
+
+		j = {
+			"Reporting_User_ID": "fill", "Reported_Event_ID": "fill", "Report_Reason": report_reason
+		}
+
+		# POST request
+		# print(j)
+
+
+class OutlinedButton(Button):
 	pass
 
 

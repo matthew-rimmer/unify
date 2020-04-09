@@ -1,4 +1,8 @@
 <Login>
+	uni_email: uni_email
+	password: password
+	authenticate: authenticate
+
 	FloatLayout:
 		# Main background colour
 		canvas:
@@ -11,7 +15,7 @@
 		# Email and Password fields
 		BoxLayout:
 			orientation: "vertical"
-			height: dp(160)
+			height: dp(170)
 			size_hint_y: None
 
 			pos_hint: {"center_x": 0.5, "top": 0.6}
@@ -19,9 +23,11 @@
 			spacing: dp(10)
 
 			TextInput:
+				id: uni_email
 				hint_text: "University Email Address"
 				multiline: False
 			TextInput:
+				id: password
 				hint_text: "Password"
 				password: True
 				multiline: False

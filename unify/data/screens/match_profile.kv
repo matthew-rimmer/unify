@@ -4,12 +4,10 @@ MatchProfile:
 	img3: img3
 	fullname: fullname
 	description: description
-	course: course
-	tag2: tag2
-	tag3: tag3
-	tag4: tag4
-	tag5: tag5
-	tag6: tag6
+	tag_grid: tag_grid
+	add_match: add_match
+	remove_match: remove_match
+	report_user: report_user
 
 	ScrollView:
 		bar_width: dp(5)
@@ -26,7 +24,7 @@ MatchProfile:
 			BoxLayout:
 				orientation: 'vertical'
 				size_hint_y: None
-				height: dp(200)
+				height: dp(160)
 
 				Carousel:
 					direction: 'right'
@@ -73,53 +71,12 @@ MatchProfile:
 			# Display the user's interest tags
 			# Retrieve from database
 			GridLayout:
+				id: tag_grid
 				cols: 3
 				size_hint_x: 1
 				size_hint_y: None
 				height: dp(60)
 				spacing: dp(10)
-
-				OutlinedButton:
-					id: course
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
-
-				OutlinedButton:
-					id: tag2
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
-
-				OutlinedButton:
-					id: tag3
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
-
-				OutlinedButton:
-					id: tag4
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
-
-				OutlinedButton:
-					id: tag5
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
-
-				OutlinedButton:
-					id: tag6
-					text: ''
-					font_size: dp(13)
-					text_size: self.width, None
-					halign: 'center'
 
 
 			# Display the user's Instagram photos

@@ -1,4 +1,11 @@
 <Register>
+	first_name: first_name
+	last_name: last_name
+	dob: dob
+	uni_email: uni_email
+	password: password
+	reg_details: reg_details
+
 	FloatLayout:
 		# Main background colour
 		canvas:
@@ -13,7 +20,7 @@
 			cols: 2
 			padding: dp(20)
 			spacing: dp(20)
-			size_hint: 1, 0.5
+			size_hint: 1, 0.55
 			pos_hint: {"top": 0.7}
 
 			# First name field
@@ -21,7 +28,7 @@
 				text: "First name:"
 				color: 0,0,0,1
 			TextInput:
-				id: firstname
+				id: first_name
 				multiline: False
 
 
@@ -30,13 +37,13 @@
 				text: "Last name:"
 				color: 0,0,0,1
 			TextInput:
-				id: lastname
+				id: last_name
 				multiline: False
 
 
 			# Date of birth field
 			Label:
-				text: "Date of Birth \n (dd/mm/yyyy):"
+				text: "Date of Birth \n (YYYY-MM-DD):"
 				halign: 'center'
 				color: 0,0,0,1
 			TextInput:

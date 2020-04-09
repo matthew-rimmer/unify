@@ -1,4 +1,11 @@
-<CreateEvent>
+CreateEvent:
+	event_name: event_name
+	description: description
+	datetime: datetime
+	location: location
+	max_people: max_people
+	create: create
+
 	GridLayout:
 		cols: 1
 		padding: dp(5)
@@ -26,6 +33,7 @@
 				size_hint_x: 1
 				size_hint_y: None
 				height: dp(200)
+				multiselect: False
 				on_selection: root.select(*args)
 
 		ScrollView:
@@ -47,7 +55,7 @@
 					size_hint_y: None
 					height: dp(20)
 				TextInput:
-					id: eventname
+					id: event_name
 					multiline: False
 					size_hint_y: None
 					height: dp(30)
@@ -62,7 +70,7 @@
 					size_hint_y: None
 					height: dp(20)
 				TextInput:
-					id: event_description
+					id: description
 					multiline: True
 					size_hint_y: None
 					height: dp(80)
@@ -70,7 +78,7 @@
 
 				# Event time and date
 				Label:
-					text: "When is the date and time of the event?"
+					text: "When is the date and time of the event? \n (YYYY-MM-DD hh:mm:ss)"
 					halign: "center"
 					text_size: root.width, None
 					color: 0,0,0,1
@@ -107,7 +115,7 @@
 					size_hint_y: None
 					height: dp(20)
 				TextInput:
-					id: max_users
+					id: max_people
 					multiline: False
 					size_hint_y: None
 					height: dp(30)
@@ -116,7 +124,6 @@
 				RoundedButton:
 					id: create
 					text: "Create Event"
-					#size_hint: 0.5, 0.8
 					size_hint_y: None
 					height: dp(20)
 					on_release: app.go_screen(9)

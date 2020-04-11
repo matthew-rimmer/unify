@@ -7,14 +7,17 @@
 			size: self.size
 			pos: self.pos
 	value: ''
+	name: 'a'
+	tags: 'a'
+	
 	Button:
 		text: "Image Placeholder"
 		on_release: app.go_screen(5)   
 		# REMOVE - currently gives access to match profile & report user for now
 	Label:
-		text: root.value
+		text: root.name
 	Label:
-		text: "Test tags"
+		text: root.tags
 
 		
 

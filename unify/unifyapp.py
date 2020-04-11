@@ -142,7 +142,7 @@ class Register(Screen):
 		}
 
 		# POST request
-		# user_info = SignUpPayload(j)
+		# user_info = SignUpPayload(j
 		# print(j)
 
 
@@ -185,8 +185,15 @@ class MatchList(BoxLayout):
 class MatchRecycle(RecycleView):
 
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-
+		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+		self.populate()
+	
+	def populate(self):
+		# j = {}
+		# pl = json.loads(j)
+		pl = {'User_ID':'15','First_Name':'Jeremy','Last_Name':"Lee",'Picture_Path':'placeholder','User_Tag':'#nice' }
+		self.data.append({'id':pl["User_ID"],'name': pl["First_Name"]+" "+pl["Last_Name"],'tags':pl["User_Tag"],'imagePath':["Picture_Path"]})
+		
 
 class EventList(BoxLayout):
 	pass
@@ -485,7 +492,6 @@ class UnifyApp(App):
 		screen = self.load_screen(self.index) # build the screen kv form
 		sm = self.root.ids.main.ids.sm
 		sm.switch_to(screen, direction='left') # switch the screen
-		#self.populate()
 
 		if self.index == 0:
 			title = self.root.ids.main.ids.title

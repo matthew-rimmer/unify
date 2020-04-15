@@ -4,6 +4,7 @@
 #:include data/setup/initial.kv
 #:include data/setup/login.kv
 #:include data/setup/register.kv
+#:include data/setup/account_verification.kv
 #:include data/setup/profile_creation.kv
 
 ScreenManager:
@@ -19,11 +20,13 @@ ScreenManager:
 		name: "register_screen"
 		id: register_screen
 
+	AccountVerification:
+		name: "account_verification"
+		id: account_verification
 
 	ProfileCreation:
 		name: "profile_creation"
 		id: profile_creation
-
 
 	MainSections:
 		name: "main"

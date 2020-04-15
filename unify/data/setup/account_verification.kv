@@ -1,0 +1,52 @@
+<AccountVerification>:
+	verif_code: verif_code
+	verify_account: verify_account
+
+	BoxLayout:
+		orientation: 'vertical'
+		padding: dp(30)
+		#spacing: dp(10)
+
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#D8BFD8")
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
+
+		Label:
+			text: "Verify Your Account"
+			font_size: 25
+			bold: True
+			text_size: self.size
+			halign: "center"
+
+
+		Label:
+			text: "We have sent a verification code to the email address you provided. \n \n Please enter the 6-digit code below:"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
+
+		TextInput:
+			id: verif_code
+			multiline: False
+			size_hint_y: None
+			height: dp(30)
+
+		GridLayout:
+			cols: 1
+			spacing: dp(20)
+			padding: dp(30)
+
+			RoundedButton:
+				id: verify_account
+				text: "Verify Account"
+				size_hint_y: None
+				height: dp(30)
+				on_release:
+					app.root.current = "profile_creation"
+					root.manager.transition.direction = 'left'
+

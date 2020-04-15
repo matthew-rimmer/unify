@@ -1,5 +1,5 @@
 ViewEvent:
-        event_img: event_img
+	event_img: event_img
 	event_name: event_name
 	description: description
 	datetime: datetime
@@ -7,101 +7,105 @@ ViewEvent:
 	attend: attend
 	report_event: report_event
 
-        ScrollView:
-                BoxLayout:
-                        orientation: "vertical"
-                        size_hint_y: None
-                        height: dp(600)
-                        padding: dp(8)
-                        spacing: dp(6)
+	ScrollView:
+		BoxLayout:
+			orientation: "vertical"
+			size_hint_y: None
+			height: dp(600)
+			padding: dp(8)
+			spacing: dp(6)
 
-                        # Display the event photo
-                        # Retrieve from database
-                        AsyncImage:
-                                id: event_img
-                                source: 'http://placehold.it/480x270.png&text=slide-1.png'
+			# Display the event photo
+			# Retrieve from database
+			AsyncImage:
+				id: event_img
+				source: 'http://placehold.it/480x270.png&text=slide-1.png'
 				size_hint_y: None
-                                height: dp(180)
+				height: dp(180)
 
 
-                        # Display the event name
-                        # Retrieve from database
-                        Label:
-                                id: event_name
-                                text: 'Event Name'
-                                font_size: dp(15)
-                                bold: True
-                                color: 0,0,0,1
-                                size_hint: 0.5, 0.5
-                                pos_hint: {"center_x": 0.5}
+			# Display the event name
+			# Retrieve from database
+			Label:
+				id: event_name
+				text: 'Event Name'
+				font_size: dp(15)
+				bold: True
+				color: 0,0,0,1
+				size_hint: 0.5, 0.5
+				pos_hint: {"center_x": 0.5}
 
 
-                        # Display the event creator's name
-                        # Retrieve from database
-                        Label:
-                                id: creator
-                                text: 'Created by:'
-                                font_size: dp(15)
-                                color: 0,0,0,1
-                                size_hint: 0.5, 0.5
-                                pos_hint: {"center_x": 0.5}
+			# Display the event creator's name
+			# Retrieve from database
+			Label:
+				id: creator
+				text: 'Created by:'
+				font_size: dp(15)
+				color: 0,0,0,1
+				size_hint: 0.5, 0.5
+				pos_hint: {"center_x": 0.5}
 
 
-                        # Display the event's description
-                        # Retrieve from database
-                        Label:
-                                id: description
-                                text: 'Event Description'
-                                text_size: root.width, None
-                                halign: 'center'
-                                color: 0, 0, 0, 1
-                                size: self.texture_size
-                                padding: dp(10), dp(10)
+			# Display the event's description
+			# Retrieve from database
+			Label:
+				id: description
+				text: 'Event Description'
+				text_size: root.width, None
+				halign: 'center'
+				color: 0, 0, 0, 1
+				size: self.texture_size
+				padding: dp(10), dp(10)
 
 
-                        # Event date & time
-                        # Event location
-                        GridLayout:
-                                cols: 2
+			# Event date & time
+			# Event location
+			GridLayout:
+				cols: 2
 				size_hint_y: None
 				height: dp(70)
-                                spacing: dp(10)
+				spacing: dp(10)
 
 				Image:
-                                        # icon made by Freepik from www.flaticon.com
-                                        source: 'data/icons/date_time.png'
+					# icon made by Freepik from www.flaticon.com
+					source: 'data/icons/date_time.png'
 
-                                Label:
-                                        id: datetime
-                                        text: 'YYYY-MM-DD hh:mm:ss'
-                                        font_size: dp(15)
-                                        color: 0, 0, 0, 1
-                                        text_size: self.width, None
-                                        halign: 'center'
+				Label:
+					id: datetime
+					text: 'YYYY-MM-DD hh:mm:ss'
+					font_size: dp(15)
+					color: 0, 0, 0, 1
+					text_size: self.width, None
+					halign: 'center'
 
-                                Image:
-                                        # icon made by DinosoftLabs from www.flaticon.com
-                                        source: 'data/icons/location.png'
+				Image:
+					# icon made by DinosoftLabs from www.flaticon.com
+					source: 'data/icons/location.png'
 
-                                Label:
-                                        id: location
-                                        text: 'Location'
-                                        font_size: dp(15)
-                                        color: 0, 0, 0, 1
-                                        text_size: self.width, None
-                                        halign: 'center'
+				Label:
+					id: location
+					text: 'Location'
+					font_size: dp(15)
+					color: 0, 0, 0, 1
+					text_size: self.width, None
+					halign: 'center'
 
+			GridLayout:
+				cols: 1
+				padding: dp(25)
+				spacing: dp(10)
 
-                        RoundedButton:
-                                id: attend
-                                text: "Attend"
-                                pos_hint: {"center_x": 0.5}
-                                size_hint:  0.4, 0.3
-                                on_release:
+				RoundedButton:
+					id: attend
+					text: "Attend"
+					size_hint_y: None
+					height: dp(30)
+					on_release:
 
-                        RoundedButton:
-                                id: report_event
-                                text: "Report Event"
-                                pos_hint: {"center_x": 0.5}
-                                size_hint:  0.4, 0.3
-                                on_release: app.go_screen(7)
+				RoundedButton:
+					id: report_event
+					text: "Report Event"
+					size_hint_y: None
+					height: dp(30)
+					on_release: app.go_screen(7)

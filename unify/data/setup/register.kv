@@ -81,6 +81,7 @@
 			RoundedButton:
 				id: reg_details
 				text: "Register"
+				on_release: root.save_user()
 				on_release:
-					app.root.current = "profile_creation"
+					app.root.current = "account_verification"
 					root.manager.transition.direction = 'left'

@@ -11,11 +11,14 @@ from random import sample
 from string import ascii_lowercase
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
+from kivy.uix.image import AsyncImage
+from kivy.uix.label import Label
 
 from kivy.uix.button import Button
 from kivy.uix.behaviors.touchripple import TouchRippleBehavior
 from kivy.clock import Clock
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.popup import Popup
 
 import webbrowser
 
@@ -128,53 +131,78 @@ class Initial(Screen):
 class Login(Screen):
 	def on_pre_leave(self):
 		j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
-		# GET request
-		# user_login = LoginPayload(j)
-		# print(j)
+		
 
 
 class Register(Screen):
-	def on_pre_leave(self):
+	def save_user(self):
 
 		j = {
 			"User_ID": "Temp123", "Email": self.uni_email.text, "First_Name": self.first_name.text,
 			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, "Password": self.password.text
 		}
 
-		# POST request
-		# user_info = SignUpPayload(j
-		# print(j)
+		# POST request (POST/user/create)
+
+
+class AccountVerification(Screen):
+	pass
+	# PATCH request (PATCH/user/{USER_ID}/verify
+	# Verification_Code
 
 
 class ProfileCreation(Screen):
-	def select(self, *args):
+	photos = []
+
+	def select(self, filename):
 		try:
-			profile_pictures = {}
-			profile_pictures["pic_one"] = args[1][0]
-			profile_pictures["pic_two"] = args[1][1]
-			profile_pictures["pic_three"] = args[1][2]
+			popupWindow = Popup(
+				title="Photo Selection",
+				content=Label(
+					text="Photo selected and saved! \n \n Click anywhere on the \n screen to continue...",
+					font_size=14, halign='center'),
+				size_hint=(None, None), size=(200, 200)
+			)
+			popupWindow.open()
 
-			print(profile_pictures)
-
+			global photos
+			self.photos.append(filename[0])
+			self.filechooser.selection.clear()
+			
 		except:
 			pass
 
-	def on_pre_leave(self):
-		interest_tags = self.tags.text.splitlines()
-
+	def save_profile(self):
+		# for users table
 		j = {
-			"User_ID": "Temp123", "Picture_Path": "blank", "Description": self.description.text,
-			"User_Tag": interest_tags,
+			"User_ID": "Temp123", "Description": self.description.text,
 			"LinkedIn_Link": self.linked_in.text
 		}
 
-		# POST request
-		# user_info = SignUpPayload(j)
-		# print(j)
+		# PATCH request (PATCH/user/{User_ID})
+
+		# for userpictures table
+		self.photos[0] = self.photos[0].replace("\\", "/")
+		self.photos[1] = self.photos[1].replace("\\", "/")
+		self.photos[2] = self.photos[2].replace("\\", "/")
+		
+		k = {"User_ID": "Temp123", "Picture_Path": self.photos[0]}
+		l = {"User_ID": "Temp123", "Picture_Path": self.photos[1]}
+		m = {"User_ID": "Temp123", "Picture_Path": self.photos[2]}
+
+		# POST request (POST/image/{User_ID}/upload)
+		# Image (Base64 Encoded)
+
+		# for usertags table
+		interest_tags = self.tags.text.splitlines()
+
+		n = {"User_ID": "Temp123", "UserTag": interest_tags[0]}
+
+		# PATCH request (PATCH/user/{User_ID})
+		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
 
 
-
-# Class for the profile, find & event sections
+# Class for the profile, match & event sections
 class MainSections(Screen):
 	pass
 
@@ -183,7 +211,6 @@ class MatchList(BoxLayout):
 	pass
 
 class MatchRecycle(RecycleView):
-
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
 		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
 		self.populate()
@@ -196,17 +223,18 @@ class MatchRecycle(RecycleView):
 		
 
 class EventList(BoxLayout):
-	pass
+	def getText(self):
+		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
 
 class EventRecycle(RecycleView):
-
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
 		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
 	
 
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
+		# GET request
 		p = ProfilePayload(match)
 
 		# photos
@@ -250,6 +278,7 @@ class UnifyScreen(Screen):
 
 	
 class Profile(Screen):
+	# GET request
 	def on_pre_enter(self, *args):
 		p = ProfilePayload(profile)
 
@@ -279,7 +308,7 @@ class Profile(Screen):
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		p = ProfilePayload(k)
+		p = ProfilePayload(profile)
 
 		url = p.data["Linked_In"]
 		_dict = {"profile": url}
@@ -293,28 +322,42 @@ class Friends(BoxLayout):
 
 
 class CreateEvent(Screen):
-	def select(self, *args):
-		try:
-			event_picture = args[1][0]
+	event_picture = []
 
-			print(event_picture)
+	def select(self, filename):
+		try:
+			popupWindow = Popup(
+				title="Photo Selection",
+				content=Label(
+					text="Picture selected and saved! \n \n Click anywhere on the \n screen to continue...",
+					font_size=14, halign='center'),
+				size_hint=(None, None), size=(200, 200)
+			)
+			popupWindow.open()
+
+			global event_picture
+			self.event_picture.append(filename[0])
+			self.filechooser.selection.clear()
+
 		except:
 			pass
 
-	def on_pre_leave(self):
+	def save_event(self):
+		self.event_picture[0] = self.event_picture[0].replace("\\", "/")
 
 		j = {
 			"User_ID": "Temp123", "Name": self.event_name.text, "Description": self.description.text,
-			"DateTime": self.datetime.text, "Event_Location": self.location.text
+			"Event_Picture": self.event_picture[0], "DateTime": self.datetime.text, 
+			"Event_Location": self.location.text
 		}
 
 		# POST request
-		# event_info =
-		# print(j)
+		
 
 
 class ViewEvent(Screen):
 	def on_pre_enter(self):
+		# GET request
 		p = ProfilePayload(event)
 
 		# event picture
@@ -337,33 +380,40 @@ class ViewEvent(Screen):
 
 
 class AppSettings(Screen):
-	def select(self, *args):
-		try:
-			profile_pictures = {}
-			profile_pictures["pic_one"] = args[1][0]
-			profile_pictures["pic_two"] = args[1][1]
-			profile_pictures["pic_three"] = args[1][2]
+	photos = []
 
-			print(profile_pictures)
+	def select(self, filename):
+		try:
+			popupWindow = Popup(
+				title="Photo Selection",
+				content=Label(
+					text="Photo selected and saved! \n \n Click anywhere on the \n screen to continue...",
+					font_size=14, halign='center'),
+				size_hint=(None, None), size=(200, 200)
+			)
+			popupWindow.open()
+
+			global photos
+			self.photos.append(filename[0])
+			self.filechooser.selection.clear()
+			
 		except:
 			pass
 
-	def on_pre_leave(self):
+
+	def change_settings(self):
 		new_tags = self.new_tags.text.splitlines()
 
+		# for users table
 		j = {
-			"User_ID": "Temp123", "Picture_Path": "fill", "Description": self.new_description.text,
-			"User_Tag": new_tags
+			"User_ID": "Temp123", "Description": self.new_description.text,
 		}
 
-		# POST request
-		# new_info =  SignUpPayload(j)
-		# print(j)
-
+		# PATCH request
+		
 
 class ReportEvent(Screen):
-	def on_pre_leave(self):
-
+	def save_event_report(self):
 		report_event_reason = [None, None, None, None]
 		if self.reason1.active:
 			report_event_reason[0] = "Objectionable content on the event's page"
@@ -377,7 +427,6 @@ class ReportEvent(Screen):
 		if self.reason4.text != '':
 			report_event_reason[3] = self.reason4.text
 
-		print(report_event_reason)
 
 		self.reason1.active = False
 		self.reason2.active = False
@@ -385,16 +434,15 @@ class ReportEvent(Screen):
 		self.reason4.text = ''
 
 		j = {
-			"Reporting_User_ID": "fill", "Reported_Event_ID": "fill", "Report_Reason": report_event_reason
+			"Reporting_User_ID": '', "Reported_Event_ID": '', "Report_Reason": report_event_reason
 		}
 
 		# POST request
-		# print(j)
+		
 
 
 class ReportUser(Screen):
-	def on_pre_leave(self):
-
+	def save_user_report(self):
 		report_reason = [None, None, None, None]
 		if self.reason1.active:
 			report_reason[0] = "Objectionable content in profile"
@@ -416,11 +464,10 @@ class ReportUser(Screen):
 		self.reason4.text = ''
 
 		j = {
-			"Reporting_User_ID": "fill", "Reported_Event_ID": "fill", "Report_Reason": report_reason
+			"Reporting_User_ID": '', "Reported_User_ID": '', "Report_Reason": report_reason
 		}
 
 		# POST request
-		# print(j)
 
 
 class OutlinedButton(Button):
@@ -476,7 +523,7 @@ class UnifyApp(App):
 	def build(self):
 		self.screens = {} # Empty screen list
 		self.available_screens = sorted([	
-			'app_settings', 'create_event', 'eventFind', 'friends', 'match', 'match_profile', 'profile',
+			'app_settings', 'create_event', 'eventfind', 'friends', 'match', 'match_profile', 'profile',
 		'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
 		self.screen_names = self.available_screens 
 		curdir = dirname(__file__)

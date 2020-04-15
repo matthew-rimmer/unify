@@ -1,4 +1,5 @@
 CreateEvent:
+	filechooser: filechooser
 	event_name: event_name
 	description: description
 	datetime: datetime
@@ -30,11 +31,14 @@ CreateEvent:
 					size: self.size
 
 			FileChooserIconView:
+				id: filechooser
 				size_hint_x: 1
 				size_hint_y: None
 				height: dp(200)
 				multiselect: False
-				on_selection: root.select(*args)
+				filters: ["*.png", "*.jpg"]
+				on_selection:
+					root.select(filechooser.selection)
 
 		ScrollView:
 			bar_width: dp(5)
@@ -126,17 +130,6 @@ CreateEvent:
 					text: "Create Event"
 					size_hint_y: None
 					height: dp(20)
-					on_release: app.go_screen(9)
+					on_release: root.save_event()
+					on_release: app.go_screen(2)
 
-				Label:
-					text: "P.S. once you are done here you will be shown exactly how users will see your event!"
-					halign: "center"
-					text_size: root.width, None
-					font_size: dp(12)
-					color: 128,0,128,1
-					size_hint_y: None
-					height: dp(30)
-					padding: dp(20), (20)
-
-UnifyScreen:
-	CreateEvent:

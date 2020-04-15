@@ -9,8 +9,7 @@
 	value: ''
 	Button:
 		text: "Image Placeholder"
-		on_release: app.go_screen(5)   
-		# REMOVE - currently gives access to match profile & report user for now
+		on_release: app.go_screen(9)   
 	Label:
 		text: root.value
 		
@@ -18,6 +17,13 @@
 <EventList>:	
 	orientation: 'vertical'
 	id: nice
+	Label:
+		text: root.getText()
+		markup: True
+		size_hint_y: None
+		height: dp(50)
+		color: 0,0,0,1
+		on_ref_press: app.go_screen(1)
 	EventRecycle:
 		id: rvEvent
 

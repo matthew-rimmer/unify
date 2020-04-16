@@ -19,7 +19,9 @@ from kivy.uix.behaviors.touchripple import TouchRippleBehavior
 from kivy.clock import Clock
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.popup import Popup
+from kivy.metrics import dp
 
+import os
 import webbrowser
 
 import requests
@@ -132,6 +134,9 @@ class Login(Screen):
 	def on_pre_leave(self):
 		j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
 		
+	def on_leave(self):
+		self.uni_email.text = ''
+		self.password.text = ''
 
 
 class Register(Screen):
@@ -143,6 +148,13 @@ class Register(Screen):
 		}
 
 		# POST request (POST/user/create)
+
+	def on_leave(self):
+		self.uni_email.text = ''
+		self.first_name.text = ''
+		self.last_name.text = ''
+		self.dob.text = ''
+		self.password.text = ''
 
 
 class AccountVerification(Screen):
@@ -317,7 +329,7 @@ class Profile(Screen):
 		webbrowser.open(_dict[ref], new=1)
 	
 		
-class Friends(BoxLayout):
+class Friends(Screen):
 	pass
 
 
@@ -352,8 +364,13 @@ class CreateEvent(Screen):
 		}
 
 		# POST request
-		
 
+	def on_leave(self):
+		self.event_name.text = ''
+		self.description.text = ''
+		self.datetime.text = ''
+		self.location.text = ''
+		
 
 class ViewEvent(Screen):
 	def on_pre_enter(self):
@@ -406,15 +423,51 @@ class AppSettings(Screen):
 
 		# for users table
 		j = {
-			"User_ID": "Temp123", "Description": self.new_description.text,
+			"User_ID": "Temp123", "Description": self.new_description.text
 		}
 
 		# PATCH request
+
+	def on_leave(self):
+		self.new_description.text = ''
+		self.new_tags.text = ''
+
+
+class ChangePassword(Screen):
+	def check_code(self, code):
+		# comparison 
+		
+		
+		# user only sees the 'enter new password' section if their code is correct
+		self.prompt.text = "Enter your new password: "
+		self.new_pass.height = dp(30)
+		self.save.back_color = (192, 192, 192, 0.3)
+		self.save.height = dp(30)
+		self.save.text = "Save"
+
+	def save_password(self, new_password):
+		# for users table
+		j = {
+			"User_ID": "Temp123", "Password": new_password
+		}
+
+		# PATCH request
+		# print(j)
+
+		# hides the 'enter new password' section again
+		self.prompt.text = ''
+		self.new_pass.height = dp(0)
+		self.new_pass.text = ''
+		self.save.back_color = (192, 192, 192, 0)
+		self.save.height = dp(0)
+		self.save.text = ''
+
+		self.pass_code.text = ''
 		
 
 class ReportEvent(Screen):
 	def save_event_report(self):
-		report_event_reason = [None, None, None, None]
+		report_event_reason = ['', '', '', '']
 		if self.reason1.active:
 			report_event_reason[0] = "Objectionable content on the event's page"
 
@@ -427,23 +480,34 @@ class ReportEvent(Screen):
 		if self.reason4.text != '':
 			report_event_reason[3] = self.reason4.text
 
+		reasons = []
 
+		# if item is not an empty string then add the item to the reasons list
+		for x in report_event_reason:
+			if x != '':
+				reasons.append(x)
+
+		# join the items in the reasons list into a single string
+		event_reasons = ' & '.join(reasons)
+
+
+		j = {
+			"Reporting_User_ID": '', "Reported_Event_ID": '', "Report_Reason": event_reasons
+		}
+
+		# POST request
+
+	def on_leave(self):	
 		self.reason1.active = False
 		self.reason2.active = False
 		self.reason3.active = False
 		self.reason4.text = ''
-
-		j = {
-			"Reporting_User_ID": '', "Reported_Event_ID": '', "Report_Reason": report_event_reason
-		}
-
-		# POST request
 		
 
 
 class ReportUser(Screen):
 	def save_user_report(self):
-		report_reason = [None, None, None, None]
+		report_reason = ['', '', '', '']
 		if self.reason1.active:
 			report_reason[0] = "Objectionable content in profile"
 
@@ -456,18 +520,28 @@ class ReportUser(Screen):
 		if self.reason4.text != '':
 			report_reason[3] = self.reason4.text
 
-		print(report_reason)
+		reasons = []
 
+		# if item is not an empty string then add the item to the reasons list
+		for x in report_reason:
+			if x != '':
+				reasons.append(x)
+
+		# join the items in the reasons list into a single string
+		user_reasons = ' & '.join(reasons)
+		
+
+		j = {
+			"Reporting_User_ID": '', "Reported_User_ID": '', "Report_Reason": user_reasons
+		}
+
+		# POST request
+
+	def on_leave(self):
 		self.reason1.active = False
 		self.reason2.active = False
 		self.reason3.active = False
 		self.reason4.text = ''
-
-		j = {
-			"Reporting_User_ID": '', "Reported_User_ID": '', "Report_Reason": report_reason
-		}
-
-		# POST request
 
 
 class OutlinedButton(Button):
@@ -523,12 +597,12 @@ class UnifyApp(App):
 	def build(self):
 		self.screens = {} # Empty screen list
 		self.available_screens = sorted([	
-			'app_settings', 'create_event', 'eventfind', 'friends', 'match', 'match_profile', 'profile',
+			'app_settings', 'change_password', 'create_event', 'eventfind', 'friends', 'match', 'match_profile', 'profile',
 		'report_event', 'report_user', 'view_event']) # Explicitly sets the available screens
 		self.screen_names = self.available_screens 
 		curdir = dirname(__file__)
 		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-		self.go_screen(4) # goto match screen 
+		self.go_screen(5) # goto match screen 
 		
 		#print(len(self.available_screens))
 		
@@ -545,29 +619,32 @@ class UnifyApp(App):
 			title.text = "Settings"
 		elif self.index == 1:
 			title = self.root.ids.main.ids.title
-			title.text = "Create Event"
+			title.text = "Change Your Password"
 		elif self.index == 2:
 			title = self.root.ids.main.ids.title
-			title.text = "Find Events"
+			title.text = "Create Event"
 		elif self.index == 3:
 			title = self.root.ids.main.ids.title
-			title.text = "My Friends"
+			title.text = "Find Events"
 		elif self.index == 4:
 			title = self.root.ids.main.ids.title
-			title.text = "Find Friends"
+			title.text = "My Friends"
 		elif self.index == 5:
 			title = self.root.ids.main.ids.title
-			title.text = "Student's Profile"
+			title.text = "Find Friends"
 		elif self.index == 6:
 			title = self.root.ids.main.ids.title
-			title.text = "My Profile"
+			title.text = "Student's Profile"
 		elif self.index == 7:
 			title = self.root.ids.main.ids.title
-			title.text = "Report an Event"
+			title.text = "My Profile"
 		elif self.index == 8:
 			title = self.root.ids.main.ids.title
-			title.text = "Report a User"
+			title.text = "Report an Event"
 		elif self.index == 9:
+			title = self.root.ids.main.ids.title
+			title.text = "Report a User"
+		elif self.index == 10:
 			title = self.root.ids.main.ids.title
 			title.text = "View Event"
 		

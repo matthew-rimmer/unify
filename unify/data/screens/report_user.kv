@@ -3,7 +3,6 @@ ReportUser:
 	reason2: reason2
 	reason3: reason3
 	reason4: reason4
-	report_user: report_user
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -65,9 +64,8 @@ ReportUser:
 
 		# Submit report
 		RoundedButton:
-			id: report_user
 			text: "Submit"
 			pos_hint: {"center_x": 0.5}
 			size_hint: 0.5, 0.7
 			on_release: root.save_user_report()
-			on_release: app.go_screen(4)
+			on_release: app.go_screen(5)

@@ -1,10 +1,12 @@
-<Friends>:
-	BoxLayout:
-		orientation: 'vertical'
+Friends:
+	TabbedPanel:
+		background_color: (237,223,247,0.2)
+		do_default_tab: False
+		size_hint: 1, 1
+		tab_width: self.parent.width / 2
 
-		Label:
-			text: "My Friends"
-			
-UnifyScreen:
-	Friends:
-		id: FriendsList  
+		TabbedPanelItem:
+			text: "Friends"
+
+		TabbedPanelItem:
+			text: "Friend Requests"

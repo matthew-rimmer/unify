@@ -1,11 +1,9 @@
 <AccountVerification>:
 	verif_code: verif_code
-	verify_account: verify_account
 
 	BoxLayout:
 		orientation: 'vertical'
 		padding: dp(30)
-		#spacing: dp(10)
 
 		# Main background colour
 		canvas:
@@ -42,10 +40,10 @@
 			padding: dp(30)
 
 			RoundedButton:
-				id: verify_account
 				text: "Verify Account"
 				size_hint_y: None
 				height: dp(30)
+				on_release: root.verify(verif_code.text)
 				on_release:
 					app.root.current = "profile_creation"
 					root.manager.transition.direction = 'left'

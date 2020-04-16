@@ -3,7 +3,6 @@ ReportEvent:
 	reason2: reason2
 	reason3: reason3
 	reason4: reason4
-	report_event: report_event
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -66,9 +65,8 @@ ReportEvent:
 
 		# Submit report
 		RoundedButton:
-			id: report_event
 			text: "Submit"
 			pos_hint: {"center_x": 0.5}
 			size_hint: 0.5, 0.6
 			on_release: root.save_event_report()
-			on_release: app.go_screen(4)
+			on_release: app.go_screen(5)

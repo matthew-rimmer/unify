@@ -4,8 +4,6 @@ CreateEvent:
 	description: description
 	datetime: datetime
 	location: location
-	max_people: max_people
-	create: create
 
 	GridLayout:
 		cols: 1
@@ -110,26 +108,10 @@ CreateEvent:
 					height: dp(30)
 
 
-				# Maximum number of students for event
-				Label:
-					text: "Maximum number of students that can attend the event?"
-					halign: "center"
-					text_size: root.width, None
-					color: 0,0,0,1
-					size_hint_y: None
-					height: dp(20)
-				TextInput:
-					id: max_people
-					multiline: False
-					size_hint_y: None
-					height: dp(30)
-
-
 				RoundedButton:
-					id: create
 					text: "Create Event"
 					size_hint_y: None
 					height: dp(20)
 					on_release: root.save_event()
-					on_release: app.go_screen(2)
+					on_release: app.go_screen(3)
 

@@ -2,7 +2,6 @@ AppSettings:
 	filechooser: filechooser
 	new_description: new_description
 	new_tags: new_tags
-	update_profile: update_profile
 
 	GridLayout:
 		cols: 1
@@ -80,12 +79,18 @@ AppSettings:
 
 				# Submit new data & update database
 				RoundedButton:
-					id: update_profile
 					text: "Update Profile"
 					size_hint_y: None
 					height: dp(25)
 					on_release: root.change_settings()
-					on_release: app.go_screen(4)
+					on_release: app.go_screen(5)
+
+				# Change password
+				RoundedButton:
+					text: "Change Password"
+					size_hint_y: None
+					height: dp(25)
+					on_release: app.go_screen(1)
 
 				# Log out
 				RoundedButton:

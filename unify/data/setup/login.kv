@@ -1,7 +1,6 @@
 <Login>
 	uni_email: uni_email
 	password: password
-	authenticate: authenticate
 
 	FloatLayout:
 		# Main background colour
@@ -32,7 +31,6 @@
 				password: True
 				multiline: False
 			RoundedButton:
-				id: authenticate
 				text: "Sign In"
 				on_release:
 					app.root.current = "main"

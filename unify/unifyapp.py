@@ -20,6 +20,7 @@ from kivy.clock import Clock
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.popup import Popup
 from kivy.metrics import dp
+from kivy.storage.jsonstore import JsonStore
 
 import os
 import webbrowser
@@ -29,6 +30,9 @@ import json
 import jwt
 from datetime import datetime
 import time
+
+from clientside.resources import User_Requests
+
 
 #This generates a json token for each request
 now = datetime.now()
@@ -118,9 +122,13 @@ class Register(Screen):
 	def save_user(self):
 
 		j = {
-			"User_ID": "Temp123", "Email": self.uni_email.text, "First_Name": self.first_name.text,
+			"Email": self.uni_email.text, "First_Name": self.first_name.text,
 			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, "Password": self.password.text
 		}
+
+
+		
+		
 
 		# POST request (POST/user/create)
 
@@ -154,38 +162,31 @@ class ProfileCreation(Screen):
 			)
 			popupWindow.open()
 
-			self.photos.append(filename[0])
+			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
-			
+		        
+
+			# POST REQ	
 		except:
 			pass
 
 	def save_profile(self):
-		# for users table
-		j = {
-			"User_ID": "Temp123", "Description": self.description.text,
-			"LinkedIn_Link": self.linked_in.text
-		}
 
-		# PATCH request (PATCH/user/{User_ID})
-
-		# for userpictures table
-		self.photos[0] = self.photos[0].replace("\\", "/")
-		self.photos[1] = self.photos[1].replace("\\", "/")
-		self.photos[2] = self.photos[2].replace("\\", "/")
-		
-		k = [{"User_ID": "Temp123", "Picture_Path": self.photos[0]}, {"User_ID": "Temp123", "Picture_Path": self.photos[1]}, {"User_ID": "Temp123", "Picture_Path": self.photos[2]}]
-
-		# POST request (POST/image/{User_ID}/upload)
-		
-
-		# for usertags table
 		interest_tags = self.tags.text.splitlines()
 
-		n = [{"User_ID": "Temp123", "UserTag": interest_tags[0]}, {"User_ID": "Temp123", "UserTag": interest_tags[1]}]
+		j = {
+			"Email": self.uni_email.text, "First_Name": self.first_name.text,
+			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
+			"Password": self.password.text, "Description": self.description.text
+			#"tags": interest_tags
+		}
 
-		# PATCH request (PATCH/user/{User_ID})
-		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
+		User_Requests.create(j)
+		# POST request (POST/image/{User_ID}/upload)
+
+
+		
+
 
 
 # Class for the profile, match & event sections

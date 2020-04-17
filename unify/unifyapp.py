@@ -51,7 +51,7 @@ class Login(Screen):
 		self.password.text = ''
 
 	def login_click(self):
-		j = { "Email:": self.uni_email.text, "Password": self.password.text}
+		j = { "Email": self.uni_email.text, "Password": self.password.text}
 		userDetails = User_Requests.login(j)
 		UserStore.put('user_info',  token=userDetails["access_token"], id=userDetails["data"]["User_ID"])
 	

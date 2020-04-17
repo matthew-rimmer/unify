@@ -231,7 +231,7 @@ class MatchRecycle(RecycleView):
 		# j = {}
 		# pl = json.loads(j)
 		pl = {'User_ID':'15','First_Name':'Jeremy','Last_Name':"Lee",'Picture_Path':'placeholder','User_Tag':'#nice' }
-		self.data.append({'id':pl["User_ID"],'name': pl["First_Name"]+" "+pl["Last_Name"],'tags':pl["User_Tag"],'imagePath':["Picture_Path"]})
+		self.data.append({'id':pl["User_ID"],'name': pl["First_Name"]+" "+pl["Last_Name"],'tags':pl["User_Tag"],'imagePath': pl["Picture_Path"]})
 		
 
 class EventList(BoxLayout):
@@ -241,8 +241,14 @@ class EventList(BoxLayout):
 
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-	
+		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+		self.populate()
+
+	def populate(self):
+		# j = {}
+		# pl = json.loads(j)
+		pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder' }
+		self.data.append({'id':pl["Event_ID"],'name': pl["Name"], 'imagePath': pl["Picture_Path"]})
 
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):

@@ -559,7 +559,7 @@ class UnifyApp(App):
 		self.screen_names = self.available_screens 
 		curdir = dirname(__file__)
 		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-		# self.go_screen(5) # goto match screen 
+		self.go_screen(5) # goto match screen 
 		
 		#print(len(self.available_screens))
 		
@@ -568,7 +568,8 @@ class UnifyApp(App):
 				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
 				if query is not None:
 					self.root.current = "main"
-					UnifyApp.go_screen(5)	
+					self.go_screen(5)
+
 		return self.root
 
 	def go_screen(self, idx):

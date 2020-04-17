@@ -1,4 +1,5 @@
 import requests
+import asyncio
 from json import loads, dumps
 
 from .settings import get_route, api_url
@@ -20,6 +21,13 @@ class User_Requests:
 
     @staticmethod
     def create(user_data):
+        if 'tags' in user_data:
+            user_data['tag_rels'] = []
+            for t in user_data['tags']:
+                user_data['tag_rels'].append({
+                    'User_Tag':t
+                })
+            del user_data['tags']
         resp = requests.post(
             api_url + get_route('create_user'),
             json = user_data
@@ -138,6 +146,40 @@ class Event_Requests:
         resp = requests.post(
             api_url + get_route('create_event'),
             json = event_data,
+            headers=get_request_headers(auth_token)
+        )
+        return check_req_success(resp)
+
+    @staticmethod
+    def edit(event_id, auth_token, event_data):
+        resp = requests.patch(
+            api_url + get_route('event', event_id),
+            json = event_data,
+            headers=get_request_headers(auth_token)
+        )
+        return check_req_success(resp)
+
+    @staticmethod
+    def delete(event_id, auth_token):
+        resp = requests.delete(
+            api_url + get_route('event', event_id),
+            headers=get_request_headers(auth_token)
+        )
+        return check_req_success(resp)
+    
+    @staticmethod
+    def attending(event_id, auth_token):
+        resp = requests.post(
+            api_url + get_route('event_users', event_id),
+            json = {},
+            headers=get_request_headers(auth_token)
+        )
+        return check_req_success(resp)
+    
+    @staticmethod
+    def delete_attending(event_id, auth_token):
+        resp = requests.delete(
+            api_url + get_route('event_users', event_id),
             headers=get_request_headers(auth_token)
         )
         return check_req_success(resp)

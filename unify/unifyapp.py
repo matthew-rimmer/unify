@@ -99,31 +99,6 @@ class EventPayload(object):
 		)
 		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
 
-#TEMPORARY - testing profile, match and event ids
-profile = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",' \
-    ' "Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
-    ' "Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla", ' \
-    '"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!", ' \
-    '"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"], "Instagram_Link": null, "Spotify_Link": null, "Twitter_Link": null, '\
-    ' "Linked_In": "https://www.linkedin.com/"}}'
-
-match = '{"data": {"Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",' \
-	' "Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
-	' "Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80", "First_Name": "Austin", ' \
-	' "Last_Name": "Moran", "Description": "Hi there! I am new to the area and could do with more friends.", ' \
-	' "User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], "Instagram_Link": null,' \
-	' "Spotify_Link": null, "Twitter_Link": null, '\
-	' "Linked_In": "https://www.linkedin.com/"}}'
-
-event = '{"data": {"Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", ' \
-	' "Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",' \
-	' "Event_Location": "Westmoor Lane, LN1 2JW"}}'
-
-# Temporary
-class ProfilePayload(object):
-	def __init__(self, k):
-		self.__dict__ = json.loads(k)
-
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
@@ -158,9 +133,11 @@ class Register(Screen):
 
 
 class AccountVerification(Screen):
-	pass
-	# PATCH request (PATCH/user/{USER_ID}/verify
-	# Verification_Code
+	def verify(self, code):
+		pass
+
+		# PATCH request (PATCH/user/{USER_ID}/verify
+		# Verification_Code
 
 
 class ProfileCreation(Screen):
@@ -177,7 +154,6 @@ class ProfileCreation(Screen):
 			)
 			popupWindow.open()
 
-			global photos
 			self.photos.append(filename[0])
 			self.filechooser.selection.clear()
 			
@@ -198,17 +174,15 @@ class ProfileCreation(Screen):
 		self.photos[1] = self.photos[1].replace("\\", "/")
 		self.photos[2] = self.photos[2].replace("\\", "/")
 		
-		k = {"User_ID": "Temp123", "Picture_Path": self.photos[0]}
-		l = {"User_ID": "Temp123", "Picture_Path": self.photos[1]}
-		m = {"User_ID": "Temp123", "Picture_Path": self.photos[2]}
+		k = [{"User_ID": "Temp123", "Picture_Path": self.photos[0]}, {"User_ID": "Temp123", "Picture_Path": self.photos[1]}, {"User_ID": "Temp123", "Picture_Path": self.photos[2]}]
 
 		# POST request (POST/image/{User_ID}/upload)
-		# Image (Base64 Encoded)
+		
 
 		# for usertags table
 		interest_tags = self.tags.text.splitlines()
 
-		n = {"User_ID": "Temp123", "UserTag": interest_tags[0]}
+		n = [{"User_ID": "Temp123", "UserTag": interest_tags[0]}, {"User_ID": "Temp123", "UserTag": interest_tags[1]}]
 
 		# PATCH request (PATCH/user/{User_ID})
 		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
@@ -246,26 +220,37 @@ class EventRecycle(RecycleView):
 
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
-		# GET request
-		p = ProfilePayload(match)
+		# j = {}
+		# match = json.loads(j)
+
+		match = {
+				"UserID": "Temp235", "Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+				"Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				"Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
+				"First_Name": "Austin", "Last_Name": "Moran", "Description": "Hi there! I am new to the area and could do with more friends.",
+				"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], "Linked_In": "https://www.linkedin.com/"
+			}
 
 		# photos
-		self.img.source = p.data["Profile_Picture"]
-		self.img2.source = p.data["Profile_Picture2"]
-		self.img3.source = p.data["Profile_Picture3"]
+		self.img.source = match["Profile_Picture"]
+		self.img2.source = match["Profile_Picture2"]
+		self.img3.source = match["Profile_Picture3"]
 
 		# full name
-		self.fullname.text = p.data["First_Name"] + " " + p.data["Last_Name"]
+		self.fullname.text = match["First_Name"] + " " + match["Last_Name"]
 
 		# about me description
-		self.description.text = p.data["Description"]
+		self.description.text = match["Description"]
 
 		# interest tags
-		tags = p.data["User_Tag"]
+		tags = match["User_Tag"]
 
 		for x in tags:
 			button = OutlinedButton(text="#" + x)
 			self.tag_grid.add_widget(button)
+
+		# linked in
+		self.linkedin_link = match["Linked_In"]
 			
 	def on_pre_leave(self):
 		self.tag_grid.clear_widgets()
@@ -276,9 +261,7 @@ class MatchProfile(Screen):
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		p = ProfilePayload(match)
-
-		url = p.data["Linked_In"]
+		url = self.linkedin_link
 		_dict = {"profile": url}
 
 		# Opens new tab in browser
@@ -290,27 +273,38 @@ class UnifyScreen(Screen):
 
 	
 class Profile(Screen):
-	# GET request
 	def on_pre_enter(self, *args):
-		p = ProfilePayload(profile)
+		# j = {}
+		# profile = json.loads(j)
+
+		profile = {
+				"UserID": "Temp123", "Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				"Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				"Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla",
+				"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!",
+				"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"],
+				"Linked_In": "https://www.linkedin.com/"
+		}
 
 		# photos
-		self.img.source = p.data["Profile_Picture"]
-		self.img2.source = p.data["Profile_Picture2"]
-		self.img3.source = p.data["Profile_Picture3"]
+		self.img.source = profile["Profile_Picture"]
+		self.img2.source = profile["Profile_Picture2"]
+		self.img3.source = profile["Profile_Picture3"]
 
 		# full name
-		self.fullname.text = p.data["First_Name"] + " " + p.data["Last_Name"]
+		self.fullname.text = profile["First_Name"] + " " + profile["Last_Name"]
 
 		# about me description
-		self.description.text = p.data["Description"]
+		self.description.text = profile["Description"]
 
 		# interest tags
-		tags = p.data["User_Tag"]
+		tags = profile["User_Tag"]
 
 		for x in tags:
 			button = OutlinedButton(text="#" + x)
 			self.tag_grid.add_widget(button)
+
+		self.linkedin_link = profile["Linked_In"]
 
 	def on_pre_leave(self):
 		self.tag_grid.clear_widgets()
@@ -320,9 +314,7 @@ class Profile(Screen):
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		p = ProfilePayload(profile)
-
-		url = p.data["Linked_In"]
+		url = self.linkedin_link
 		_dict = {"profile": url}
 
 		# Opens new tab in browser
@@ -347,7 +339,6 @@ class CreateEvent(Screen):
 			)
 			popupWindow.open()
 
-			global event_picture
 			self.event_picture.append(filename[0])
 			self.filechooser.selection.clear()
 
@@ -374,28 +365,34 @@ class CreateEvent(Screen):
 
 class ViewEvent(Screen):
 	def on_pre_enter(self):
-		# GET request
-		p = ProfilePayload(event)
+		# j = {}
+		# event = json.loads(j)
+
+		event = {
+				"Event_ID": "CS123", "User_ID": "Temp123", "Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				"Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",
+				"Event_Location": "Westmoor Lane, LN1 2JW"
+			}
 
 		# event picture
-		self.event_img.source = p.data["Event_Picture"]
+		self.event_img.source = event["Event_Picture"]
 
 		# event name
-		self.event_name.text = p.data["Name"]
+		self.event_name.text = event["Name"]
 
 		# event creator
 		# self.creator.text =
 
 		# event description
-		self.description.text = p.data["Description"]
+		self.description.text = event["Description"]
 
 		# event date & time
-		self.datetime.text = p.data["DateTime"]
+		self.datetime.text = event["DateTime"]
 
 		# event location
-		self.location.text = p.data["Event_Location"]
+		self.location.text = event["Event_Location"]
 
-
+		
 class AppSettings(Screen):
 	photos = []
 
@@ -410,7 +407,6 @@ class AppSettings(Screen):
 			)
 			popupWindow.open()
 
-			global photos
 			self.photos.append(filename[0])
 			self.filechooser.selection.clear()
 			
@@ -419,14 +415,29 @@ class AppSettings(Screen):
 
 
 	def change_settings(self):
-		new_tags = self.new_tags.text.splitlines()
-
 		# for users table
 		j = {
 			"User_ID": "Temp123", "Description": self.new_description.text
 		}
 
 		# PATCH request
+
+		# for userpictures table
+		self.photos[0] = self.photos[0].replace("\\", "/")
+		self.photos[1] = self.photos[1].replace("\\", "/")
+		self.photos[2] = self.photos[2].replace("\\", "/")
+
+		k = [{"User_ID": "Temp123", "Picture_Path": self.photos[0]}, {"User_ID": "Temp123", "Picture_Path": self.photos[1]}, {"User_ID": "Temp123", "Picture_Path": self.photos[2]}]
+
+		# request
+
+		# for usertags table
+		interest_tags = self.new_tags.text.splitlines()
+
+		n = [{"User_ID": "Temp123", "UserTag": interest_tags[0]}, {"User_ID": "Temp123", "UserTag": interest_tags[1]}]
+
+		# PATCH request (PATCH/user/{User_ID})
+		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
 
 	def on_leave(self):
 		self.new_description.text = ''
@@ -452,7 +463,6 @@ class ChangePassword(Screen):
 		}
 
 		# PATCH request
-		# print(j)
 
 		# hides the 'enter new password' section again
 		self.prompt.text = ''

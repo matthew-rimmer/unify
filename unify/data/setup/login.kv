@@ -33,6 +33,7 @@
 			RoundedButton:
 				text: "Sign In"
 				on_release:
+					root.login_click()
 					app.root.current = "main"
 					root.manager.transition.direction = 'left'
 			RoundedButton:

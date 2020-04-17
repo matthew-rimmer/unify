@@ -39,7 +39,13 @@ UserStore = JsonStore('UserStore.json')
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
-	pass
+	def on_pre_enter(self):
+		if UserStore.exists("user_info"):
+			if UserStore.get('user_info')["token"] is not None:
+				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
+				if query is not None:
+					App.go_screen(5)	
+		
 
 
 class Login(Screen):
@@ -559,9 +565,15 @@ class UnifyApp(App):
 		self.screen_names = self.available_screens 
 		curdir = dirname(__file__)
 		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-		self.go_screen(5) # goto match screen 
+		# self.go_screen(5) # goto match screen 
 		
 		#print(len(self.available_screens))
+		
+		if UserStore.exists("user_info"):
+			if UserStore.get('user_info')["token"] is not None:
+				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
+				if query is not None:
+					App.go_screen(5)	
 		
 		return self.root
 

@@ -39,13 +39,7 @@ UserStore = JsonStore('UserStore.json')
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
-	def on_pre_enter(self):
-		if UserStore.exists("user_info"):
-			if UserStore.get('user_info')["token"] is not None:
-				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
-				if query is not None:
-					App.go_screen(5)	
-		
+	pass	
 
 
 class Login(Screen):
@@ -553,11 +547,11 @@ class UnifyApp(App):
 	"""
 	
 	index = NumericProperty(-1)
-	
 
 	# Build creates and gets the available screens, loads them from, 
 	# the data/screens folder, sets it to the zero index screen
 	def build(self):
+		print('BUILD HERE')
 		self.screens = {} # Empty screen list
 		self.available_screens = sorted([	
 			'app_settings', 'change_password', 'create_event', 'eventfind', 'friends', 'match', 'match_profile', 'profile',
@@ -573,8 +567,8 @@ class UnifyApp(App):
 			if UserStore.get('user_info')["token"] is not None:
 				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
 				if query is not None:
-					App.go_screen(5)	
-		
+					self.root.current = "main"
+					UnifyApp.go_screen(5)	
 		return self.root
 
 	def go_screen(self, idx):

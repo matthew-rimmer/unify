@@ -34,74 +34,7 @@ import time
 from clientside.resources import User_Requests
 
 
-#This generates a json token for each request
-now = datetime.now()
-date_time_string = now.strftime("%Y-%m-%d %H:%M:%S")
-date_time = date_time_string
-date_order = '%Y-%m-%d %H:%M:%S'
-iat = int(time.mktime(time.strptime(date_time, date_order))) #issued at
-nbf = int(time.mktime(time.strptime(date_time, date_order))) - 1 #not before
-exp = int(time.mktime(time.strptime(date_time, date_order))) + 20 #expires
-signature = "secret"
-
-json_token = jwt.encode({"iat": iat, "nbf": nbf, "exp":exp}, signature, algorithm='HS256').decode('utf-8')
-
-header = {"content-type": "application/json", "Authorization": "jwt {}".format(json_token)}
-http_link = 'http://api.unifyapp.xyz:3828'
-
-applicationRoutes = {
-   'create_user' : '/user/create/', # POST, PATCH
-   'user_control' : '/user/'        # GET, PUT, DELETE
-}
-
-		
-#j = {"User_ID":"Temp123","Friend_ID":"Wall123"} #Find friend payload layout
-class FindFriendPayload(object):
-	def __init__(self,j):
-		response = requests.get(
-		http_link + applicationRoutes['user_control'] + j["User_ID"], 
-		data = j, 
-		headers = header
-		)
-		self._dict_ = response.text #might be this -- response.json() or json.loads(j)		
-		
-		
-#Profile payload not needed, because the login payload will return the profile if the user_id and password are correct
-#j = {"User_ID":"Temp123","Password":"Temppassword123"} #Login payload layout
-class LoginPayload(object): 
-	def __init__(self,j):
-		response = requests.get(
-		http_link + applicationRoutes['user_control'] + j["User_ID"], 
-		data = j, 
-		headers = header
-		)
-		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
-
-
-	
-##### ----------------- THE POST REQUEST DOESN'T CURRENTLY WORK! ------------------ #####
-	
-#Sign up payload layout
-#j = {"User_ID":"Temp123","Email":"temp@gmail.com","First_Name":"Temp","Last_Name":"Chair","DateOfBirth":"2000-05-27","Password":"Temppassword123","Profile_Picture":null,"Twitter_Link":"https://twitter.com/temp/","Instagram_Link":"https://www.instagram.com/temp/","Description":"Temp likes Computer Science","User_Created":"2020-02-20T14:02:32Z","Last_Login":"2020-02-27T17:40:32Z"}
-class SignUpPayload(object):
-	def __init__(self,j):
-		response = requests.post(
-		http_link + applicationRoutes['create_user'] + j["User_ID"],
-		json = j, 
-		headers = header
-		)
-		self.__dict__ = response.text #might be this -- response.json() or json.loads(j)
-
-	
-#j = {"User_ID":"Temp123","Event_ID":"CS123"} #Event payload layout
-class EventPayload(object):
-	def __init__(self,j):
-		response = requests.get(
-		http_link + applicationRoutes['user_control'] + j["User_ID"], 
-		data = j, 
-		headers = header
-		)
-		self._dict_ = response.text #might be this -- response.json() or json.loads(j)
+UserStore = JsonStore('UserStore.json') 
 
 
 # Initial page shown when app is first downloaded
@@ -117,6 +50,11 @@ class Login(Screen):
 		self.uni_email.text = ''
 		self.password.text = ''
 
+	def login_click(self):
+		j = { "Email:": self.uni_email.text, "Password": self.password.text}
+		userDetails = User_Requests.login(j)
+		UserStore.put('user_info',  token=userDetails["access_token"], id=userDetails["data"]["User_ID"])
+	
 
 class Register(Screen):
 	def save_user(self):
@@ -174,14 +112,16 @@ class ProfileCreation(Screen):
 
 		interest_tags = self.tags.text.splitlines()
 
-		j = {
+		j = { 
 			"Email": self.uni_email.text, "First_Name": self.first_name.text,
 			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
 			"Password": self.password.text, "Description": self.description.text
 			#"tags": interest_tags
 		}
 
-		User_Requests.create(j)
+		createdUser = User_Requests.create(j)
+		
+		UserStore.put('user_info',  token=createdUser["access_token"], id=createdUser["data"]["User_ID"])
 		# POST request (POST/image/{User_ID}/upload)
 
 

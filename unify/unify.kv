@@ -3,9 +3,8 @@
 #:import utils kivy.utils
 #:include data/setup/initial.kv
 #:include data/setup/login.kv
-#:include data/setup/register.kv
-#:include data/setup/account_verification.kv
 #:include data/setup/profile_creation.kv
+#:include data/setup/account_verification.kv
 
 ScreenManager:
 	Initial:
@@ -16,17 +15,14 @@ ScreenManager:
 		name: "login_screen"
 		id: login_screen
 
-	Register:
-		name: "register_screen"
-		id: register_screen
+	
+	ProfileCreation:
+		name: "profile_creation"
+		id: profile_creation
 
 	AccountVerification:
 		name: "account_verification"
 		id: account_verification
-
-	ProfileCreation:
-		name: "profile_creation"
-		id: profile_creation
 
 	MainSections:
 		name: "main"
@@ -102,6 +98,8 @@ ScreenManager:
 	back_color: (0, 0, 128, 0.2)
 	border_radius: 5
 	color: (0,0,0,1)
+	size_hint_y: None
+	height: dp(30)
 
 	canvas.before:
 		Color:

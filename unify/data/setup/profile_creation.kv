@@ -2,6 +2,9 @@
 	filechooser: filechooser
 	description: description
 	tags: tags
+	instagram: instagram
+	twitter: twitter
+	spotify: spotify
 	linked_in: linked_in
 	first_name: first_name
 	last_name: last_name
@@ -127,6 +130,8 @@
 					id: password
 					size_hint_y: None
 					height: dp(40)
+					password: True
+					multiline: False
 
 				Label:
 					text: "What should be in your 'About Me'?"
@@ -159,26 +164,41 @@
 
 				# Link Instagram
 				Label:
-					text: "Connect your Instagram:"
+					text: "Instagram Handle:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
+				TextInput:
+					id: instagram
+					size_hint_y: None
+					height: dp(40)
+					multiline: False
+
+				
+				# Link Twitter
+				Label:
+					text: "Twitter Handle:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: twitter
+					size_hint_y: None
+					height: dp(40)
+					multiline: False
 
 
 				# Link Spotify
 				Label:
-					text: "Connect your Spotify:"
+					text: "Spotify Username:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
-
-
-				# Link Twitter
-				Label:
-					text: "Connect your Twitter:"
-					color: 0,0,0,1
+				TextInput:
+					id: spotify
 					size_hint_y: None
-					height: dp(20)
+					height: dp(40)
+					multiline: False
 
 
 				# Provide LinkedIn URL
@@ -200,5 +220,13 @@
 					height: dp(25)
 					on_release: root.save_profile()
 					on_release:
-						app.root.current = "main"
+						app.root.current = "account_verification"
 						root.manager.transition.direction = 'left'
+
+				RoundedButton:
+					text: "Cancel"
+					size_hint_y: None
+					height: dp(25)
+					on_release:
+						app.root.current = "initial_screen"
+						root.manager.transition.direction = 'right'

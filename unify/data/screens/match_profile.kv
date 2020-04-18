@@ -5,6 +5,9 @@ MatchProfile:
 	fullname: fullname
 	description: description
 	tag_grid: tag_grid
+	instagram: instagram
+	twitter: twitter
+	spotify: spotify
 	add_match: add_match
 	remove_match: remove_match
 	report_user: report_user
@@ -73,52 +76,84 @@ MatchProfile:
 			GridLayout:
 				id: tag_grid
 				cols: 3
-				size_hint_x: 1
 				size_hint_y: None
-				height: dp(60)
+				height: self.minimum_height
 				spacing: dp(10)
 
-
-			# Display the user's Instagram photos
-			# Instagram API
-			Label:
-				text: "Instagram"
-				color: 0,0,0,1
-				size_hint_x: 1
+			
+			GridLayout:
+				cols: 2
 				size_hint_y: None
-				text_size: self.width, None
+				height: self.minimum_height
+				padding: dp(15)
+				spacing: dp(10)
+
+				# Display the user's Instagram handle
+				Image:
+					source: "data/icons/Instagram_Glyph.png"
+					size_hint_y: None
+					height: dp(35)
+					#allow_stretch: True
+					keep_ratio: True
+				Label:
+					id: instagram
+					text: "Not Provided"
+					color: 0,0,0,1
+					size_hint_x: 1
+					size_hint_y: None
+					height: dp(40)
+					text_size: self.width, None
+					halign: 'center'
 
 
-			# Display the user's Spotify artists
-			# Spotify API
-			Label:
-				text: "Spotify - Favourite Artists"
-				color: 0,0,0,1
-				size_hint_x: 1
-				size_hint_y: None
-				text_size: self.width, None
+				# Display the user's Twitter handle
+				Image:
+					source: "data/icons/Twitter_Logo_Blue.png"
+					size_hint_y: None
+					height: dp(45)
+				Label:
+					id: twitter
+					text: "Not Provided"
+					color: 0,0,0,1
+					size_hint_x: 1
+					size_hint_y: None
+					height: dp(40)
+					text_size: self.width, None
+					halign: 'center'
 
 
-			# Display the user's Twitter
-			# Retrieve link from database
-			Label:
-				text: "Twitter"
-				color: 0,0,0,1
-				size_hint_x: 1
-				size_hint_y: None
-				text_size: self.width, None
+				# Display the user's Spotify username
+				Image:
+					source: "data/icons/Spotify_Icon.png"
+					size_hint_y: None
+					height: dp(35)
+				Label:
+					id: spotify
+					text: "Not Provided"
+					color: 0,0,0,1
+					size_hint_x: 1
+					size_hint_y: None
+					height: dp(40)
+					text_size: self.width, None
+					halign: 'center'
 
 
-			# Display the user's LinkedIn url
-			# Retrieve link from database
-			Label:
-				text: root.getText()
-				markup: True
-				color: 0,0,0,1
-				size_hint_x: 1
-				size_hint_y: None
-				text_size: self.width, None
-				on_ref_press: root.urlLink(*args)
+				# Display the user's LinkedIn url
+				# Retrieve link from database
+				Image:
+					source: "data/icons/LinkedIn_Logo.png"
+					size_hint_y: None
+					height: dp(30)
+				Label:
+					text: root.getText()
+					markup: True
+					color: 0,0,0,1
+					size_hint_x: 1
+					size_hint_y: None
+					height: dp(40)
+					text_size: self.width, None
+					halign: 'center'
+					on_ref_press: root.urlLink(*args)
 
 
 			GridLayout:

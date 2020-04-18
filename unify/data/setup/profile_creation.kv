@@ -2,10 +2,10 @@
 	filechooser: filechooser
 	description: description
 	tags: tags
-	linked_in: linked_in
-	twitter: twitter
 	instagram: instagram
+	twitter: twitter
 	spotify: spotify
+	linked_in: linked_in
 	#first_name: first_name
 	#last_name: last_name
 	#dob: dob
@@ -162,7 +162,7 @@
 
 				# Link Instagram
 				Label:
-					text: "Connect your Instagram:"
+					text: "Instagram Handle:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -172,10 +172,10 @@
 					size_hint_y: None
 					height: dp(30)
 
-
-				# Link Spotify
+				
+				# Link Twitter
 				Label:
-					text: "Connect your Spotify:"
+					text: "Twitter Handle:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -186,9 +186,9 @@
 					height: dp(30)
 
 
-				# Link Twitter
+				# Link Spotify
 				Label:
-					text: "Connect your Twitter:"
+					text: "Spotify Username:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -218,5 +218,13 @@
 					height: dp(25)
 					on_release: root.save_profile()
 					on_release:
-						app.root.current = "main"
+						app.root.current = "account_verification"
 						root.manager.transition.direction = 'left'
+
+				RoundedButton:
+					text: "Cancel"
+					size_hint_y: None
+					height: dp(25)
+					on_release:
+						app.root.current = "initial_screen"
+						root.manager.transition.direction = 'right'

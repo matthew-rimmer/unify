@@ -1,3 +1,10 @@
+# ---------------------------------------------------------------------
+# Kivy App file
+# Defines all the classes for the screens of the app
+# ---------------------------------------------------------------------
+
+
+# Kivy imports
 from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivy.animation import Animation
@@ -6,9 +13,6 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout  
 from kivy.uix.carousel import Carousel
 
-from os.path import dirname, join
-from random import sample
-from string import ascii_lowercase
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 from kivy.uix.image import AsyncImage
@@ -22,9 +26,16 @@ from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.storage.jsonstore import JsonStore
 
+# Misc. Imports
+
+from os.path import dirname, join
+from random import sample
+from string import ascii_lowercase
+
 import os
 import webbrowser
 
+# ??? REMOVE ???
 import requests
 import json
 import jwt
@@ -35,19 +46,32 @@ from clientside.resources import User_Requests
 
 UserStore = JsonStore('userdata/UserStore.json') 
 
-# Initial page shown when app is first downloaded
+# ------------
+# Initial Screen
+# ------------
 class Initial(Screen):
 	pass	
 
-
+# ------------
+# Login Screen
+# ------------
 class Login(Screen):
-	def on_pre_leave(self):
-		j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
+	
+	# REDUNDANT, ??? REMOVE ???
+	#def on_pre_leave(self):
+	#	j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
 		
+	# Login on_leave:
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.uni_email.text = ''
 		self.password.text = ''
 
+
+	# Login login_click:
+	# - When the login button is clicked:
+	# 	- Send user Request
+	#   - Add to store
 	def login_click(self):
 		j = { "Email": self.uni_email.text, "Password": self.password.text}
 		user_details = User_Requests.login(j)
@@ -91,8 +115,12 @@ class AccountVerification(Screen):
 
 
 class ProfileCreation(Screen):
-	photos = []
-
+	
+	# ProfileCreation select:
+	# - When a photo is selected:
+	# 	- Open/close popupwindow
+	#   - Get the selection
+	#   - Send picture request !!! ADD !!!
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -111,12 +139,17 @@ class ProfileCreation(Screen):
 			print(user_image)
 			
 			self.filechooser.selection.clear()
-		        
+			
 
-			# POST REQ	
+			# POST REQ	!!! ADD !!!
 		except:
 			pass
-
+	
+	# ProfileCreation save_profile:
+	# - When the save button is clicked:
+	#   - Add all info to json
+	#   - Send request
+	#   - Add user to userstore
 	def save_profile(self):
 
 		interest_tags = self.tags.text.splitlines()
@@ -147,30 +180,244 @@ class ProfileCreation(Screen):
 
 		# POST request (POST/image/{User_ID}/upload)
 
+	def on_leave(self):
+		self.uni_email.text = ''
+		self.first_name.text = ''
+		self.last_name.text = ''
+		self.dob.text = ''
+		self.password.text = ''
+		self.description.text = ''
+		self.instagram.text = ''
+		self.twitter.text = ''
+		self.spotify.text = ''
+		self.linked_in.text = ''
 
 		
+# ------------
+# Account Verification Screen
+# ------------
+class AccountVerification(Screen):
+	def verify(self, code):
+		pass
 
+		# PATCH request (PATCH/user/{USER_ID}/verify
+		# Verification_Code
+		# !!! ADD !!!
+		
 
+# ----------------------------------------------------------------
+# Main Screens
+# ----------------------------------------------------------------
+
+# ------------
+# Config
+# ------------
 
 # Class for the profile, match & event sections
 class MainSections(Screen):
 	pass
 
+class UnifyScreen(Screen):
+	fullscreen = BooleanProperty(False)
+
+# ------------
+# MatchList Screen
+# ------------
 
 class MatchList(BoxLayout):
 	pass
 
+# -----
+# MatchRecycle RecycleView
+# -----
+# Used for displaying all the matched users
+
 class MatchRecycle(RecycleView):
-	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+
+	# MatchRecycle on_parent:
+	# - Function is loaded when the widget is added to the screen
+	# - Get match list Request from server
+	# - Populates screen
+	def on_parent(self,widget,parent): 
+		# REQUEST !!! ADD !!!
 		self.populate()
 	
+	# MatchRecycle populate:
+	# - Populates the screen with loaded json users !!! ADD !!!
 	def populate(self):
 		# j = {}
 		# pl = json.loads(j)
 		pl = {'User_ID':'15','First_Name':'Jeremy','Last_Name':"Lee",'Picture_Path':'placeholder','User_Tag':'#nice' }
-		self.data.append({'id':pl["User_ID"],'name': pl["First_Name"]+" "+pl["Last_Name"],'tags':pl["User_Tag"],'imagePath': pl["Picture_Path"]})
+		self.data.append({
+			'id':pl["User_ID"],
+			'name': pl["First_Name"]+" "+pl["Last_Name"],
+			'tags':pl["User_Tag"],
+			'imagePath': pl["Picture_Path"]
+			})
 		
+# ------------
+# Match Profile Screen
+# ------------
+
+class MatchProfile(Screen):
+	tags_filled = False
+
+	def on_parent(self, widget, parent):
+		self.populate_match()
+
+	def populate_match(self, *args):
+		pass
+		# j = {}
+		# match = json.loads(j)
+
+		# Temporary
+		#match = {
+				#"UserID": "Temp235", 
+				#"Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+				#"Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				#"Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
+				#"First_Name": "Austin", "Last_Name": "Moran", 
+				#"Description": "Hi there! I am new to the area and could do with more friends.",
+				#"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], 
+				#"Linked_In": "https://www.linkedin.com/", "Instagram_Link": "@AusMoran", 
+				#"Twitter_Link": "@AusMoran", "Spotify_Link": "AusMoran"
+			#}
+
+		# photos
+		#self.img.source = match["Profile_Picture"]
+		#self.img2.source = match["Profile_Picture2"]
+		#self.img3.source = match["Profile_Picture3"]
+
+		# full name
+		#self.fullname.text = match["First_Name"] + " " + match["Last_Name"]
+
+		# about me description
+		#self.description.text = match["Description"]
+
+		# interest tags
+		#tags = match["User_Tag"]
+
+		#if not self.tags_filled:
+			#for x in tags:
+				#button = OutlinedButton(text="#" + x)
+				#self.tag_grid.add_widget(button)
+			#self.tags_filled = True
+
+		#if self.tags_filled:
+			#pass
+
+		# instagram handle
+		#self.instagram.text = match["Instagram_Link"]
+
+		# twitter handle
+		#self.twitter.text = match["Twitter_Link"]
+
+		# spotify username
+		#self.spotify.text = match["Spotify_Link"]
+
+		# linked in
+		#self.linkedin_link = match["Linked_In"]
+
+	def getText(self):
+		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
+
+	# Opens LinkedIn profile in the browser
+	def urlLink(self, url, ref):
+		url = "https://www.linkedin.com/"
+		#self.linkedin_link
+		_dict = {"profile": url}
+
+		# Opens new tab in browser
+		webbrowser.open(_dict[ref], new=1)
+
+
+
+# ------------
+# User Profile Screen
+# ------------
+	
+class Profile(Screen):
+	tags_filled = False
+
+	def on_parent(self, widget, parent):
+		self.populate_profile()
+
+	def populate_profile(self, *args):
+		pass
+		# j = {}
+		# profile = json.loads(j)
+
+		#profile = {
+				#"UserID": "Temp123", "Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				#"Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				#"Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla",
+				#"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!",
+				#"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"],
+				#"Linked_In": "https://www.linkedin.com/"
+		#}
+
+		# photos
+		#self.img.source = profile["Profile_Picture"]
+		#self.img2.source = profile["Profile_Picture2"]
+		#self.img3.source = profile["Profile_Picture3"]
+
+		# full name
+		#self.fullname.text = profile["First_Name"] + " " + profile["Last_Name"]
+
+		# about me description
+		#self.description.text = profile["Description"]
+
+		# interest tags
+		#tags = profile["User_Tag"]
+
+		#if not self.tags_filled:
+			#for x in tags:
+				#button = OutlinedButton(text="#" + x)
+				#self.tag_grid.add_widget(button)
+			#self.tags_filled = True
+
+		#if self.tags_filled:
+			#pass
+
+		# instagram handle
+		#self.instagram.text = ["Instagram_Link"]
+
+		# twitter handle
+		#self.twitter.text = ["Twitter_Link"]
+
+		# spotify username
+		#self.spotify.text = ["Spotify_Link"]
+
+		# linked in
+		#self.linkedin_link = profile["Linked_In"]
+
+	def getText(self):
+		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
+
+	# Opens LinkedIn profile in the browser
+	def urlLink(self, url, ref):
+		url = "https://www.linkedin.com/"
+		#self.linkedin_link
+		_dict = {"profile": url}
+
+		# Opens new tab in browser
+		webbrowser.open(_dict[ref], new=1)
+	
+
+
+# ------------
+# Friends Screen
+# ------------
+
+class Friends(Screen):
+	pass
+
+
+
+# ------------
+# EventList Screen
+# ------------
+
 
 class EventList(BoxLayout):
 	def getText(self):
@@ -188,116 +435,13 @@ class EventRecycle(RecycleView):
 		pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder' }
 		self.data.append({'id':pl["Event_ID"],'name': pl["Name"], 'imagePath': pl["Picture_Path"]})
 
-class MatchProfile(Screen):
-	def on_pre_enter(self, *args):
-		# j = {}
-		# match = json.loads(j)
-
-		match = {
-				"UserID": "Temp235", "Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-				"Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				"Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
-				"First_Name": "Austin", "Last_Name": "Moran", "Description": "Hi there! I am new to the area and could do with more friends.",
-				"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], "Linked_In": "https://www.linkedin.com/"
-			}
-
-		# photos
-		self.img.source = match["Profile_Picture"]
-		self.img2.source = match["Profile_Picture2"]
-		self.img3.source = match["Profile_Picture3"]
-
-		# full name
-		self.fullname.text = match["First_Name"] + " " + match["Last_Name"]
-
-		# about me description
-		self.description.text = match["Description"]
-
-		# interest tags
-		tags = match["User_Tag"]
-
-		for x in tags:
-			button = OutlinedButton(text="#" + x)
-			self.tag_grid.add_widget(button)
-
-		# linked in
-		self.linkedin_link = match["Linked_In"]
-			
-	def on_pre_leave(self):
-		self.tag_grid.clear_widgets()
 
 
-	def getText(self):
-		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
-
-	# Opens LinkedIn profile in the browser
-	def urlLink(self, url, ref):
-		url = self.linkedin_link
-		_dict = {"profile": url}
-
-		# Opens new tab in browser
-		webbrowser.open(_dict[ref], new=1)
-
-
-class UnifyScreen(Screen):
-	fullscreen = BooleanProperty(False)
-
-	
-class Profile(Screen):
-	def on_pre_enter(self, *args):
-		# j = {}
-		# profile = json.loads(j)
-
-		profile = {
-				"UserID": "Temp123", "Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				"Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				"Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla",
-				"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!",
-				"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"],
-				"Linked_In": "https://www.linkedin.com/"
-		}
-
-		# photos
-		self.img.source = profile["Profile_Picture"]
-		self.img2.source = profile["Profile_Picture2"]
-		self.img3.source = profile["Profile_Picture3"]
-
-		# full name
-		self.fullname.text = profile["First_Name"] + " " + profile["Last_Name"]
-
-		# about me description
-		self.description.text = profile["Description"]
-
-		# interest tags
-		tags = profile["User_Tag"]
-
-		for x in tags:
-			button = OutlinedButton(text="#" + x)
-			self.tag_grid.add_widget(button)
-
-		self.linkedin_link = profile["Linked_In"]
-
-	def on_pre_leave(self):
-		self.tag_grid.clear_widgets()
-
-	def getText(self):
-		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
-
-	# Opens LinkedIn profile in the browser
-	def urlLink(self, url, ref):
-		url = self.linkedin_link
-		_dict = {"profile": url}
-
-		# Opens new tab in browser
-		webbrowser.open(_dict[ref], new=1)
-	
-		
-class Friends(Screen):
-	pass
-
+# ------------
+# Create Event Screen
+# ------------
 
 class CreateEvent(Screen):
-	event_picture = []
-
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -309,19 +453,20 @@ class CreateEvent(Screen):
 			)
 			popupWindow.open()
 
-			self.event_picture.append(filename[0])
+			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
+			
+
+			# POST REQ	!!! ADD !!!
 
 		except:
 			pass
 
 	def save_event(self):
-		self.event_picture[0] = self.event_picture[0].replace("\\", "/")
 
 		j = {
-			"User_ID": "Temp123", "Name": self.event_name.text, "Description": self.description.text,
-			"Event_Picture": self.event_picture[0], "DateTime": self.datetime.text, 
-			"Event_Location": self.location.text
+			"Name": self.event_name.text, "Description": self.description.text,
+			"DateTime": self.datetime.text, "Event_Location": self.location.text
 		}
 
 		# POST request
@@ -333,39 +478,51 @@ class CreateEvent(Screen):
 		self.location.text = ''
 		
 
+# ------------
+# View Event Screen
+# ------------
+
+
 class ViewEvent(Screen):
-	def on_pre_enter(self):
+	def on_parent(self, widget, parent):
+		self.populate_event()
+
+	def populate_event(self, *args):
+		pass
 		# j = {}
 		# event = json.loads(j)
 
-		event = {
-				"Event_ID": "CS123", "User_ID": "Temp123", "Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				"Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",
-				"Event_Location": "Westmoor Lane, LN1 2JW"
-			}
+		# Temporary
+		#event = {
+				#"Event_ID": "CS123", "User_ID": "Temp123", "Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+				#"Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",
+				#"Event_Location": "Westmoor Lane, LN1 2JW"
+			#}
 
 		# event picture
-		self.event_img.source = event["Event_Picture"]
+		#self.event_img.source = event["Event_Picture"]
 
 		# event name
-		self.event_name.text = event["Name"]
+		#self.event_name.text = event["Name"]
 
 		# event creator
 		# self.creator.text =
 
 		# event description
-		self.description.text = event["Description"]
+		#self.description.text = event["Description"]
 
 		# event date & time
-		self.datetime.text = event["DateTime"]
+		#self.datetime.text = event["DateTime"]
 
 		# event location
-		self.location.text = event["Event_Location"]
+		#self.location.text = event["Event_Location"]
 
-		
+
+# ------------
+# App settings Screen
+# ------------
+
 class AppSettings(Screen):
-	photos = []
-
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -377,9 +534,11 @@ class AppSettings(Screen):
 			)
 			popupWindow.open()
 
-			self.photos.append(filename[0])
+			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
 			
+
+			# POST REQ	!!! ADD !!!
 		except:
 			pass
 
@@ -387,19 +546,11 @@ class AppSettings(Screen):
 	def change_settings(self):
 		# for users table
 		j = {
-			"User_ID": "Temp123", "Description": self.new_description.text
+			"Description": self.new_description.text
 		}
 
 		# PATCH request
 
-		# for userpictures table
-		self.photos[0] = self.photos[0].replace("\\", "/")
-		self.photos[1] = self.photos[1].replace("\\", "/")
-		self.photos[2] = self.photos[2].replace("\\", "/")
-
-		k = [{"User_ID": "Temp123", "Picture_Path": self.photos[0]}, {"User_ID": "Temp123", "Picture_Path": self.photos[1]}, {"User_ID": "Temp123", "Picture_Path": self.photos[2]}]
-
-		# request
 
 		# for usertags table
 		interest_tags = self.new_tags.text.splitlines()
@@ -413,6 +564,9 @@ class AppSettings(Screen):
 		self.new_description.text = ''
 		self.new_tags.text = ''
 
+# ------------
+# Change pass Screen
+# ------------
 
 class ChangePassword(Screen):
 	def check_code(self, code):
@@ -429,7 +583,7 @@ class ChangePassword(Screen):
 	def save_password(self, new_password):
 		# for users table
 		j = {
-			"User_ID": "Temp123", "Password": new_password
+			"Password": new_password
 		}
 
 		# PATCH request
@@ -444,6 +598,9 @@ class ChangePassword(Screen):
 
 		self.pass_code.text = ''
 		
+# ------------
+# Report Screen
+# ------------
 
 class ReportEvent(Screen):
 	def save_event_report(self):
@@ -524,6 +681,10 @@ class ReportUser(Screen):
 		self.reason4.text = ''
 
 
+# ------------
+# Button Code
+# ------------
+
 class OutlinedButton(Button):
 	pass
 
@@ -558,10 +719,14 @@ class RoundedButton(TouchRippleBehavior, Button):
 		return False
 
 
-# Acts like a button & an image
 class ImageButton(ButtonBehavior, Image):
 	pass
 	
+
+
+# ----------------------------------------------------------------
+# App definition
+# ----------------------------------------------------------------
 
 class UnifyApp(App):
 	"""Unify base kivy app
@@ -601,39 +766,24 @@ class UnifyApp(App):
 		sm = self.root.ids.main.ids.sm
 		sm.switch_to(screen, direction='left') # switch the screen
 
-		if self.index == 0:
-			title = self.root.ids.main.ids.title
-			title.text = "Settings"
-		elif self.index == 1:
-			title = self.root.ids.main.ids.title
-			title.text = "Change Your Password"
-		elif self.index == 2:
-			title = self.root.ids.main.ids.title
-			title.text = "Create Event"
-		elif self.index == 3:
-			title = self.root.ids.main.ids.title
-			title.text = "Find Events"
-		elif self.index == 4:
-			title = self.root.ids.main.ids.title
-			title.text = "My Friends"
-		elif self.index == 5:
-			title = self.root.ids.main.ids.title
-			title.text = "Find Friends"
-		elif self.index == 6:
-			title = self.root.ids.main.ids.title
-			title.text = "Student's Profile"
-		elif self.index == 7:
-			title = self.root.ids.main.ids.title
-			title.text = "My Profile"
-		elif self.index == 8:
-			title = self.root.ids.main.ids.title
-			title.text = "Report an Event"
-		elif self.index == 9:
-			title = self.root.ids.main.ids.title
-			title.text = "Report a User"
-		elif self.index == 10:
-			title = self.root.ids.main.ids.title
-			title.text = "View Event"
+		screen_titles = {
+			0: "Settings",
+			1: "Change Your Password",
+			2: "Create Event",
+			3: "Find Events",
+			4: "My Friends",
+			5: "Find Friends",
+			6: "Student Profile",
+			7: "My Profile",
+			8: "Report This Event",
+			9: "Report This User",
+			10: "View Event"
+		}
+
+		for x, y in screen_titles.items():
+			if self.index == x:
+				title = self.root.ids.main.ids.title
+				title.text = y
 		
 	
 	def load_screen(self, index):

@@ -42,7 +42,11 @@ import jwt
 from datetime import datetime
 import time
 
-from clientside.resources import User_Requests
+from clientside.resources import (
+	User_Requests, 
+	Event_Requests, 
+	Report_Requests
+)
 
 UserStore = JsonStore('userdata/UserStore.json') 
 
@@ -77,7 +81,6 @@ class Login(Screen):
 		user_details = User_Requests.login(j)
 		if user_details is not None:
 			UserStore.put('user_info',  token=user_details["access_token"], id=user_details["data"]["User_ID"])
-	
 
 class Register(Screen):
 	def save_user(self):
@@ -105,15 +108,6 @@ class Register(Screen):
 		self.dob.text = ''
 		self.password.text = ''
 
-
-class AccountVerification(Screen):
-	def verify(self, code):
-		pass
-
-		# PATCH request (PATCH/user/{USER_ID}/verify
-		# Verification_Code
-
-
 class ProfileCreation(Screen):
 	
 	# ProfileCreation select:
@@ -131,13 +125,12 @@ class ProfileCreation(Screen):
 				size_hint=(None, None), size=(200, 200)
 			)
 			popupWindow.open()
-
+			
 			user_image = User_Requests.upload_image(
 				UserStore.get('user_info')["token"],
 				filename[0]
 			)
-			print(user_image)
-			
+
 			self.filechooser.selection.clear()
 			
 
@@ -182,15 +175,29 @@ class ProfileCreation(Screen):
 		self.twitter.text = ''
 		self.spotify.text = ''
 		self.linked_in.text = ''
-
-		
+	
 # ------------
 # Account Verification Screen
 # ------------
 class AccountVerification(Screen):
 	def verify(self, code):
-		pass
+		verif = User_Requests.verify(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"],
+			code
+		)
 
+		if verif is not None:
+			App.get_running_app().root.current = 'profile_creation'
+		else:
+			popupWindow = Popup(
+				title="Code Incorrect!",
+				content=Label(
+					text="Provided code was incorrect!",
+					font_size=14, halign='center'),
+				size_hint=(None, None), size=(200, 200)
+			)
+			popupWindow.open()
 		# PATCH request (PATCH/user/{USER_ID}/verify
 		# Verification_Code
 		# !!! ADD !!!
@@ -214,7 +221,6 @@ class UnifyScreen(Screen):
 # ------------
 # MatchList Screen
 # ------------
-
 class MatchList(BoxLayout):
 	pass
 
@@ -222,7 +228,6 @@ class MatchList(BoxLayout):
 # MatchRecycle RecycleView
 # -----
 # Used for displaying all the matched users
-
 class MatchRecycle(RecycleView):
 
 	# MatchRecycle on_parent:
@@ -249,7 +254,6 @@ class MatchRecycle(RecycleView):
 # ------------
 # Match Profile Screen
 # ------------
-
 class MatchProfile(Screen):
 	tags_filled = False
 
@@ -321,12 +325,9 @@ class MatchProfile(Screen):
 		# Opens new tab in browser
 		webbrowser.open(_dict[ref], new=1)
 
-
-
 # ------------
 # User Profile Screen
 # ------------
-	
 class Profile(Screen):
 	tags_filled = False
 
@@ -334,7 +335,29 @@ class Profile(Screen):
 		self.populate_profile()
 
 	def populate_profile(self, *args):
-		pass
+		
+		this_user = User_Requests.get_info(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"]
+		)
+
+		for pic in this_user['data']['pictures']:
+			self.user_pictures.add_widget(
+				AsyncImage(source=pic)
+			)
+		
+		for tag in this_user['data']['tags']:
+			self.tag_grid.add_widget(
+				OutlinedButton(text='#' + tag)
+			)
+
+		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
+		self.description.text = this_user['data']["Description"] if this_user['data']["Description"] is not None else ''
+		self.instagram.text = this_user['data']["Instagram_Link"] if this_user['data']["Instagram_Link"] is not None else 'Not Provided'
+		self.twitter.text = this_user['data']["Twitter_Link"] if this_user['data']["Twitter_Link"] is not None else 'Not Provided'
+		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
+		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
+
 		# j = {}
 		# profile = json.loads(j)
 
@@ -394,26 +417,29 @@ class Profile(Screen):
 		# Opens new tab in browser
 		webbrowser.open(_dict[ref], new=1)
 	
-
-
 # ------------
 # Friends Screen
 # ------------
-
 class Friends(Screen):
 	pass
-
-
 
 # ------------
 # EventList Screen
 # ------------
 
+# class EventFindScreen(UnifyScreen):
+# 	def on_enter(self, *args):
+# 	 	self.efs.rvEvent.populate()
 
 class EventList(BoxLayout):
 	def getText(self):
 		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
+class EventRow(BoxLayout):
+
+	def load_event(self, event_id):
+		UserStore.put('curr_event', id=event_id)
+		App.get_running_app().go_screen(10)
 
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
@@ -423,16 +449,35 @@ class EventRecycle(RecycleView):
 	def populate(self):
 		# j = {}
 		# pl = json.loads(j)
-		pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder' }
-		self.data.append({'id':pl["Event_ID"],'name': pl["Name"], 'imagePath': pl["Picture_Path"]})
+		# pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder', 'attendees':'10' }
+		# self.data.append({
+		# 		'id':pl['Event_ID'],
+		# 		'name': pl["Name"], 
+		# 		'imagePath': pl["Picture_Path"],
+		# 		'attendees':'10'
+		# 	})
+		events = User_Requests.get_feed(
+			UserStore.get('user_info')["token"],
+			limit = 100
+		)
 
+		if events is not None:
+			for e in events['data']:
+				self.data.append({
+					'id':str(e['Event_ID']),
+					'name': e["Name"], 
+					'imagePath': e["Picture_Path"] if e['Picture_Path'] is not None else '',
+					#'attendees': e['Attendees']
+				})
 
 
 # ------------
 # Create Event Screen
 # ------------
-
 class CreateEvent(Screen):
+
+	_image = ''
+
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -443,6 +488,15 @@ class CreateEvent(Screen):
 				size_hint=(None, None), size=(200, 200)
 			)
 			popupWindow.open()
+
+			event_image = Event_Requests.upload_image(
+				UserStore.get('user_info')["token"],
+				filename[0]
+			)
+			
+			if event_image is not None:
+				print(event_image['data']['image'])
+				self._image = event_image['data']['image']
 
 			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
@@ -455,31 +509,64 @@ class CreateEvent(Screen):
 
 	def save_event(self):
 
+		got_date_time = self.datetime.text.split()
+		if len(got_date_time) > 1:
+			got_date_time = '{date}T{time}Z'.format(date=got_date_time[0],time=got_date_time[1])
+
+		print(got_date_time)
+
 		j = {
 			"Name": self.event_name.text, "Description": self.description.text,
-			"DateTime": self.datetime.text, "Event_Location": self.location.text
+			"DateTime": got_date_time, "Location": self.location.text,
+			'Picture_Path': self._image
 		}
 
-		# POST request
+		event = Event_Requests.create(
+			UserStore.get('user_info')["token"],
+			j
+		)
+
+		if event is not None:
+			self.load_event(event['data']['Event_ID'])
+
+	def load_event(self, event_id):
+		UserStore.put('curr_event', id=event_id)
+		App.get_running_app().go_screen(10)
 
 	def on_leave(self):
 		self.event_name.text = ''
 		self.description.text = ''
 		self.datetime.text = ''
 		self.location.text = ''
-		
 
 # ------------
 # View Event Screen
 # ------------
-
-
 class ViewEvent(Screen):
 	def on_parent(self, widget, parent):
-		self.populate_event()
+		if UserStore.exists('curr_event'):
+			self.populate_event(id=UserStore.get('curr_event')['id'])
 
-	def populate_event(self, *args):
-		pass
+	def populate_event(self, id=None):
+		if id is not None:
+			event = Event_Requests.get(
+				int(id),
+				UserStore.get('user_info')["token"],
+			)
+			if event is not None:
+				self.event_img.source = event['data']['Picture_Path']
+				self.event_name.text = event['data']['Name']
+				self.description.text = event['data']["Description"]
+				self.datetime.text = event['data']["DateTime"]
+				self.location.text = event['data']["Location"]
+				self.creator.text = '{fname} {lname}'.format(
+					fname = event['data']['Creator']['First_Name'],
+					lname = event['data']['Creator']['Last_Name']
+				)
+
+	def on_leave(self, *args):
+		UserStore.delete('curr_event')
+
 		# j = {}
 		# event = json.loads(j)
 
@@ -508,11 +595,9 @@ class ViewEvent(Screen):
 		# event location
 		#self.location.text = event["Event_Location"]
 
-
 # ------------
 # App settings Screen
 # ------------
-
 class AppSettings(Screen):
 	def select(self, filename):
 		try:
@@ -551,6 +636,10 @@ class AppSettings(Screen):
 		# PATCH request (PATCH/user/{User_ID})
 		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
 
+	def log_out(self):
+		UserStore.delete('user_info')
+		App.get_running_app().root.current = "initial_screen"
+
 	def on_leave(self):
 		self.new_description.text = ''
 		self.new_tags.text = ''
@@ -558,7 +647,6 @@ class AppSettings(Screen):
 # ------------
 # Change pass Screen
 # ------------
-
 class ChangePassword(Screen):
 	def check_code(self, code):
 		# comparison 
@@ -592,7 +680,6 @@ class ChangePassword(Screen):
 # ------------
 # Report Screen
 # ------------
-
 class ReportEvent(Screen):
 	def save_event_report(self):
 		report_event_reason = ['', '', '', '']
@@ -630,8 +717,6 @@ class ReportEvent(Screen):
 		self.reason2.active = False
 		self.reason3.active = False
 		self.reason4.text = ''
-		
-
 
 class ReportUser(Screen):
 	def save_user_report(self):
@@ -671,14 +756,11 @@ class ReportUser(Screen):
 		self.reason3.active = False
 		self.reason4.text = ''
 
-
 # ------------
 # Button Code
 # ------------
-
 class OutlinedButton(Button):
 	pass
-
 
 # Code for RoundedButton adapted from Youtuber 'Daniel kolim'
 # Available at https://www.youtube.com/watch?v=lo6KFW2kt84
@@ -709,16 +791,12 @@ class RoundedButton(TouchRippleBehavior, Button):
 			return True
 		return False
 
-
 class ImageButton(ButtonBehavior, Image):
 	pass
-	
-
 
 # ----------------------------------------------------------------
 # App definition
 # ----------------------------------------------------------------
-
 class UnifyApp(App):
 	"""Unify base kivy app
 

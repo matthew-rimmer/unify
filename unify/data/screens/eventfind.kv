@@ -1,4 +1,4 @@
-<EventRow@BoxLayout>:
+<EventRow>:
 	orientation: 'horizontal'
 	canvas.before:
 		Color:
@@ -9,16 +9,18 @@
 	name: ''
 	id: ''
 	imagePath: ''
+	attendees: ''
 	Button:
 		text: "Image Placeholder"
-		on_release: app.go_screen(10)   
+		on_release: root.load_event(root.id)
 	Label:
 		text: root.name
+	Label:
+		text: root.attendees + " friends are attending."
 		
 
 <EventList>:	
 	orientation: 'vertical'
-	id: nice
 	Label:
 		text: root.getText()
 		markup: True
@@ -31,6 +33,7 @@
 
 
 <EventRecycle>:
+	id: er
 	scroll_type: ['bars', 'content']
 	scroll_wheel_distance: dp(114)
 	bar_width: dp(10)
@@ -45,4 +48,4 @@
 
 UnifyScreen:
 	EventList:
-		id: anice
+		id: efs

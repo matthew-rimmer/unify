@@ -3,6 +3,7 @@
 #:import utils kivy.utils
 #:include data/setup/initial.kv
 #:include data/setup/login.kv
+#:include data/setup/register.kv
 #:include data/setup/profile_creation.kv
 #:include data/setup/account_verification.kv
 
@@ -15,7 +16,10 @@ ScreenManager:
 		name: "login_screen"
 		id: login_screen
 
-	
+	Register:
+		name: "register"
+		id: register
+
 	ProfileCreation:
 		name: "profile_creation"
 		id: profile_creation

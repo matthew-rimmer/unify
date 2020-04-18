@@ -155,11 +155,11 @@ class ProfileCreation(Screen):
 		interest_tags = self.tags.text.splitlines()
 
 		j = { 
-			'Description': self.description.text,
-			'Twitter_Link': self.twitter.text,
-			'Instagram_Link': self.instagram.text,
-			'Spotify_Link': self.spotify.text,
-			'LinkedIn_Link':self.linked_in.text
+			'Description': self.description.text if self.description.text is not None else '',
+			'Twitter_Link': self.twitter.text if self.twitter.text is not None else '',
+			'Instagram_Link': self.instagram.text if self.instagram.text is not None else '',
+			'Spotify_Link': self.spotify.text if self.spotify.text is not None else '',
+			'LinkedIn_Link':self.linked_in.text if self.linked_in.text is not None else ''
 		}
 
 		user_edits = User_Requests.edit(
@@ -168,24 +168,15 @@ class ProfileCreation(Screen):
 			j
 		)
 
-		tags = {
-			'User_Tags':interest_tags
-		}
-
 		user_tags = User_Requests.add_tags(
 			UserStore.get('user_info')['id'],
 			UserStore.get('user_info')["token"],
-			tags
+			interest_tags
 		)
 
 		# POST request (POST/image/{User_ID}/upload)
 
 	def on_leave(self):
-		self.uni_email.text = ''
-		self.first_name.text = ''
-		self.last_name.text = ''
-		self.dob.text = ''
-		self.password.text = ''
 		self.description.text = ''
 		self.instagram.text = ''
 		self.twitter.text = ''

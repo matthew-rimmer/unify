@@ -39,6 +39,7 @@ class User_Requests:
     @staticmethod
     def upload_image(auth_token, image_path):
         with open(image_path, 'rb') as image:
+            print('Opened: {img}'.format(img=image_path))
             resp = requests.post(
                 api_url + get_route('images', assign_user=True),
                 data = image,
@@ -47,6 +48,7 @@ class User_Requests:
                     content_type=guess_type(image_path)
                 )
             )
+            print('{s}: {r}'.format(s=resp.status_code, r=resp.reason))
 
     @staticmethod
     def login(login_data, auth_token=None):

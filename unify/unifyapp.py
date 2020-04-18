@@ -33,9 +33,7 @@ import time
 
 from clientside.resources import User_Requests
 
-
-UserStore = JsonStore('UserStore.json') 
-
+UserStore = JsonStore('userdata/UserStore.json') 
 
 # Initial page shown when app is first downloaded
 class Initial(Screen):
@@ -52,8 +50,9 @@ class Login(Screen):
 
 	def login_click(self):
 		j = { "Email": self.uni_email.text, "Password": self.password.text}
-		userDetails = User_Requests.login(j)
-		UserStore.put('user_info',  token=userDetails["access_token"], id=userDetails["data"]["User_ID"])
+		user_details = User_Requests.login(j)
+		if user_details is not None:
+			UserStore.put('user_info',  token=user_details["access_token"], id=user_details["data"]["User_ID"])
 	
 
 class Register(Screen):
@@ -61,13 +60,18 @@ class Register(Screen):
 
 		j = {
 			"Email": self.uni_email.text, "First_Name": self.first_name.text,
-			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, "Password": self.password.text
+			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
+			"Password": self.password.text
 		}
 
-
+		createdUser = User_Requests.create(j)
+		if createdUser is not None:
+			UserStore.put(
+				'user_info',  
+				token=createdUser["access_token"], 
+				id=createdUser["data"]["User_ID"]
+			)
 		
-		
-
 		# POST request (POST/user/create)
 
 	def on_leave(self):
@@ -100,7 +104,12 @@ class ProfileCreation(Screen):
 			)
 			popupWindow.open()
 
-			# POST REQ, ADD HERE: filename[0]
+			user_image = User_Requests.upload_image(
+				UserStore.get('user_info')["token"],
+				filename[0]
+			)
+			print(user_image)
+			
 			self.filechooser.selection.clear()
 		        
 
@@ -113,15 +122,29 @@ class ProfileCreation(Screen):
 		interest_tags = self.tags.text.splitlines()
 
 		j = { 
-			"Email": self.uni_email.text, "First_Name": self.first_name.text,
-			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
-			"Password": self.password.text, "Description": self.description.text
-			#"tags": interest_tags
+			'Description': self.description.text,
+			'Twitter_Link': self.twitter.text,
+			'Instagram_Link': self.instagram.text,
+			'Spotify_Link': self.spotify.text,
+			'LinkedIn_Link':self.linked_in.text
 		}
 
-		createdUser = User_Requests.create(j)
-		
-		UserStore.put('user_info',  token=createdUser["access_token"], id=createdUser["data"]["User_ID"])
+		user_edits = User_Requests.edit(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"],
+			j
+		)
+
+		tags = {
+			'User_Tags':interest_tags
+		}
+
+		user_tags = User_Requests.add_tags(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"],
+			tags
+		)
+
 		# POST request (POST/image/{User_ID}/upload)
 
 

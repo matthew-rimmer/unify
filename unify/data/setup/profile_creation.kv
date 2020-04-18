@@ -3,11 +3,14 @@
 	description: description
 	tags: tags
 	linked_in: linked_in
-	first_name: first_name
-	last_name: last_name
-	dob: dob
-	uni_email: uni_email
-	password: password
+	twitter: twitter
+	instagram: instagram
+	spotify: spotify
+	#first_name: first_name
+	#last_name: last_name
+	#dob: dob
+	#uni_email: uni_email
+	#password: password
 		
 	GridLayout:
 		cols: 1
@@ -72,61 +75,61 @@
 				spacing: dp(15)
 
 				# First name field
-				Label:
-					text: "First name:"
-					color: 0,0,0,1
-				TextInput:
-					id: first_name
-					multiline: False
-					size_hint_y: None
-					height: dp(40)
+#				Label:
+#					text: "First name:"
+#					color: 0,0,0,1
+#				TextInput:
+#					id: first_name
+#					multiline: False
+#					size_hint_y: None
+#					height: dp(40)
 
 				# Last name field
-				Label:
-					text: "Last name:"
-					color: 0,0,0,1
-				TextInput:
-					id: last_name
-					multiline: False
-					size_hint_y: None
-					height: dp(40)
+#				Label:
+#					text: "Last name:"
+#					color: 0,0,0,1
+#				TextInput:
+#					id: last_name
+#					multiline: False
+#					size_hint_y: None
+#					height: dp(40)
 
 
 				# Date of birth field
-				Label:
-					text: "Date of Birth \n (YYYY-MM-DD):"
-					halign: 'center'
-					color: 0,0,0,1
-				TextInput:
-					id: dob
-					multiline: False
-					size_hint_y: None
-					height: dp(40)
+#				Label:
+#					text: "Date of Birth \n (YYYY-MM-DD):"
+#					halign: 'center'
+#					color: 0,0,0,1
+#				TextInput:
+#					id: dob
+#					multiline: False
+#					size_hint_y: None
+#					height: dp(40)
 
 				# Uni Email field
-				Label:
-					text: "University \n email address:"
-					halign: 'center'
-					color: 0,0,0,1
-				TextInput:
-					id: uni_email
-					multiline: False
-					size_hint_y: None
-					height: dp(40)
+#				Label:
+#					text: "University \n email address:"
+#					halign: 'center'
+#					color: 0,0,0,1
+#				TextInput:
+#					id: uni_email
+#					multiline: False
+#					size_hint_y: None
+#					height: dp(40)
 
 
 				# Password field
-				Label:
-					text: "Password:"
-					halign: "center"
-					text_size: root.width, None
-					color: 0,0,0,1
-					size_hint_y: None
-					height: dp(20)
-				TextInput:
-					id: password
-					size_hint_y: None
-					height: dp(40)
+#				Label:
+#					text: "Password:"
+#					halign: "center"
+#					text_size: root.width, None
+#					color: 0,0,0,1
+#					size_hint_y: None
+#					height: dp(20)
+#				TextInput:
+#					id: password
+#					size_hint_y: None
+#					height: dp(40)
 
 				Label:
 					text: "What should be in your 'About Me'?"
@@ -163,6 +166,11 @@
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
+				TextInput:
+					id: instagram
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
 				# Link Spotify
@@ -171,6 +179,11 @@
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
+				TextInput:
+					id: spotify
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
 				# Link Twitter
@@ -179,6 +192,11 @@
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
+				TextInput:
+					id: twitter
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
 				# Provide LinkedIn URL

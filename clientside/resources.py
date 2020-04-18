@@ -1,14 +1,15 @@
 import requests
 import asyncio
 from json import loads, dumps
+from mimetypes import guess_type
 
 from .settings import get_route, api_url
 
-def get_request_headers(token, content_type='application/json'):
-    return {
-        'Authorization':'jwt {token}'.format(token=token),
-        'Content-Type':content_type
-    }
+def get_request_headers(token=None, content_type='application/json'):
+    output = { 'Content-Type':content_type }
+    if token is not None:
+        output['Authorization'] = 'jwt {token}'.format(token=token)
+    return output
 
 def check_req_success(response):
     if 200 <= response.status_code <= 203:
@@ -30,18 +31,29 @@ class User_Requests:
             del user_data['tags']
         resp = requests.post(
             api_url + get_route('create_user'),
-            json = user_data
+            json = user_data,
+            headers = get_request_headers()
         )
         return check_req_success(resp)
+    
+    @staticmethod
+    def upload_image(auth_token, image_path):
+        with open(image_path, 'rb') as image:
+            resp = requests.post(
+                api_url + get_route('images', assign_user=True),
+                data = image,
+                headers = get_request_headers(
+                    token=auth_token, 
+                    content_type=guess_type(image_path)
+                )
+            )
 
     @staticmethod
     def login(login_data, auth_token=None):
         resp = requests.get(
             api_url + get_route('login'),
             json = login_data,
-            headers = get_request_headers(auth_token) \
-                if auth_token is not None \
-                    else {'Content-Type':'application/json'} 
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
     
@@ -50,7 +62,7 @@ class User_Requests:
         resp = requests.patch(
             api_url + get_route('user_verify', user_id),
             json = {'Verification_Code':code},
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -58,7 +70,7 @@ class User_Requests:
     def get_info(user_id, auth_token):
         resp = requests.get(
             api_url + get_route('user', user_id),
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -66,7 +78,7 @@ class User_Requests:
     def get_feed(auth_token, offset=0, limit=15):
         resp = requests.get(
             api_url + get_route('user_feed', offset=offset, limit=limit),
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -75,7 +87,7 @@ class User_Requests:
         resp = requests.patch(
             api_url + get_route('user', user_id),
             json = user_edits,
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
     
@@ -83,7 +95,7 @@ class User_Requests:
     def delete(user_id, auth_token):
         resp = requests.delete(
             api_url + get_route('user', user_id),
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -92,7 +104,7 @@ class User_Requests:
         resp = requests.post(
             api_url + get_route('user_tags', user_id),
             json = {'User_Tags': tags},
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
     
@@ -101,7 +113,7 @@ class User_Requests:
         resp = requests.delete(
             api_url + get_route('user_tags', user_id),
             json = {'User_Tags': tags},
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -110,7 +122,7 @@ class User_Requests:
         resp = requests.post(
             api_url + get_route('user_friend_requests', user_id),
             json = {},
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -118,7 +130,7 @@ class User_Requests:
     def delete_friend_request(user_id, auth_token):
         resp = requests.delete(
             api_url + get_route('user_friend_requests', user_id),
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -127,7 +139,7 @@ class User_Requests:
         resp = requests.patch(
             api_url + get_route('user_friend_requests', user_id),
             json = {},
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -135,7 +147,7 @@ class User_Requests:
     def delete_friendship(user_id, auth_token):
         resp = requests.delete(
             api_url + get_route('user_friends', user_id),
-            headers = get_request_headers(auth_token)
+            headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -146,7 +158,7 @@ class Event_Requests:
         resp = requests.post(
             api_url + get_route('create_event'),
             json = event_data,
-            headers=get_request_headers(auth_token)
+            headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -155,7 +167,7 @@ class Event_Requests:
         resp = requests.patch(
             api_url + get_route('event', event_id),
             json = event_data,
-            headers=get_request_headers(auth_token)
+            headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
 
@@ -163,7 +175,7 @@ class Event_Requests:
     def delete(event_id, auth_token):
         resp = requests.delete(
             api_url + get_route('event', event_id),
-            headers=get_request_headers(auth_token)
+            headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
     
@@ -172,7 +184,7 @@ class Event_Requests:
         resp = requests.post(
             api_url + get_route('event_users', event_id),
             json = {},
-            headers=get_request_headers(auth_token)
+            headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
     
@@ -180,6 +192,26 @@ class Event_Requests:
     def delete_attending(event_id, auth_token):
         resp = requests.delete(
             api_url + get_route('event_users', event_id),
-            headers=get_request_headers(auth_token)
+            headers=get_request_headers(token=auth_token)
+        )
+        return check_req_success(resp)
+
+class Report_Requests:
+
+    @staticmethod
+    def report_user(user_id, auth_token, reason):
+        resp = requests.post(
+            api_url + get_route('report_user', user_id),
+            json = { 'Reason':reason },
+            headers=get_request_headers(token=auth_token)
+        )
+        return check_req_success(resp)
+    
+    @staticmethod
+    def report_event(event_id, auth_token, reason):
+        resp = requests.post(
+            api_url + get_route('report_event', event_id),
+            json = { 'Reason':reason },
+            headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)

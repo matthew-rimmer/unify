@@ -1,3 +1,10 @@
+# ---------------------------------------------------------------------
+# Kivy App file
+# Defines all the classes for the screens of the app
+# ---------------------------------------------------------------------
+
+
+# Kivy imports
 from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivy.animation import Animation
@@ -6,9 +13,6 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout  
 from kivy.uix.carousel import Carousel
 
-from os.path import dirname, join
-from random import sample
-from string import ascii_lowercase
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 from kivy.uix.image import AsyncImage
@@ -22,9 +26,16 @@ from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.storage.jsonstore import JsonStore
 
+# Misc. Imports
+
+from os.path import dirname, join
+from random import sample
+from string import ascii_lowercase
+
 import os
 import webbrowser
 
+# ??? REMOVE ???
 import requests
 import json
 import jwt
@@ -34,42 +45,59 @@ import time
 from clientside.resources import User_Requests
 
 
+# Global Storage:
+# - Stores public key in 'token'
+# - Stores user ID in 'id'
+# - To add: UserStore.put('user_info', token=...,id=...)
 UserStore = JsonStore('UserStore.json') 
 
+# ----------------------------------------------------------------
+# Inital Screens
+# ----------------------------------------------------------------
+# These classes are for the screens which are needed for login and sign up
 
-# Initial page shown when app is first downloaded
+# ------------
+# Initial Screen
+# ------------
 class Initial(Screen):
 	pass	
 
-
+# ------------
+# Login Screen
+# ------------
 class Login(Screen):
-	def on_pre_leave(self):
-		j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
+	
+	# REDUNDANT, ??? REMOVE ???
+	#def on_pre_leave(self):
+	#	j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
 		
+	# Login on_leave:
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.uni_email.text = ''
 		self.password.text = ''
 
+
+	# Login login_click:
+	# - When the login button is clicked:
+	# 	- Send user Request
+	#   - Add to store
 	def login_click(self):
 		j = { "Email": self.uni_email.text, "Password": self.password.text}
 		userDetails = User_Requests.login(j)
 		UserStore.put('user_info',  token=userDetails["access_token"], id=userDetails["data"]["User_ID"])
 	
-
+# ------------
+# Register Screen
+# ------------
+# REDUNDANT CLASS, ??? REMOVE ???
 class Register(Screen):
 	def save_user(self):
-
 		j = {
 			"Email": self.uni_email.text, "First_Name": self.first_name.text,
 			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, "Password": self.password.text
 		}
-
-
-		
-		
-
 		# POST request (POST/user/create)
-
 	def on_leave(self):
 		self.uni_email.text = ''
 		self.first_name.text = ''
@@ -77,18 +105,27 @@ class Register(Screen):
 		self.dob.text = ''
 		self.password.text = ''
 
-
+# ------------
+# Account Verification Screen
+# ------------
 class AccountVerification(Screen):
 	def verify(self, code):
 		pass
 
 		# PATCH request (PATCH/user/{USER_ID}/verify
 		# Verification_Code
+		# !!! ADD !!!
 
-
+# ------------
+# Profile creation Screen
+# ------------
 class ProfileCreation(Screen):
-	photos = []
-
+	
+	# ProfileCreation select:
+	# - When a photo is selected:
+	# 	- Open/close popupwindow
+	#   - Get the selection
+	#   - Send picture request !!! ADD !!!
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -104,10 +141,15 @@ class ProfileCreation(Screen):
 			self.filechooser.selection.clear()
 		        
 
-			# POST REQ	
+			# POST REQ	!!! ADD !!!
 		except:
 			pass
-
+	
+	# ProfileCreation save_profile:
+	# - When the save button is clicked:
+	#   - Add all info to json
+	#   - Send request
+	#   - Add user to userstore
 	def save_profile(self):
 
 		interest_tags = self.tags.text.splitlines()
@@ -127,43 +169,59 @@ class ProfileCreation(Screen):
 
 		
 
+# ----------------------------------------------------------------
+# Main Screens
+# ----------------------------------------------------------------
 
+# ------------
+# Config
+# ------------
 
 # Class for the profile, match & event sections
 class MainSections(Screen):
 	pass
 
+class UnifyScreen(Screen):
+	fullscreen = BooleanProperty(False)
+
+# ------------
+# MatchList Screen
+# ------------
 
 class MatchList(BoxLayout):
 	pass
 
+# -----
+# MatchRecycle RecycleView
+# -----
+# Used for displaying all the matched users
+
 class MatchRecycle(RecycleView):
-	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+
+	# MatchRecycle on_parent:
+	# - Function is loaded when the widget is added to the screen
+	# - Get match list Request from server
+	# - Populates screen
+	def on_parent(self,widget,parent): 
+		# REQUEST !!! ADD !!!
 		self.populate()
 	
+	# MatchRecycle populate:
+	# - Populates the screen with loaded json users !!! ADD !!!
 	def populate(self):
 		# j = {}
 		# pl = json.loads(j)
 		pl = {'User_ID':'15','First_Name':'Jeremy','Last_Name':"Lee",'Picture_Path':'placeholder','User_Tag':'#nice' }
-		self.data.append({'id':pl["User_ID"],'name': pl["First_Name"]+" "+pl["Last_Name"],'tags':pl["User_Tag"],'imagePath': pl["Picture_Path"]})
+		self.data.append({
+			'id':pl["User_ID"],
+			'name': pl["First_Name"]+" "+pl["Last_Name"],
+			'tags':pl["User_Tag"],
+			'imagePath': pl["Picture_Path"]
+			})
 		
-
-class EventList(BoxLayout):
-	def getText(self):
-		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
-
-
-class EventRecycle(RecycleView):
-	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
-		self.populate()
-
-	def populate(self):
-		# j = {}
-		# pl = json.loads(j)
-		pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder' }
-		self.data.append({'id':pl["Event_ID"],'name': pl["Name"], 'imagePath': pl["Picture_Path"]})
+# ------------
+# Match Profile Screen
+# ------------
 
 class MatchProfile(Screen):
 	def on_pre_enter(self, *args):
@@ -171,11 +229,14 @@ class MatchProfile(Screen):
 		# match = json.loads(j)
 
 		match = {
-				"UserID": "Temp235", "Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+				"UserID": "Temp235", 
+				"Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
 				"Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
 				"Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
-				"First_Name": "Austin", "Last_Name": "Moran", "Description": "Hi there! I am new to the area and could do with more friends.",
-				"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], "Linked_In": "https://www.linkedin.com/"
+				"First_Name": "Austin", "Last_Name": "Moran", 
+				"Description": "Hi there! I am new to the area and could do with more friends.",
+				"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], 
+				"Linked_In": "https://www.linkedin.com/"
 			}
 
 		# photos
@@ -215,9 +276,10 @@ class MatchProfile(Screen):
 		webbrowser.open(_dict[ref], new=1)
 
 
-class UnifyScreen(Screen):
-	fullscreen = BooleanProperty(False)
 
+# ------------
+# User Profile Screen
+# ------------
 	
 class Profile(Screen):
 	def on_pre_enter(self, *args):
@@ -267,10 +329,43 @@ class Profile(Screen):
 		# Opens new tab in browser
 		webbrowser.open(_dict[ref], new=1)
 	
-		
+
+
+# ------------
+# Friends Screen
+# ------------
+
 class Friends(Screen):
 	pass
 
+
+
+# ------------
+# EventList Screen
+# ------------
+
+
+class EventList(BoxLayout):
+	def getText(self):
+		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
+
+
+class EventRecycle(RecycleView):
+	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
+		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
+		self.populate()
+
+	def populate(self):
+		# j = {}
+		# pl = json.loads(j)
+		pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder' }
+		self.data.append({'id':pl["Event_ID"],'name': pl["Name"], 'imagePath': pl["Picture_Path"]})
+
+
+
+# ------------
+# Create Event Screen
+# ------------
 
 class CreateEvent(Screen):
 	event_picture = []
@@ -310,6 +405,11 @@ class CreateEvent(Screen):
 		self.location.text = ''
 		
 
+# ------------
+# View Event Screen
+# ------------
+
+
 class ViewEvent(Screen):
 	def on_pre_enter(self):
 		# j = {}
@@ -339,7 +439,11 @@ class ViewEvent(Screen):
 		# event location
 		self.location.text = event["Event_Location"]
 
-		
+
+# ------------
+# App settings Screen
+# ------------
+
 class AppSettings(Screen):
 	photos = []
 
@@ -390,6 +494,9 @@ class AppSettings(Screen):
 		self.new_description.text = ''
 		self.new_tags.text = ''
 
+# ------------
+# Change pass Screen
+# ------------
 
 class ChangePassword(Screen):
 	def check_code(self, code):
@@ -421,6 +528,9 @@ class ChangePassword(Screen):
 
 		self.pass_code.text = ''
 		
+# ------------
+# Report Screen
+# ------------
 
 class ReportEvent(Screen):
 	def save_event_report(self):
@@ -501,6 +611,10 @@ class ReportUser(Screen):
 		self.reason4.text = ''
 
 
+# ------------
+# Button Code
+# ------------
+
 class OutlinedButton(Button):
 	pass
 
@@ -539,6 +653,11 @@ class RoundedButton(TouchRippleBehavior, Button):
 class ImageButton(ButtonBehavior, Image):
 	pass
 	
+
+
+# ----------------------------------------------------------------
+# App definition
+# ----------------------------------------------------------------
 
 class UnifyApp(App):
 	"""Unify base kivy app

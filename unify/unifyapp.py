@@ -80,7 +80,7 @@ class Login(Screen):
 	def login_click(self):
 		j = { "Email": self.uni_email.text, "Password": self.password.text}
 		user_details = User_Requests.login(j)
-		if user_details is not None:
+		if 'error' not in user_details:
 			UserStore.put(
 				'user_info',  
 				token=user_details["access_token"], 
@@ -97,7 +97,7 @@ class Register(Screen):
 		}
 
 		created_user = User_Requests.create(j)
-		if created_user is not None:
+		if 'error' not in created_user:
 			UserStore.put(
 				'user_info',  
 				token=created_user["access_token"], 
@@ -192,7 +192,7 @@ class AccountVerification(Screen):
 			code
 		)
 
-		if verif is not None:
+		if 'error' not in verif:
 			App.get_running_app().root.current = 'profile_creation'
 		else:
 			popupWindow = Popup(
@@ -253,7 +253,7 @@ class MatchRecycle(RecycleView):
 
 		print(matches)
 
-		if matches is not None:
+		if 'error' not in matches:
 			for match in matches['data']:
 				self.data.append({
 					'id':str(match["User_ID"]),
@@ -456,7 +456,7 @@ class EventRecycle(RecycleView):
 			limit = 100
 		)
 
-		if events is not None:
+		if 'error' not in events:
 			for e in events['data']:
 				self.data.append({
 					'id':str(e['Event_ID']),
@@ -489,7 +489,7 @@ class CreateEvent(Screen):
 				filename[0]
 			)
 			
-			if event_image is not None:
+			if 'error' not in event_image:
 				print(event_image['data']['image'])
 				self._image = event_image['data']['image']
 
@@ -521,7 +521,7 @@ class CreateEvent(Screen):
 			j
 		)
 
-		if event is not None:
+		if 'error' not in event:
 			self.load_event(event['data']['Event_ID'])
 
 	def load_event(self, event_id):
@@ -548,7 +548,7 @@ class ViewEvent(Screen):
 				int(id),
 				UserStore.get('user_info')["token"],
 			)
-			if event is not None:
+			if 'error' not in event:
 				self.event_img.source = event['data']['Picture_Path']
 				self.event_name.text = event['data']['Name']
 				self.description.text = event['data']["Description"]
@@ -645,7 +645,9 @@ class AppSettings(Screen):
 class ChangePassword(Screen):
 	def check_code(self, code):
 		# comparison 
-		
+		check = User_Requests.get_change_password_code(
+			UserStore.get('user_info')['token']
+		)
 		
 		# user only sees the 'enter new password' section if their code is correct
 		self.prompt.text = "Enter your new password: "
@@ -818,7 +820,7 @@ class UnifyApp(App):
 		if UserStore.exists("user_info"):
 			if UserStore.get('user_info')["token"] is not None:
 				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
-				if query is not None:
+				if 'error' not in query:
 					self.root.current = "main"
 					self.go_screen(5)
 

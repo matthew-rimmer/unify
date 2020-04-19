@@ -37,7 +37,7 @@ def check_req_success(response, picture_path=None):
     if 200 <= response.status_code <= 203:
         return response.json()
     else:
-        return None
+        return { 'error': response.text }
 
 def get_image_url(user_id, image_path):
     output = api_url + get_route('images', user=user_id, image=image_path)
@@ -131,6 +131,14 @@ class User_Requests:
         resp = requests.patch(
             api_url + get_route('user', effected_id=user_id),
             json = user_edits,
+            headers = get_request_headers(token=auth_token)
+        )
+        return check_req_success(resp)
+
+    @staticmethod
+    def get_change_password_code(auth_token):
+        resp = requests.get(
+            api_url + get_route('user_change_password'),
             headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)

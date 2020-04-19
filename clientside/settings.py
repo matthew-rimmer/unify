@@ -9,6 +9,7 @@ routes = {
     'user_friends':         '/user/{EFFECTED_ID}/friends',
     'user_friend_requests': '/user/{EFFECTED_ID}/friends/requests',
     'user_verify':          '/user/{EFFECTED_ID}/verify',
+    'user_change_password': '/user/password/change',
     'user_feed':            '/feed',
     'user_matches':         '/matches',
 

@@ -383,11 +383,15 @@ class EventList(BoxLayout):
 	def getText(self):
 		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
-class EventRow(BoxLayout):
+class EventRow(ButtonBehavior,BoxLayout):
 
 	def load_event(self, event_id):
 		UserStore.put('curr_event', id=event_id)
 		App.get_running_app().go_screen(10)
+	
+	def on_press(self):
+		load_event(self.id)
+
 
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen

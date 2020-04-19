@@ -256,10 +256,14 @@ class MatchRecycle(RecycleView):
 # -----
 # MatchRow 
 # -----
-class MatchRow(BoxLayout):
+class MatchRow(ButtonBehavior,BoxLayout):
+
 	def load_profile(self, user_id):
 		UserStore.put('curr_profile', id=user_id)
 		App.get_running_app().go_screen(6)
+
+	def on_press(self):
+		load_profile(self.id)
 
 # ------------
 # Match Profile Screen

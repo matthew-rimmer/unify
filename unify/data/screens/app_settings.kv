@@ -77,7 +77,7 @@ AppSettings:
 					height: dp(80)
 
 
-				# Submit new data & update database
+				# Submit new data
 				RoundedButton:
 					text: "Update Profile"
 					size_hint_y: None
@@ -85,14 +85,14 @@ AppSettings:
 					on_release: root.change_profile()
 					on_release: app.go_screen(5)
 
-				# Change password
+				# Change password button
 				RoundedButton:
 					text: "Change Password"
 					size_hint_y: None
 					height: dp(25)
 					on_release: app.go_screen(1)
 
-				# Log out
+				# Log out button
 				RoundedButton:
 					text: "Log Out"
 					size_hint_y: None

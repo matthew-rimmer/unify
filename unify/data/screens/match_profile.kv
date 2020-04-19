@@ -35,7 +35,6 @@ MatchProfile:
 
 
 			# Display the user's name
-			# Retrieve from database
 			Label:
 				id: fullname
 				text: ''
@@ -45,7 +44,6 @@ MatchProfile:
 
 
 			# Display the user's 'About Me' message
-			# Retrieve from database
 			Label:
 				id: description
 				text: ''
@@ -57,7 +55,6 @@ MatchProfile:
 
 
 			# Display the user's interest tags
-			# Retrieve from database
 			GridLayout:
 				id: tag_grid
 				cols: 3
@@ -124,7 +121,6 @@ MatchProfile:
 
 
 				# Display the user's LinkedIn url
-				# Retrieve link from database
 				Image:
 					source: "data/icons/LinkedIn_Logo.png"
 					size_hint_y: None
@@ -161,7 +157,8 @@ MatchProfile:
 					id: remove_match
 					text: "Pass"
 					on_release:
-
+					
+			# Report user button
 			RoundedButton:
 				id: report_user
 				text: "Report User"

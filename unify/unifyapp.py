@@ -366,10 +366,17 @@ class Profile(Screen):
 		webbrowser.open(_dict[ref], new=1)
 	
 # ------------
-# Friends Screen
+# Friends List and Friend Request Screens
 # ------------
-class Friends(Screen):
+class FriendList(BoxLayout):
 	pass
+
+class FriendRow(BoxLayout):
+	pass
+
+class FriendRecycle(RecycleView):
+	def on_parent(self,widget,parent):
+		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(10)]
 
 # ------------
 # EventList Screen

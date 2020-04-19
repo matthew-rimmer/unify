@@ -10,44 +10,44 @@ ReportEvent:
 		spacing: dp(10)
 
 		Label:
-			text: "Please select your reason \n for reporting this event:"
+			text: "Please select your reason for reporting this event:"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
-			pos_hint: {"top": 0.9}
+			bold: True
+			
 
-
-		# Four choices total
-		CheckBox:
-			id: reason1
-			active: False
-			color: 0,0,0,1
+		# Three predefined options and the 'other' option for text input
 		Label:
 			text: "1) Objectionable content on the event's page"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
-
-
 		CheckBox:
-			id: reason2
+			id: reason1
 			active: False
 			color: 0,0,0,1
+
+
 		Label:
 			text: "2) Fears over the safety of the event"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
-
-
 		CheckBox:
-			id: reason3
+			id: reason2
 			active: False
 			color: 0,0,0,1
+
+
 		Label:
 			text: "3) Fraud and deception"
 			halign: "center"
 			text_size: root.width, None
+			color: 0,0,0,1
+		CheckBox:
+			id: reason3
+			active: False
 			color: 0,0,0,1
 
 

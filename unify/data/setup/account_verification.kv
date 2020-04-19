@@ -22,6 +22,7 @@
 			halign: "center"
 
 
+		# Requesting the verification code sent to the user's email
 		Label:
 			text: "We have sent a verification code to the email address you provided. \n \n Please enter the 6-digit code below:"
 			halign: "center"
@@ -39,12 +40,11 @@
 			spacing: dp(20)
 			padding: dp(30)
 
+			# Verify account button
 			RoundedButton:
 				text: "Verify Account"
 				size_hint_y: None
 				height: dp(30)
 				on_release: root.verify(verif_code.text)
-				on_release:
-					# app.root.current = "profile_creation"
-					root.manager.transition.direction = 'left'
+
 

@@ -10,43 +10,44 @@ ReportUser:
 		spacing: dp(10)
 
 		Label:
-			text: "Please select your reason \n for reporting this user:"
+			text: "Please select your reason for reporting this user:"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
+			bold: True
 
 
-		# Four choices total
-		CheckBox:
-			id: reason1
-			active: False
-			color: 0,0,0,1
+		# Three predefined options and the 'other' option for text input
 		Label:
 			text: "1) Objectionable content in profile"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
+		CheckBox:
+			id: reason1
+			active: False
+			color: 0,0,0,1
 
 
+		Label:
+			text: "2) Bullying and harrassment \n through social media"
+			halign: "center"
+			text_size: root.width, None
+			color: 0,0,0,1
 		CheckBox:
 			id: reason2
 			active: False
 			color: 0,0,0,1
-		Label:
-			text: "2) Bullying and harassment \n through social media"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
 
 
-		CheckBox:
-			id: reason3
-			active: False
-			color: 0,0,0,1
 		Label:
 			text: "3) Fake profile - student does not exist"
 			halign: "center"
 			text_size: root.width, None
+			color: 0,0,0,1
+		CheckBox:
+			id: reason3
+			active: False
 			color: 0,0,0,1
 
 

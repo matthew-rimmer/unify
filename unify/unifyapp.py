@@ -45,7 +45,8 @@ import time
 from clientside.resources import (
 	User_Requests, 
 	Event_Requests, 
-	Report_Requests
+	Report_Requests,
+	get_image_url
 )
 
 UserStore = JsonStore('userdata/UserStore.json') 
@@ -80,7 +81,11 @@ class Login(Screen):
 		j = { "Email": self.uni_email.text, "Password": self.password.text}
 		user_details = User_Requests.login(j)
 		if user_details is not None:
-			UserStore.put('user_info',  token=user_details["access_token"], id=user_details["data"]["User_ID"])
+			UserStore.put(
+				'user_info',  
+				token=user_details["access_token"], 
+				id=user_details["data"]["User_ID"]
+			)
 
 class Register(Screen):
 	def save_user(self):
@@ -91,12 +96,12 @@ class Register(Screen):
 			"Password": self.password.text
 		}
 
-		createdUser = User_Requests.create(j)
-		if createdUser is not None:
+		created_user = User_Requests.create(j)
+		if created_user is not None:
 			UserStore.put(
 				'user_info',  
-				token=createdUser["access_token"], 
-				id=createdUser["data"]["User_ID"]
+				token=created_user["access_token"], 
+				id=created_user["data"]["User_ID"]
 			)
 		
 		# POST request (POST/user/create)
@@ -241,77 +246,62 @@ class MatchRecycle(RecycleView):
 	# MatchRecycle populate:
 	# - Populates the screen with loaded json users !!! ADD !!!
 	def populate(self):
-		# j = {}
-		# pl = json.loads(j)
-		pl = {'User_ID':'15','First_Name':'Jeremy','Last_Name':"Lee",'Picture_Path':'placeholder','User_Tag':'#nice' }
-		self.data.append({
-			'id':pl["User_ID"],
-			'name': pl["First_Name"]+" "+pl["Last_Name"],
-			'tags':pl["User_Tag"],
-			'imagePath': pl["Picture_Path"]
-			})
-		
+
+		matches = User_Requests.get_matches(
+			UserStore.get('user_info')["token"]
+		)
+
+		print(matches)
+
+		if matches is not None:
+			for match in matches['data']:
+				self.data.append({
+					'id':str(match["User_ID"]),
+					'name': match["First_Name"]+" "+match["Last_Name"],
+					'tags':str(match["Matches"]),
+					'picture': get_image_url(
+						match['User_ID'],
+						match["Picture_Path"]
+					) if match['Picture_Path'] is not '' else User_Requests.get_default_image()
+				})
+		#pass
+
+class MatchRow(BoxLayout):
+	def load_profile(self, user_id):
+		UserStore.put('curr_profile', id=user_id)
+		App.get_running_app().go_screen(6)
+
 # ------------
 # Match Profile Screen
 # ------------
 class MatchProfile(Screen):
-	tags_filled = False
-
 	def on_parent(self, widget, parent):
-		self.populate_match()
+		if UserStore.exists('curr_profile'):
+			self.populate_match(id=UserStore.get('curr_profile')['id'])
 
-	def populate_match(self, *args):
-		pass
-		# j = {}
-		# match = json.loads(j)
+	def populate_match(self, id=None):
 
-		# Temporary
-		#match = {
-				#"UserID": "Temp235", 
-				#"Profile_Picture": "https://images.unsplash.com/photo-1513020954852-86e7e44d3113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-				#"Profile_Picture2": "https://images.unsplash.com/photo-1504263977680-01bebd8765b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				#"Profile_Picture3": "https://images.unsplash.com/photo-1514867036548-8c2a9178b4fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
-				#"First_Name": "Austin", "Last_Name": "Moran", 
-				#"Description": "Hi there! I am new to the area and could do with more friends.",
-				#"User_Tag": ["Sociology", "Anime", "Film", "Archery", "Judo", "Guitar"], 
-				#"Linked_In": "https://www.linkedin.com/", "Instagram_Link": "@AusMoran", 
-				#"Twitter_Link": "@AusMoran", "Spotify_Link": "AusMoran"
-			#}
+		this_user = User_Requests.get_info(
+			id,
+			UserStore.get('user_info')["token"]
+		)
 
-		# photos
-		#self.img.source = match["Profile_Picture"]
-		#self.img2.source = match["Profile_Picture2"]
-		#self.img3.source = match["Profile_Picture3"]
+		for pic in this_user['data']['pictures']:
+			self.user_pictures.add_widget(
+				AsyncImage(source=pic)
+			)
+		
+		for tag in this_user['data']['tags']:
+			self.tag_grid.add_widget(
+				OutlinedButton(text='#' + tag)
+			)
 
-		# full name
-		#self.fullname.text = match["First_Name"] + " " + match["Last_Name"]
-
-		# about me description
-		#self.description.text = match["Description"]
-
-		# interest tags
-		#tags = match["User_Tag"]
-
-		#if not self.tags_filled:
-			#for x in tags:
-				#button = OutlinedButton(text="#" + x)
-				#self.tag_grid.add_widget(button)
-			#self.tags_filled = True
-
-		#if self.tags_filled:
-			#pass
-
-		# instagram handle
-		#self.instagram.text = match["Instagram_Link"]
-
-		# twitter handle
-		#self.twitter.text = match["Twitter_Link"]
-
-		# spotify username
-		#self.spotify.text = match["Spotify_Link"]
-
-		# linked in
-		#self.linkedin_link = match["Linked_In"]
+		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
+		self.description.text = this_user['data']["Description"] if this_user['data']["Description"] is not None else ''
+		self.instagram.text = this_user['data']["Instagram_Link"] if this_user['data']["Instagram_Link"] is not None else 'Not Provided'
+		self.twitter.text = this_user['data']["Twitter_Link"] if this_user['data']["Twitter_Link"] is not None else 'Not Provided'
+		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
+		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
 
 	def getText(self):
 		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
@@ -324,6 +314,11 @@ class MatchProfile(Screen):
 
 		# Opens new tab in browser
 		webbrowser.open(_dict[ref], new=1)
+	
+	def on_leave(self, *args):
+		UserStore.delete('curr_profile')
+		self.user_pictures.clear_widgets()
+		self.tag_grid.clear_widgets()
 
 # ------------
 # User Profile Screen

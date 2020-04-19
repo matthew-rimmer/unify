@@ -11,11 +11,32 @@ def get_request_headers(token=None, content_type='application/json'):
         output['Authorization'] = 'jwt {token}'.format(token=token)
     return output
 
-def check_req_success(response):
+def get_servable_pictures(json, picture_path):
+    if json is not None:
+        if picture_path in json['data']:
+            if isinstance(json['data'][picture_path], str):
+                json['data'][picture_path] = get_image_url(
+                    json['data']['User_ID'],
+                    json['data'][picture_path]
+                )
+            else:
+                picture_links = []
+                for pic in json['data'][picture_path]:
+                    picture_links.append(
+                        get_image_url(
+                            json['data']['User_ID'],
+                            pic
+                        )
+                    )
+                json['data'][picture_path] = picture_links
+        return json
+    else:
+        return None
+
+def check_req_success(response, picture_path=None):
     if 200 <= response.status_code <= 203:
         return response.json()
     else:
-        print (response.text)
         return None
 
 def get_image_url(user_id, image_path):
@@ -57,6 +78,10 @@ class User_Requests:
             )
             print('{s}: {r}'.format(s=resp.status_code, r=resp.reason))
             return check_req_success(resp)
+    
+    @staticmethod
+    def get_default_image():
+        return get_image_url('default','user.png')
 
     @staticmethod
     def login(login_data, auth_token=None):
@@ -83,20 +108,7 @@ class User_Requests:
             headers = get_request_headers(token=auth_token)
         )
 
-        check = check_req_success(resp)
-
-        if check is not None:
-            picture_links = []
-            for pic in check['data']['pictures']:
-                picture_links.append(
-                    get_image_url(
-                        check['data']['User_ID'],
-                        pic
-                    )
-                )
-            check['data']['pictures'] = picture_links
-
-        return check
+        return get_servable_pictures(check_req_success(resp), 'pictures')
 
     @staticmethod    
     def get_feed(auth_token, offset=0, limit=15):
@@ -105,6 +117,14 @@ class User_Requests:
             headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
+
+    @staticmethod
+    def get_matches(auth_token, offset=0, limit=15):
+        resp = requests.get(
+            api_url + get_route('user_matches', offset=offset, limit=limit),
+            headers = get_request_headers(token=auth_token)
+        )
+        return get_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod
     def edit(user_id, auth_token, user_edits):
@@ -193,15 +213,7 @@ class Event_Requests:
             headers=get_request_headers(token=auth_token)
         )
 
-        check = check_req_success(resp)
-
-        if check is not None:
-            check['data']['Picture_Path'] = get_image_url(
-                check['data']['Creator']['User_ID'],
-                check['data']['Picture_Path']
-            )
-
-        return check
+        return get_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod
     def edit(event_id, auth_token, event_data):

@@ -10,6 +10,7 @@ routes = {
     'user_friend_requests': '/user/{EFFECTED_ID}/friends/requests',
     'user_verify':          '/user/{EFFECTED_ID}/verify',
     'user_feed':            '/feed',
+    'user_matches':         '/matches',
 
     'create_event':         '/event/create',
     'event':                '/event/{EFFECTED_ID}',

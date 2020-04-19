@@ -1,4 +1,4 @@
-<Row@BoxLayout>:
+<MatchRow>:
 	orientation: 'horizontal'
 	canvas.before:
 		Color:
@@ -6,17 +6,21 @@
 		Rectangle:
 			size: self.size
 			pos: self.pos
+	id: ''
+	picture: ''
 	value: ''
 	name: 'a'
 	tags: 'a'
 	
-	Button:
-		text: "Image Placeholder"
-		on_release: app.go_screen(6)   
+	AsyncImage:
+		source: root.picture
 	Label:
 		text: root.name
 	Label:
 		text: root.tags
+		text_size: self.size
+	Button:
+		on_release: root.load_profile(root.id)
 
 		
 
@@ -31,7 +35,7 @@
 	scroll_type: ['bars', 'content']
 	scroll_wheel_distance: dp(114)
 	bar_width: dp(10)
-	viewclass: 'Row'
+	viewclass: 'MatchRow'
 	RecycleBoxLayout:
 		default_size: None, dp(56)
 		default_size_hint: 1, None

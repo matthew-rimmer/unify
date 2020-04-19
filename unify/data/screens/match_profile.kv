@@ -61,7 +61,7 @@ MatchProfile:
 				size_hint_y: None
 				height: self.minimum_height
 				spacing: dp(10)
-
+		
 			
 			GridLayout:
 				cols: 2
@@ -80,13 +80,14 @@ MatchProfile:
 				Label:
 					id: instagram
 					text: ''
+					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's Twitter handle
 				Image:
@@ -96,13 +97,14 @@ MatchProfile:
 				Label:
 					id: twitter
 					text: ''
+					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's Spotify username
 				Image:
@@ -112,13 +114,14 @@ MatchProfile:
 				Label:
 					id: spotify
 					text: ''
+					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's LinkedIn url
 				Image:

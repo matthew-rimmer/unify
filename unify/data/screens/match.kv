@@ -16,11 +16,14 @@
 		source: root.picture
 	Label:
 		text: root.name
+		text_size: self.size
+		halign: 'center'
+		valign: 'center'
 	Label:
 		text: root.tags
 		text_size: self.size
-	Button:
-		on_release: root.load_profile(root.id)
+		halign: 'center'	
+		valign: 'center'
 
 		
 

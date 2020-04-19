@@ -1,11 +1,12 @@
 <FriendRow>:
 	orientation: 'horizontal'
-	value: ''
-	Button:
-		text: "Image Placeholder"
-		on_release: app.go_screen(6)
+	id: ''
+	picture: ''
+	name: ''
+	AsyncImage:
+		source: root.picture
 	Label:
-		text: root.value
+		text: root.name
 		color: 0, 0, 0, 1
 
 
@@ -14,6 +15,46 @@
 	scroll_wheel_distance: dp(114)
 	bar_width: dp(10)
 	viewclass: 'FriendRow'
+	RecycleBoxLayout:
+		default_size: None, dp(56)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(2)
+
+<FriendRequestRow>:
+	accept_button: accept_button
+	decline_button: decline_button
+	orientation: 'horizontal'
+	id: ''
+	index: ''
+	picture: ''
+	name: ''
+	AsyncImage:
+		source: root.picture
+	Label:
+		text: root.name
+		color: 0, 0, 0, 1
+	Button:
+		id: accept_button
+		text: 'ACCEPT'
+		on_press:
+			root.disable_buttons()
+			root.accept_request(root.id)
+	Button:
+		id: decline_button
+		text: 'DECLINE'
+		on_press:
+			root.disable_buttons() 
+			root.decline_request(root.id)
+
+
+<FriendRequestRecycle>:
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'FriendRequestRow'
 	RecycleBoxLayout:
 		default_size: None, dp(56)
 		default_size_hint: 1, None
@@ -40,6 +81,9 @@
 
 		TabbedPanelItem:
 			text: "Friend Requests"
+
+			FriendRequestRecycle:
+				id: rvFriendRequest
 
 
 UnifyScreen:

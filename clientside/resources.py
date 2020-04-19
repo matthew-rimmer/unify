@@ -12,9 +12,14 @@ def get_request_headers(token=None, content_type='application/json'):
     return output
 
 def get_servable_pictures(json, picture_path):
-    if json is not None:
+    if 'error' not in json:
+        print(json['data'][picture_path])
         if picture_path in json['data']:
-            if isinstance(json['data'][picture_path], str):
+            if json['data'][picture_path] == '':
+                json['data'][picture_path] = User_Requests.get_default_image()
+            elif json['data'][picture_path] == []:
+                json['data'][picture_path] = [ User_Requests.get_default_image() ]
+            elif isinstance(json['data'][picture_path], str):
                 json['data'][picture_path] = get_image_url(
                     json['data']['User_ID'],
                     json['data'][picture_path]
@@ -29,9 +34,22 @@ def get_servable_pictures(json, picture_path):
                         )
                     )
                 json['data'][picture_path] = picture_links
-        return json
-    else:
-        return None
+     
+    return json
+
+def get_list_servable_pictures(json, picture_path):
+    if 'error' not in json:
+        if len(json['data']) >= 1:
+            for i in range(len(json['data'])):
+                if picture_path in json['data'][i]:
+                    if json['data'][i][picture_path] == '':
+                        json['data'][i][picture_path] = User_Requests.get_default_image()  
+                    elif isinstance(json['data'][i][picture_path], str):
+                        json['data'][i][picture_path] = get_image_url(
+                            json['data'][i]['User_ID'],
+                            json['data'][i][picture_path]
+                        )
+    return json
 
 def check_req_success(response, picture_path=None):
     if 200 <= response.status_code <= 203:
@@ -40,9 +58,7 @@ def check_req_success(response, picture_path=None):
         return { 'error': response.text }
 
 def get_image_url(user_id, image_path):
-    output = api_url + get_route('images', user=user_id, image=image_path)
-    print(output)
-    return output
+    return api_url + get_route('images', user=user_id, image=image_path)
 
 class User_Requests:
 
@@ -107,8 +123,15 @@ class User_Requests:
             api_url + get_route('user', effected_id=user_id),
             headers = get_request_headers(token=auth_token)
         )
-
         return get_servable_pictures(check_req_success(resp), 'pictures')
+
+    @staticmethod
+    def get_friends(user_id, auth_token):
+        resp = requests.get(
+            api_url + get_route('user_friends', effected_id=user_id),
+            headers = get_request_headers(token=auth_token)
+        )
+        return get_list_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod    
     def get_feed(auth_token, offset=0, limit=15):
@@ -124,7 +147,7 @@ class User_Requests:
             api_url + get_route('user_matches', offset=offset, limit=limit),
             headers = get_request_headers(token=auth_token)
         )
-        return get_servable_pictures(check_req_success(resp), 'Picture_Path')
+        return get_list_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod
     def edit(user_id, auth_token, user_edits):
@@ -143,6 +166,24 @@ class User_Requests:
         )
         return check_req_success(resp)
     
+    @staticmethod
+    def check_change_password_code(auth_token, code):
+        resp = requests.patch(
+            api_url + get_route('user_change_password'),
+            json = { 'Password_Code': code },
+            headers = get_request_headers(token=auth_token)
+        )
+        return check_req_success(resp)
+    
+    @staticmethod
+    def change_password(auth_token, password):
+        resp = requests.post(
+            api_url + get_route('user_change_password'),
+            json = { 'Password': password },
+            headers = get_request_headers(token=auth_token)
+        )
+        return check_req_success(resp)
+
     @staticmethod
     def delete(user_id, auth_token):
         resp = requests.delete(
@@ -168,6 +209,14 @@ class User_Requests:
             headers = get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
+
+    @staticmethod
+    def get_friend_requests(user_id, auth_token):
+        resp = requests.get(
+            api_url + get_route('user_friend_requests', effected_id=user_id),
+            headers = get_request_headers(token=auth_token)
+        )
+        return get_list_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod
     def send_friend_request(user_id, auth_token):
@@ -280,7 +329,7 @@ class Report_Requests:
     def report_user(user_id, auth_token, reason):
         resp = requests.post(
             api_url + get_route('report_user', effected_id=user_id),
-            json = { 'Reason':reason },
+            json = { 'Report_Reason':reason },
             headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)
@@ -289,7 +338,7 @@ class Report_Requests:
     def report_event(event_id, auth_token, reason):
         resp = requests.post(
             api_url + get_route('report_event', effected_id=event_id),
-            json = { 'Reason':reason },
+            json = { 'Report_Reason':reason },
             headers=get_request_headers(token=auth_token)
         )
         return check_req_success(resp)

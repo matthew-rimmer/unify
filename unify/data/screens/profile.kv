@@ -77,13 +77,14 @@ Profile:
 				Label:
 					id: instagram
 					text: ''
+					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's Twitter handle
 				Image:
@@ -92,6 +93,7 @@ Profile:
 					height: dp(45)
 				Label:
 					id: twitter
+					markup: True
 					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
@@ -99,7 +101,7 @@ Profile:
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's Spotify username
 				Image:
@@ -109,13 +111,14 @@ Profile:
 				Label:
 					id: spotify
 					text: ''
+					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
 					height: dp(40)
 					text_size: self.width, None
 					halign: 'center'
-
+					on_ref_press: root.urlLink(*args)
 
 				# Display the user's LinkedIn url
 				Image:

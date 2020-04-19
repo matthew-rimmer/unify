@@ -1,21 +1,43 @@
 AppSettings:
 	filechooser: filechooser
-	new_description: new_description
-	new_tags: new_tags
-
+	description: description
+	tags: tags
+	instagram: instagram
+	twitter: twitter
+	spotify: spotify
+	linked_in: linked_in
+		
 	GridLayout:
 		cols: 1
-		padding: dp(10)
+		padding: dp(15)
 		spacing: dp(15)
 
-		# Change photos
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#D8BFD8")
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
 		Label:
-			text: "Change your photos:"
+			text: "Create Your Profile"
+			font_size: 20
+			bold: True
+			text_size: self.size
+			halign: "left"
+			size_hint_y: None
+			height: dp(20)
+
+
+		# Select photos to be uploaded
+		Label:
+			text: "Choose your 3 photos:"
 			halign: "center"
 			text_size: root.width, None
 			color: 0,0,0,1
 			size_hint_y: None
-			height: dp(10)
+			height: dp(20)
 
 		GridLayout:
 			cols: 1
@@ -36,7 +58,6 @@ AppSettings:
 				on_selection:
 					root.select(filechooser.selection)
 
-
 		ScrollView:
 			bar_width: dp(5)
 
@@ -45,36 +66,89 @@ AppSettings:
 				size_hint_x: 1
 				size_hint_y: None
 				height: self.minimum_height
+				padding: dp(15)
 				spacing: dp(15)
 
-				# Update description
+				# Fill in 'About Me' section
 				Label:
-					text: "Update 'About Me' description:"
+					text: "What should be in your 'About Me'?"
 					halign: "center"
 					text_size: root.width, None
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
 				TextInput:
-					id: new_description
+					id: description
 					multiline: True
 					size_hint_y: None
 					height: dp(80)
 
 
-				# Update interest tags
+				# Interest tags field
 				Label:
-					text: "Update interest tags: \n (one per line)"
+					text: "University course & interests? \n (one per line)"
 					halign: "center"
 					text_size: root.width, None
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
 				TextInput:
-					id: new_tags
+					id: tags
 					multiline: True
 					size_hint_y: None
 					height: dp(80)
+
+
+				# Instagram handle
+				Label:
+					text: "Instagram Handle:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: instagram
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+				
+				# Twitter handle
+				Label:
+					text: "Twitter Handle:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: spotify
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+
+				# Spotify username
+				Label:
+					text: "Spotify Username:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: twitter
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+
+				# LinkedIn public profile url
+				Label:
+					text: "LinkedIn URL:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: linked_in
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
 
 
 				# Submit new data
@@ -83,7 +157,6 @@ AppSettings:
 					size_hint_y: None
 					height: dp(25)
 					on_release: root.change_profile()
-					on_release: app.go_screen(5)
 
 				# Change password button
 				RoundedButton:

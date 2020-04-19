@@ -26,6 +26,10 @@ from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.storage.jsonstore import JsonStore
 
+from kivy.config import Config
+Config.set('graphics', 'width', '360')
+Config.set('graphics', 'height', '640')
+
 # Misc. Imports
 from os.path import dirname, join
 from random import sample
@@ -73,6 +77,7 @@ class Login(Screen):
 				token=user_details["access_token"], 
 				id=user_details["data"]["User_ID"]
 			)
+			App.get_running_app().go_screen(5)
 
 	# Login on_leave:
 	# - Clears text after leaving screen
@@ -99,6 +104,7 @@ class Register(Screen):
 				token=created_user["access_token"], 
 				id=created_user["data"]["User_ID"]
 			)
+			App.get_running_app().go_screen(5)
 
 	def on_leave(self):
 		self.uni_email.text = ''
@@ -111,7 +117,7 @@ class Register(Screen):
 # Profile Creation Screen
 # ------------
 class ProfileCreation(Screen):
-	
+
 	# ProfileCreation select:
 	# - When a photo is selected:
 	# 	- Open/close popupwindow
@@ -239,18 +245,23 @@ class MatchRecycle(RecycleView):
 			UserStore.get('user_info')["token"]
 		)
 
-		print(matches)
-
 		if 'error' not in matches:
 			for match in matches['data']:
+				tags = ''
+				for i in range(0,len(match['Matches'])):
+					if i < 3:
+						tags += '#{}'.format(match['Matches'][i])
+						if i != len(match['Matches']) - 1:
+							tags += '\n'
+					else:
+						tags += '...'
+						break
+
 				self.data.append({
 					'id':str(match["User_ID"]),
 					'name': match["First_Name"]+" "+match["Last_Name"],
-					'tags':str(match["Matches"]),
-					'picture': get_image_url(
-						match['User_ID'],
-						match["Picture_Path"]
-					) if match['Picture_Path'] is not '' else User_Requests.get_default_image()
+					'tags':tags,
+					'picture': match['Picture_Path']
 				})
 
 # -----
@@ -263,12 +274,20 @@ class MatchRow(ButtonBehavior,BoxLayout):
 		App.get_running_app().go_screen(6)
 
 	def on_press(self):
-		load_profile(self.id)
+		self.load_profile(self.id)
 
 # ------------
 # Match Profile Screen
 # ------------
 class MatchProfile(Screen):
+
+	_urls = {
+		'Instagram':'',
+		'Twitter':'',
+		'Spotify':'',
+		'LinkedIn':''
+	}
+
 	def on_parent(self, widget, parent):
 		if UserStore.exists('curr_profile'):
 			self.populate_match(id=UserStore.get('curr_profile')['id'])
@@ -291,32 +310,34 @@ class MatchProfile(Screen):
 			)
 
 		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
-		self.description.text = this_user['data']["Description"] if this_user['data']["Description"] is not None else ''
-		self.instagram.text = this_user['data']["Instagram_Link"] if this_user['data']["Instagram_Link"] is not None else 'Not Provided'
-		self.twitter.text = this_user['data']["Twitter_Link"] if this_user['data']["Twitter_Link"] is not None else 'Not Provided'
-		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
-		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
 
-		self.getText()
+		if this_user['data']["Description"] is not None or this_user['data']["Description"] == '':
+			self.description.size_hint_y = None
+			self.description.text = this_user['data']["Description"]
+		else:
+			self.description.size_hint_y = 0
+
+		self.getText(this_user)
+
+	def get_link(self, item, service):
+		if service in self._urls:
+			self._urls[service] = item
+			return "View {service} [ref={service}][color=DC143C]profile[/color][/ref]".format(
+				service = service
+			) if item is not None and item != '' else 'Not Provided'
 
 	# Assigns the text to the LinkedIn section of the profile
-	def getText(self):
-		if self.linkedin_link != 'Not Provided':
-			self.linked_in.text = "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref]"
-
-		else:
-			self.linked_in.text = "Not Provided"
+	def getText(self, this_user):
+		self.instagram.text = self.get_link(this_user['data']["Instagram_Link"], 'Instagram')
+		self.twitter.text = self.get_link(this_user['data']["Twitter_Link"], 'Twitter')
+		self.spotify.text = self.get_link(this_user['data']["Spotify_Link"], 'Spotify')
+		self.linked_in.text = self.get_link(this_user['data']["LinkedIn_Link"], 'LinkedIn')
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		url = self.linkedin_link
-		_dict = {"profile": url}
-
-		# Opens new tab in browser
-		webbrowser.open(_dict[ref], new=1)
+		webbrowser.open(self._urls[ref], new=1)
 	
 	def on_leave(self, *args):
-		UserStore.delete('curr_profile')
 		self.user_pictures.clear_widgets()
 		self.tag_grid.clear_widgets()
 
@@ -324,11 +345,24 @@ class MatchProfile(Screen):
 # User Profile Screen
 # ------------
 class Profile(Screen):
+
+	_urls = {
+		'Instagram':'',
+		'Twitter':'',
+		'Spotify':'',
+		'LinkedIn':''
+	}
+
 	def on_parent(self, widget, parent):
-		self.populate_profile()
+		if UserStore.exists('current_user') == False:
+			self.populate_profile()
+			print('LOADING USER')
 
 	def populate_profile(self, *args):
 		
+		self.user_pictures.clear_widgets()
+		self.tag_grid.clear_widgets()
+
 		this_user = User_Requests.get_info(
 			UserStore.get('user_info')['id'],
 			UserStore.get('user_info')["token"]
@@ -345,29 +379,34 @@ class Profile(Screen):
 			)
 
 		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
-		self.description.text = this_user['data']["Description"] if this_user['data']["Description"] is not None else ''
-		self.instagram.text = this_user['data']["Instagram_Link"] if this_user['data']["Instagram_Link"] is not None else 'Not Provided'
-		self.twitter.text = this_user['data']["Twitter_Link"] if this_user['data']["Twitter_Link"] is not None else 'Not Provided'
-		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
-		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
 
-		self.getText()
+		if this_user['data']["Description"] is not None or this_user['data']["Description"] == '':
+			self.description.size_hint_y = None
+			self.description.text = this_user['data']["Description"]
+		else:
+			self.description.size_hint_y = 0
+
+		self.getText(this_user)
+
+		UserStore.put('current_user', data=this_user['data'])
+
+	def get_link(self, item, service):
+		if service in self._urls:
+			self._urls[service] = item
+			return "View {service} [ref={service}][color=DC143C]profile[/color][/ref]".format(
+				service = service
+			) if item is not None and item is not '' else 'Not Provided'
 
 	# Assigns the text to the LinkedIn section of the profile
-	def getText(self):
-		if self.linkedin_link != 'Not Provided':
-			self.linked_in.text = "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref]"
-
-		else:
-			self.linked_in.text = "Not Provided"
+	def getText(self, this_user):
+		self.instagram.text = self.get_link(this_user['data']["Instagram_Link"], 'Instagram')
+		self.twitter.text = self.get_link(this_user['data']["Twitter_Link"], 'Twitter')
+		self.spotify.text = self.get_link(this_user['data']["Spotify_Link"], 'Spotify')
+		self.linked_in.text = self.get_link(this_user['data']["LinkedIn_Link"], 'LinkedIn')
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		url = self.linkedin_link
-		_dict = {"profile": url}
-
-		# Opens new tab in browser
-		webbrowser.open(_dict[ref], new=1)
+		webbrowser.open(self._urls[ref], new=1)
 	
 # ------------
 # Friends List and Friend Request Screens
@@ -375,12 +414,97 @@ class Profile(Screen):
 class FriendList(BoxLayout):
 	pass
 
-class FriendRow(BoxLayout):
-	pass
+class FriendRow(ButtonBehavior, BoxLayout):
+	def load_profile(self, user_id):
+		UserStore.put('curr_profile', id=user_id)
+		App.get_running_app().go_screen(6)
+
+	def on_press(self):
+		self.load_profile(self.id)
 
 class FriendRecycle(RecycleView):
-	def on_parent(self,widget,parent):
-		self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(10)]
+
+	def on_parent(self,widget,parent): 
+		if not UserStore.exists('friends_loaded'):
+			print('LOADING FRIENDS')
+			self.populate()
+	
+	# MatchRecycle populate:
+	# - Populates the screen with loaded json users
+	def populate(self):
+
+		friends = User_Requests.get_friends(
+			UserStore.get('user_info')["id"],
+			UserStore.get('user_info')["token"]
+		)
+
+		if 'error' not in friends:
+			for friend in friends['data']:
+				self.data.append({
+					'id':str(friend["User_ID"]),
+					'name': friend["First_Name"]+" "+friend["Last_Name"],
+					'picture': friend['Picture_Path']
+				})
+
+		UserStore.put('friends_loaded', value=True)
+
+class FriendRequestRow(ButtonBehavior, BoxLayout):
+	def load_profile(self, user_id):
+		UserStore.put('curr_profile', id=user_id)
+		App.get_running_app().go_screen(6)
+
+	def accept_request(self, user_id):
+		request = User_Requests.accept_friend_request(
+			user_id,
+			UserStore.get('user_info')["token"]
+		)
+		if 'error' not in request:
+			self.delete_entry()
+
+	def decline_request(self, user_id):
+		request = User_Requests.decline_friend_request(
+			user_id,
+			UserStore.get('user_info')["token"]
+		)
+		if 'error' not in request:
+			self.delete_entry()
+
+	def disable_buttons(self):
+		self.accept_button.disabled = True
+		self.decline_button.disabled = True
+
+	def delete_entry(self):
+		self.parent.parent.data.pop(int(self.index))
+
+	def on_press(self):
+		self.load_profile(self.id)
+
+class FriendRequestRecycle(RecycleView):
+
+	def on_parent(self,widget,parent): 
+		self.populate()
+	
+	# MatchRecycle populate:
+	# - Populates the screen with loaded json users
+	def populate(self):
+
+		self.data = []
+
+		friends = User_Requests.get_friend_requests(
+			UserStore.get('user_info')["id"],
+			UserStore.get('user_info')["token"]
+		)
+
+		if 'error' not in friends:
+			index = 0
+			for friend in friends['data']:
+				self.data.append({
+					'id':str(friend["User_ID"]),
+					'name': friend["First_Name"]+" "+friend["Last_Name"],
+					'picture': friend['Picture_Path'],
+					'index': str(index)
+				})
+				index += 1
 
 # ------------
 # EventList Screen
@@ -401,8 +525,7 @@ class EventRow(ButtonBehavior,BoxLayout):
 		App.get_running_app().go_screen(10)
 	
 	def on_press(self):
-		load_event(self.id)
-
+		self.load_event(self.id)
 
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
@@ -422,7 +545,6 @@ class EventRecycle(RecycleView):
 					'imagePath': e["Picture_Path"] if e['Picture_Path'] is not None else '',
 					#'attendees': e['Attendees']
 				})
-
 
 # ------------
 # Create Event Screen
@@ -448,7 +570,6 @@ class CreateEvent(Screen):
 			)
 			
 			if 'error' not in event_image:
-				print(event_image['data']['image'])
 				self._image = event_image['data']['image']
 
 			self.filechooser.selection.clear()
@@ -512,13 +633,23 @@ class ViewEvent(Screen):
 				)
 
 	def on_leave(self, *args):
-		UserStore.delete('curr_event')
+		#UserStore.delete('curr_event')
+		pass
 
 
 # ------------
 # App Settings Screen
 # ------------
 class AppSettings(Screen):
+	def on_parent(self, widget, parent):
+		if UserStore.exists('current_user'):
+			user_data = UserStore.get('current_user')['data']
+			self.description.text = user_data['Description'] if user_data['Description'] is not None else ''
+			self.twitter.text = user_data['Twitter_Link'] if user_data['Twitter_Link'] is not None else ''
+			self.instagram.text = user_data['Instagram_Link'] if user_data['Instagram_Link'] is not None else ''
+			self.spotify.text = user_data['Spotify_Link'] if user_data['Spotify_Link'] is not None else ''
+			self.linked_in.text = user_data['LinkedIn_Link'] if user_data['LinkedIn_Link'] is not None else ''
+
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -530,6 +661,11 @@ class AppSettings(Screen):
 			)
 			popupWindow.open()
 
+			user_image = User_Requests.upload_image(
+				UserStore.get('user_info')["token"],
+				filename[0]
+			)
+
 			self.filechooser.selection.clear()
 			
 		except:
@@ -537,43 +673,79 @@ class AppSettings(Screen):
 
 
 	def change_profile(self):
-		new_tags = self.new_tags.text.splitlines()
+		UserStore.delete('current_user')
 
-		
-		j = {
-			"Description": self.new_description.text
+		if UserStore.exists('friends_loaded'):
+			UserStore.delete('friends_loaded')
+			
+		interest_tags = self.tags.text.splitlines()
+
+		j = { 
+			'Description': self.description.text if self.description.text is not None else '',
+			'Twitter_Link': self.twitter.text if self.twitter.text is not None else '',
+			'Instagram_Link': self.instagram.text if self.instagram.text is not None else '',
+			'Spotify_Link': self.spotify.text if self.spotify.text is not None else '',
+			'LinkedIn_Link':self.linked_in.text if self.linked_in.text is not None else ''
 		}
+
+		user_edits = User_Requests.edit(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"],
+			j
+		)
+
+		user_tags = User_Requests.add_tags(
+			UserStore.get('user_info')['id'],
+			UserStore.get('user_info')["token"],
+			interest_tags
+		)
+
+		App.get_running_app().go_screen(7)
 
 	def log_out(self):
 		UserStore.delete('user_info')
 		App.get_running_app().root.current = "initial_screen"
 
 	def on_leave(self):
-		self.new_description.text = ''
-		self.new_tags.text = ''
+		self.description.text = ''
+		self.tags.text = ''
 
 # ------------
 # Change Password Screen
 # ------------
 class ChangePassword(Screen):
-	def check_code(self, code):
-		# comparison 
-		check = User_Requests.get_change_password_code(
+
+	def on_parent(self, widget, parent):
+		get_code = User_Requests.get_change_password_code(
 			UserStore.get('user_info')['token']
 		)
-		
-		# user only sees the 'enter new password' section if their code is correct
-		self.prompt.text = "Enter your new password: "
-		self.new_pass.height = dp(30)
-		self.save.back_color = (192, 192, 192, 0.3)
-		self.save.height = dp(30)
-		self.save.text = "Save"
+
+	def check_code(self, code):
+		# comparison 
+		check = User_Requests.check_change_password_code(
+			UserStore.get('user_info')['token'],
+			code
+		)
+		if 'error' not in check:
+			# user only sees the 'enter new password' section if their code is correct
+			self.prompt.text = "Enter your new password: "
+			self.new_pass.height = dp(30)
+			self.save.back_color = (192, 192, 192, 0.3)
+			self.save.height = dp(30)
+			self.save.text = "Save"
 
 	def save_password(self, new_password):
+		change = User_Requests.change_password(
+			UserStore.get('user_info')['token'],
+			new_password
+		)
 
-		j = {
-			"Password": new_password
-		}
+		if 'error' not in change:
+			App.get_running_app().go_screen(7)
+			Popup(
+				title="Password Successfully Changed!",
+				size_hint=(.5, .1)
+			).open()
 
 		# hides the 'enter new password' section again
 		self.prompt.text = ''
@@ -590,33 +762,32 @@ class ChangePassword(Screen):
 # ------------
 class ReportUser(Screen):
 	def save_user_report(self):
-		report_reason = ['', '', '', '']
+		report_reason = []
+
 		if self.reason1.active:
-			report_reason[0] = "Objectionable content in profile"
+			report_reason.append("Objectionable content in profile")
 
 		if self.reason2.active:
-			report_reason[1] = "Bullying and harassment through social media"
+			report_reason.append("Bullying and harassment through social media")
 
 		if self.reason3.active:
-			report_reason[2] = "Fake profile - student does not exist"
+			report_reason.append("Fake profile - student does not exist")
 
 		if self.reason4.text != '':
-			report_reason[3] = self.reason4.text
+			report_reason.append(self.reason4.text)
 
-		reasons = []
+		user_reasons = '\n'.join(report_reason)
+	
+		report = Report_Requests.report_user(
+			UserStore.get('curr_profile')['id'],
+			UserStore.get('user_info')['token'],
+			user_reasons
+		)
 
-		# if item is not an empty string then add the item to the reasons list
-		for x in report_reason:
-			if x != '':
-				reasons.append(x)
-
-		# join the items in the reasons list into a single string
-		user_reasons = ' & '.join(reasons)
-		
-
-		j = {
-			"Report_Reason": user_reasons
-		}
+		Popup(
+			title="User has been reported.",
+			size_hint=(.5, .1)
+		).open()
 
 	def on_leave(self):
 		self.reason1.active = False
@@ -627,33 +798,32 @@ class ReportUser(Screen):
 
 class ReportEvent(Screen):
 	def save_event_report(self):
-		report_event_reason = ['', '', '', '']
+		report_reason = []
+
 		if self.reason1.active:
-			report_event_reason[0] = "Objectionable content on the event's page"
+			report_reason.append("Objectionable content on the event's page")
 
 		if self.reason2.active:
-			report_event_reason[1] = "Fears over the safety of the event"
+			report_reason.append("Fears over the safety of the event")
 
 		if self.reason3.active:
-			report_event_reason[2] = "Fraud and deception"
+			report_reason.append("Fraud and deception")
 
 		if self.reason4.text != '':
-			report_event_reason[3] = self.reason4.text
+			report_reason.append(self.reason4.text)
 
-		reasons = []
+		user_reasons = '\n'.join(report_reason)
+	
+		report = Report_Requests.report_event(
+			UserStore.get('curr_event')['id'],
+			UserStore.get('user_info')['token'],
+			user_reasons
+		)
 
-		# if item is not an empty string then add the item to the reasons list
-		for x in report_event_reason:
-			if x != '':
-				reasons.append(x)
-
-		# join the items in the reasons list into a single string
-		event_reasons = ' & '.join(reasons)
-
-
-		j = {
-			"Report_Reason": event_reasons
-		}
+		Popup(
+			title="Event has been reported.",
+			size_hint=(.5, .1)
+		).open()
 
 	def on_leave(self):	
 		self.reason1.active = False
@@ -713,7 +883,18 @@ class UnifyApp(App):
 	# Build creates and gets the available screens, loads them from, 
 	# the data/screens folder, sets it to the zero index screen
 	def build(self):
-		print('BUILD HERE')
+		if UserStore.exists('current_user'):
+			UserStore.delete('current_user')
+
+		if UserStore.exists('friends_loaded'):
+			UserStore.delete('friends_loaded')
+
+		if UserStore.exists('curr_profile'):
+			UserStore.delete('curr_profile')
+
+		if UserStore.exists('curr_event'):
+			UserStore.delete('curr_event')
+
 		self.screens = {} # Empty screen list
 		self.available_screens = sorted([	
 			'app_settings', 'change_password', 'create_event', 'eventfind', 'friends', 'match', 'match_profile', 'profile',
@@ -721,14 +902,14 @@ class UnifyApp(App):
 		self.screen_names = self.available_screens 
 		curdir = dirname(__file__)
 		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
-		self.go_screen(5) # goto match screen 
+		#self.go_screen(5) # goto match screen 
 		
 		if UserStore.exists("user_info"):
 			if UserStore.get('user_info')["token"] is not None:
 				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
 				if 'error' not in query:
-					self.root.current = "main"
 					self.go_screen(5)
+					self.root.current = "main"
 
 		return self.root
 

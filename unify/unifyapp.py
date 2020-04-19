@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------
 # Kivy App file
-# Defines all the classes for the screens of the app
+# Defines all the classes for the screens of the Unify app
 # ---------------------------------------------------------------------
 
 
@@ -27,7 +27,6 @@ from kivy.metrics import dp
 from kivy.storage.jsonstore import JsonStore
 
 # Misc. Imports
-
 from os.path import dirname, join
 from random import sample
 from string import ascii_lowercase
@@ -61,18 +60,6 @@ class Initial(Screen):
 # Login Screen
 # ------------
 class Login(Screen):
-	
-	# REDUNDANT, ??? REMOVE ???
-	#def on_pre_leave(self):
-	#	j = {"User_ID": "Temp123", "Email:": self.uni_email.text, "Password": self.password.text}
-		
-	# Login on_leave:
-	# - Clears text after leaving screen
-	def on_leave(self):
-		self.uni_email.text = ''
-		self.password.text = ''
-
-
 	# Login login_click:
 	# - When the login button is clicked:
 	# 	- Send user Request
@@ -87,6 +74,15 @@ class Login(Screen):
 				id=user_details["data"]["User_ID"]
 			)
 
+	# Login on_leave:
+	# - Clears text after leaving screen
+	def on_leave(self):
+		self.uni_email.text = ''
+		self.password.text = ''
+
+# ------------
+# Register Screen
+# ------------
 class Register(Screen):
 	def save_user(self):
 
@@ -103,8 +99,6 @@ class Register(Screen):
 				token=created_user["access_token"], 
 				id=created_user["data"]["User_ID"]
 			)
-		
-		# POST request (POST/user/create)
 
 	def on_leave(self):
 		self.uni_email.text = ''
@@ -113,6 +107,9 @@ class Register(Screen):
 		self.dob.text = ''
 		self.password.text = ''
 
+# ------------
+# Profile Creation Screen
+# ------------
 class ProfileCreation(Screen):
 	
 	# ProfileCreation select:
@@ -138,8 +135,6 @@ class ProfileCreation(Screen):
 
 			self.filechooser.selection.clear()
 			
-
-			# POST REQ	!!! ADD !!!
 		except:
 			pass
 	
@@ -172,8 +167,6 @@ class ProfileCreation(Screen):
 			interest_tags
 		)
 
-		# POST request (POST/image/{User_ID}/upload)
-
 	def on_leave(self):
 		self.description.text = ''
 		self.instagram.text = ''
@@ -203,10 +196,6 @@ class AccountVerification(Screen):
 				size_hint=(None, None), size=(200, 200)
 			)
 			popupWindow.open()
-		# PATCH request (PATCH/user/{USER_ID}/verify
-		# Verification_Code
-		# !!! ADD !!!
-		
 
 # ----------------------------------------------------------------
 # Main Screens
@@ -240,11 +229,10 @@ class MatchRecycle(RecycleView):
 	# - Get match list Request from server
 	# - Populates screen
 	def on_parent(self,widget,parent): 
-		# REQUEST !!! ADD !!!
 		self.populate()
 	
 	# MatchRecycle populate:
-	# - Populates the screen with loaded json users !!! ADD !!!
+	# - Populates the screen with loaded json users
 	def populate(self):
 
 		matches = User_Requests.get_matches(
@@ -264,8 +252,10 @@ class MatchRecycle(RecycleView):
 						match["Picture_Path"]
 					) if match['Picture_Path'] is not '' else User_Requests.get_default_image()
 				})
-		#pass
 
+# -----
+# MatchRow 
+# -----
 class MatchRow(BoxLayout):
 	def load_profile(self, user_id):
 		UserStore.put('curr_profile', id=user_id)
@@ -303,13 +293,19 @@ class MatchProfile(Screen):
 		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
 		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
 
+		self.getText()
+
+	# Assigns the text to the LinkedIn section of the profile
 	def getText(self):
-		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
+		if self.linkedin_link != 'Not Provided':
+			self.linked_in.text = "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref]"
+
+		else:
+			self.linked_in.text = "Not Provided"
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		url = "https://www.linkedin.com/"
-		#self.linkedin_link
+		url = self.linkedin_link
 		_dict = {"profile": url}
 
 		# Opens new tab in browser
@@ -324,8 +320,6 @@ class MatchProfile(Screen):
 # User Profile Screen
 # ------------
 class Profile(Screen):
-	tags_filled = False
-
 	def on_parent(self, widget, parent):
 		self.populate_profile()
 
@@ -353,60 +347,19 @@ class Profile(Screen):
 		self.spotify.text = this_user['data']["Spotify_Link"] if this_user['data']["Spotify_Link"] is not None else 'Not Provided'
 		self.linkedin_link = this_user['data']["LinkedIn_Link"] if this_user['data']["LinkedIn_Link"] is not None else 'Not Provided'
 
-		# j = {}
-		# profile = json.loads(j)
+		self.getText()
 
-		#profile = {
-				#"UserID": "Temp123", "Profile_Picture": "https://images.unsplash.com/photo-1501743029101-21a00d6a3fb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				#"Profile_Picture2": "https://images.unsplash.com/photo-1501744025452-768f823e41bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				#"Profile_Picture3": "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "First_Name": "Leyla",
-				#"Last_Name": "Moore", "Description": "Hi, I am a first year who would love to meet more like-minded students!",
-				#"User_Tag": ["Chemistry", "Archery", "Chess", "Anime", "Jazz", "Terrible Film"],
-				#"Linked_In": "https://www.linkedin.com/"
-		#}
-
-		# photos
-		#self.img.source = profile["Profile_Picture"]
-		#self.img2.source = profile["Profile_Picture2"]
-		#self.img3.source = profile["Profile_Picture3"]
-
-		# full name
-		#self.fullname.text = profile["First_Name"] + " " + profile["Last_Name"]
-
-		# about me description
-		#self.description.text = profile["Description"]
-
-		# interest tags
-		#tags = profile["User_Tag"]
-
-		#if not self.tags_filled:
-			#for x in tags:
-				#button = OutlinedButton(text="#" + x)
-				#self.tag_grid.add_widget(button)
-			#self.tags_filled = True
-
-		#if self.tags_filled:
-			#pass
-
-		# instagram handle
-		#self.instagram.text = ["Instagram_Link"]
-
-		# twitter handle
-		#self.twitter.text = ["Twitter_Link"]
-
-		# spotify username
-		#self.spotify.text = ["Spotify_Link"]
-
-		# linked in
-		#self.linkedin_link = profile["Linked_In"]
-
+	# Assigns the text to the LinkedIn section of the profile
 	def getText(self):
-		return "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref] "
+		if self.linkedin_link != 'Not Provided':
+			self.linked_in.text = "View LinkedIn [ref=profile][color=DC143C]profile[/color][/ref]"
+
+		else:
+			self.linked_in.text = "Not Provided"
 
 	# Opens LinkedIn profile in the browser
 	def urlLink(self, url, ref):
-		url = "https://www.linkedin.com/"
-		#self.linkedin_link
+		url = self.linkedin_link
 		_dict = {"profile": url}
 
 		# Opens new tab in browser
@@ -438,19 +391,9 @@ class EventRow(BoxLayout):
 
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
-		#self.data = [{'value': ''.join(sample(ascii_lowercase, 6))} for x in range(50)]
 		self.populate()
 
 	def populate(self):
-		# j = {}
-		# pl = json.loads(j)
-		# pl = {'Event_ID':'15','Name':'Paintball','Picture_Path':'placeholder', 'attendees':'10' }
-		# self.data.append({
-		# 		'id':pl['Event_ID'],
-		# 		'name': pl["Name"], 
-		# 		'imagePath': pl["Picture_Path"],
-		# 		'attendees':'10'
-		# 	})
 		events = User_Requests.get_feed(
 			UserStore.get('user_info')["token"],
 			limit = 100
@@ -493,11 +436,7 @@ class CreateEvent(Screen):
 				print(event_image['data']['image'])
 				self._image = event_image['data']['image']
 
-			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
-			
-
-			# POST REQ	!!! ADD !!!
 
 		except:
 			pass
@@ -507,8 +446,6 @@ class CreateEvent(Screen):
 		got_date_time = self.datetime.text.split()
 		if len(got_date_time) > 1:
 			got_date_time = '{date}T{time}Z'.format(date=got_date_time[0],time=got_date_time[1])
-
-		print(got_date_time)
 
 		j = {
 			"Name": self.event_name.text, "Description": self.description.text,
@@ -562,36 +499,9 @@ class ViewEvent(Screen):
 	def on_leave(self, *args):
 		UserStore.delete('curr_event')
 
-		# j = {}
-		# event = json.loads(j)
-
-		# Temporary
-		#event = {
-				#"Event_ID": "CS123", "User_ID": "Temp123", "Event_Picture": "https://images.unsplash.com/photo-1549389594-232f692594d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
-				#"Name": "Paintballing", "Description": "Hi! We are going paintballing this weekend to celebrate the end of exam season. Please join us!", "DateTime": "2020-05-23 13:00:00",
-				#"Event_Location": "Westmoor Lane, LN1 2JW"
-			#}
-
-		# event picture
-		#self.event_img.source = event["Event_Picture"]
-
-		# event name
-		#self.event_name.text = event["Name"]
-
-		# event creator
-		# self.creator.text =
-
-		# event description
-		#self.description.text = event["Description"]
-
-		# event date & time
-		#self.datetime.text = event["DateTime"]
-
-		# event location
-		#self.location.text = event["Event_Location"]
 
 # ------------
-# App settings Screen
+# App Settings Screen
 # ------------
 class AppSettings(Screen):
 	def select(self, filename):
@@ -605,31 +515,19 @@ class AppSettings(Screen):
 			)
 			popupWindow.open()
 
-			# POST REQ, ADD HERE: filename[0]
 			self.filechooser.selection.clear()
 			
-
-			# POST REQ	!!! ADD !!!
 		except:
 			pass
 
 
-	def change_settings(self):
-		# for users table
+	def change_profile(self):
+		new_tags = self.new_tags.text.splitlines()
+
+		
 		j = {
 			"Description": self.new_description.text
 		}
-
-		# PATCH request
-
-
-		# for usertags table
-		interest_tags = self.new_tags.text.splitlines()
-
-		n = [{"User_ID": "Temp123", "UserTag": interest_tags[0]}, {"User_ID": "Temp123", "UserTag": interest_tags[1]}]
-
-		# PATCH request (PATCH/user/{User_ID})
-		# tags:[{User_ID": <ID>, "User_Tag": "<tag>}, {...}]
 
 	def log_out(self):
 		UserStore.delete('user_info')
@@ -640,13 +538,10 @@ class AppSettings(Screen):
 		self.new_tags.text = ''
 
 # ------------
-# Change pass Screen
+# Change Password Screen
 # ------------
 class ChangePassword(Screen):
 	def check_code(self, code):
-		# comparison 
-		
-		
 		# user only sees the 'enter new password' section if their code is correct
 		self.prompt.text = "Enter your new password: "
 		self.new_pass.height = dp(30)
@@ -655,12 +550,10 @@ class ChangePassword(Screen):
 		self.save.text = "Save"
 
 	def save_password(self, new_password):
-		# for users table
+
 		j = {
 			"Password": new_password
 		}
-
-		# PATCH request
 
 		# hides the 'enter new password' section again
 		self.prompt.text = ''
@@ -673,8 +566,45 @@ class ChangePassword(Screen):
 		self.pass_code.text = ''
 		
 # ------------
-# Report Screen
+# Report Screens
 # ------------
+class ReportUser(Screen):
+	def save_user_report(self):
+		report_reason = ['', '', '', '']
+		if self.reason1.active:
+			report_reason[0] = "Objectionable content in profile"
+
+		if self.reason2.active:
+			report_reason[1] = "Bullying and harassment through social media"
+
+		if self.reason3.active:
+			report_reason[2] = "Fake profile - student does not exist"
+
+		if self.reason4.text != '':
+			report_reason[3] = self.reason4.text
+
+		reasons = []
+
+		# if item is not an empty string then add the item to the reasons list
+		for x in report_reason:
+			if x != '':
+				reasons.append(x)
+
+		# join the items in the reasons list into a single string
+		user_reasons = ' & '.join(reasons)
+		
+
+		j = {
+			"Report_Reason": user_reasons
+		}
+
+	def on_leave(self):
+		self.reason1.active = False
+		self.reason2.active = False
+		self.reason3.active = False
+		self.reason4.text = ''
+
+
 class ReportEvent(Screen):
 	def save_event_report(self):
 		report_event_reason = ['', '', '', '']
@@ -702,50 +632,10 @@ class ReportEvent(Screen):
 
 
 		j = {
-			"Reporting_User_ID": '', "Reported_Event_ID": '', "Report_Reason": event_reasons
+			"Report_Reason": event_reasons
 		}
-
-		# POST request
 
 	def on_leave(self):	
-		self.reason1.active = False
-		self.reason2.active = False
-		self.reason3.active = False
-		self.reason4.text = ''
-
-class ReportUser(Screen):
-	def save_user_report(self):
-		report_reason = ['', '', '', '']
-		if self.reason1.active:
-			report_reason[0] = "Objectionable content in profile"
-
-		if self.reason2.active:
-			report_reason[1] = "Bullying and harrassment through social media"
-
-		if self.reason3.active:
-			report_reason[2] = "Fake profile - student does not exist"
-
-		if self.reason4.text != '':
-			report_reason[3] = self.reason4.text
-
-		reasons = []
-
-		# if item is not an empty string then add the item to the reasons list
-		for x in report_reason:
-			if x != '':
-				reasons.append(x)
-
-		# join the items in the reasons list into a single string
-		user_reasons = ' & '.join(reasons)
-		
-
-		j = {
-			"Reporting_User_ID": '', "Reported_User_ID": '', "Report_Reason": user_reasons
-		}
-
-		# POST request
-
-	def on_leave(self):
 		self.reason1.active = False
 		self.reason2.active = False
 		self.reason3.active = False
@@ -790,7 +680,7 @@ class ImageButton(ButtonBehavior, Image):
 	pass
 
 # ----------------------------------------------------------------
-# App definition
+# App Definition
 # ----------------------------------------------------------------
 class UnifyApp(App):
 	"""Unify base kivy app
@@ -812,8 +702,6 @@ class UnifyApp(App):
 		curdir = dirname(__file__)
 		self.available_screens = [join(curdir, 'data', 'screens', '{}.kv'.format(fn).lower()) for fn in self.available_screens] # Create a list of available screens from the kv files
 		self.go_screen(5) # goto match screen 
-		
-		#print(len(self.available_screens))
 		
 		if UserStore.exists("user_info"):
 			if UserStore.get('user_info')["token"] is not None:
@@ -851,7 +739,6 @@ class UnifyApp(App):
 		
 	
 	def load_screen(self, index):
-		# print('loading screen')
 		if index in self.screens:
 				return self.screens[index]
 		else:

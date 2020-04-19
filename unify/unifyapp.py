@@ -514,7 +514,19 @@ class ViewEvent(Screen):
 	def on_leave(self, *args):
 		UserStore.delete('curr_event')
 
+	def showAttendees(self):
+		layout_popup = GridLayout(cols=1, spacing=10, size_hint_y=None)
+		layout_popup.bind(minimum_height=layout_popup.setter('height'))
+		
+		for i in range(0, 15):
+			lbl = Label(text='Test', size_hint_y=None)
 
+		content_popup = ScrollView(size_hint=(1, None), size_hint=1,1)
+		content_popup.add_widget(layout_popup)
+		popup = Popup(title='Attendees', content=content_pop, size=200,200)
+		popup.open()
+
+		
 # ------------
 # App Settings Screen
 # ------------

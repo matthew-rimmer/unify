@@ -18,19 +18,16 @@ ViewEvent:
 			spacing: dp(6)
 
 			# Display the event photo
-			# Retrieve from database
 			AsyncImage:
 				id: event_img
-				source: 'http://placehold.it/480x270.png&text=slide-1.png'
 				size_hint_y: None
 				height: dp(180)
 
 
 			# Display the event name
-			# Retrieve from database
 			Label:
 				id: event_name
-				text: 'Event Name'
+				text: ''
 				font_size: dp(15)
 				bold: True
 				color: 0,0,0,1
@@ -39,10 +36,9 @@ ViewEvent:
 
 
 			# Display the event creator's name
-			# Retrieve from database
 			Label:
 				id: creator
-				text: 'Created by:'
+				text: ''
 				font_size: dp(15)
 				color: 0,0,0,1
 				size_hint: 0.5, 0.5
@@ -50,10 +46,9 @@ ViewEvent:
 
 
 			# Display the event's description
-			# Retrieve from database
 			Label:
 				id: description
-				text: 'Event Description'
+				text: ''
 				text_size: root.width, None
 				halign: 'center'
 				color: 0, 0, 0, 1
@@ -75,7 +70,7 @@ ViewEvent:
 
 				Label:
 					id: datetime
-					text: 'YYYY-MM-DD hh:mm:ss'
+					text: ''
 					font_size: dp(15)
 					color: 0, 0, 0, 1
 					text_size: self.width, None
@@ -87,7 +82,7 @@ ViewEvent:
 
 				Label:
 					id: location
-					text: 'Location'
+					text: ''
 					font_size: dp(15)
 					color: 0, 0, 0, 1
 					text_size: self.width, None
@@ -98,6 +93,7 @@ ViewEvent:
 				padding: dp(25)
 				spacing: dp(10)
 
+				# Attend button
 				RoundedButton:
 					id: attend
 					text: "Attend"
@@ -105,6 +101,7 @@ ViewEvent:
 					height: dp(30)
 					on_release:
 
+				# Report event button
 				RoundedButton:
 					id: report_event
 					text: "Report Event"

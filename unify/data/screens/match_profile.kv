@@ -1,11 +1,12 @@
 MatchProfile:
+	user_pictures: user_pictures
 	fullname: fullname
 	description: description
 	tag_grid: tag_grid
-	user_pictures: user_pictures
 	instagram: instagram
 	twitter: twitter
 	spotify: spotify
+	linked_in: linked_in
 	add_match: add_match
 	remove_match: remove_match
 	report_user: report_user
@@ -33,9 +34,7 @@ MatchProfile:
 					loop: True
 
 
-
 			# Display the user's name
-			# Retrieve from database
 			Label:
 				id: fullname
 				text: ''
@@ -45,7 +44,6 @@ MatchProfile:
 
 
 			# Display the user's 'About Me' message
-			# Retrieve from database
 			Label:
 				id: description
 				text: ''
@@ -57,7 +55,6 @@ MatchProfile:
 
 
 			# Display the user's interest tags
-			# Retrieve from database
 			GridLayout:
 				id: tag_grid
 				cols: 3
@@ -82,7 +79,7 @@ MatchProfile:
 					keep_ratio: True
 				Label:
 					id: instagram
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -98,7 +95,7 @@ MatchProfile:
 					height: dp(45)
 				Label:
 					id: twitter
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -114,7 +111,7 @@ MatchProfile:
 					height: dp(35)
 				Label:
 					id: spotify
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -124,13 +121,13 @@ MatchProfile:
 
 
 				# Display the user's LinkedIn url
-				# Retrieve link from database
 				Image:
 					source: "data/icons/LinkedIn_Logo.png"
 					size_hint_y: None
 					height: dp(30)
 				Label:
-					text: root.getText()
+					id: linked_in
+					text: ''
 					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1
@@ -160,7 +157,8 @@ MatchProfile:
 					id: remove_match
 					text: "Pass"
 					on_release:
-
+					
+			# Report user button
 			RoundedButton:
 				id: report_user
 				text: "Report User"

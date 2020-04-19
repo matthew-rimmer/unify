@@ -6,11 +6,6 @@
 	twitter: twitter
 	spotify: spotify
 	linked_in: linked_in
-	#first_name: first_name
-	#last_name: last_name
-	#dob: dob
-	#uni_email: uni_email
-	#password: password
 		
 	GridLayout:
 		cols: 1
@@ -35,7 +30,7 @@
 			height: dp(20)
 
 
-		# Upload pictures - save image url
+		# Select photos to be uploaded
 		Label:
 			text: "Choose your 3 photos:"
 			halign: "center"
@@ -74,63 +69,7 @@
 				padding: dp(15)
 				spacing: dp(15)
 
-				# First name field
-#				Label:
-#					text: "First name:"
-#					color: 0,0,0,1
-#				TextInput:
-#					id: first_name
-#					multiline: False
-#					size_hint_y: None
-#					height: dp(40)
-
-				# Last name field
-#				Label:
-#					text: "Last name:"
-#					color: 0,0,0,1
-#				TextInput:
-#					id: last_name
-#					multiline: False
-#					size_hint_y: None
-#					height: dp(40)
-
-
-				# Date of birth field
-#				Label:
-#					text: "Date of Birth \n (YYYY-MM-DD):"
-#					halign: 'center'
-#					color: 0,0,0,1
-#				TextInput:
-#					id: dob
-#					multiline: False
-#					size_hint_y: None
-#					height: dp(40)
-
-				# Uni Email field
-#				Label:
-#					text: "University \n email address:"
-#					halign: 'center'
-#					color: 0,0,0,1
-#				TextInput:
-#					id: uni_email
-#					multiline: False
-#					size_hint_y: None
-#					height: dp(40)
-
-
-				# Password field
-#				Label:
-#					text: "Password:"
-#					halign: "center"
-#					text_size: root.width, None
-#					color: 0,0,0,1
-#					size_hint_y: None
-#					height: dp(20)
-#				TextInput:
-#					id: password
-#					size_hint_y: None
-#					height: dp(40)
-
+				# Fill in 'About Me' section
 				Label:
 					text: "What should be in your 'About Me'?"
 					halign: "center"
@@ -142,10 +81,10 @@
 					id: description
 					multiline: True
 					size_hint_y: None
-					height: dp(40)
+					height: dp(80)
 
 
-				# Interest tags
+				# Interest tags field
 				Label:
 					text: "University course & interests? \n (one per line)"
 					halign: "center"
@@ -160,7 +99,7 @@
 					height: dp(80)
 
 
-				# Link Instagram
+				# Instagram handle
 				Label:
 					text: "Instagram Handle:"
 					color: 0,0,0,1
@@ -173,7 +112,7 @@
 					height: dp(30)
 
 				
-				# Link Twitter
+				# Twitter handle
 				Label:
 					text: "Twitter Handle:"
 					color: 0,0,0,1
@@ -186,7 +125,7 @@
 					height: dp(30)
 
 
-				# Link Spotify
+				# Spotify username
 				Label:
 					text: "Spotify Username:"
 					color: 0,0,0,1
@@ -199,7 +138,7 @@
 					height: dp(30)
 
 
-				# Provide LinkedIn URL
+				# LinkedIn public profile url
 				Label:
 					text: "LinkedIn URL:"
 					color: 0,0,0,1
@@ -212,6 +151,7 @@
 					height: dp(30)
 
 
+				# Create profile button
 				RoundedButton:
 					text: "Create Profile"
 					size_hint_y: None
@@ -220,11 +160,3 @@
 					on_release:
 						app.root.current = "main"
 						root.manager.transition.direction = 'left'
-
-				RoundedButton:
-					text: "Cancel"
-					size_hint_y: None
-					height: dp(25)
-					on_release:
-						app.root.current = "initial_screen"
-						root.manager.transition.direction = 'right'

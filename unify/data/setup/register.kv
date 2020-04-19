@@ -14,7 +14,7 @@
 				size: self.size
 				pos: self.pos
 
-		# Request data from user to save to the database (First Name, Surname, Uni Email + Password)
+		# Request data from user (First Name, Last Name, Date of Birth, University Email & Password)
 		GridLayout:
 			cols: 2
 			padding: dp(20)
@@ -50,7 +50,7 @@
 				multiline: False
 
 
-			# Uni Email field
+			# University Email field
 			Label:
 				text: "University \n email address:"
 				halign: 'center'
@@ -70,13 +70,14 @@
 				multiline: False
 
 
+			# Cancel button to return to the initial screen
 			RoundedButton:
 				text: "Cancel"
 				on_release:
 					app.root.current = "initial_screen"
 					root.manager.transition.direction = 'right'
 
-
+			# Register button
 			RoundedButton:
 				text: "Register"
 				on_release: root.save_user()

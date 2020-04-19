@@ -1,11 +1,12 @@
 Profile:
+	user_pictures: user_pictures
 	fullname: fullname
 	description: description
 	tag_grid: tag_grid
-	user_pictures: user_pictures
 	instagram: instagram
 	twitter: twitter
 	spotify: spotify
+	linked_in: linked_in
 
 	ScrollView:
 		bar_width: dp(5)
@@ -28,9 +29,9 @@ Profile:
 					id: user_pictures 
 					direction: 'right'
 					loop: True
-						
+
+
 			# Display the user's name
-			# Retrieve from database
 			Label:
 				id: fullname
 				text: ''
@@ -40,7 +41,6 @@ Profile:
 
 
 			# Display the user's 'About Me' message
-			# Retrieve from database
 			Label:
 				id: description
 				text: ''   
@@ -52,7 +52,6 @@ Profile:
 
 
 			# Display the user's interest tags
-			# Retrieve from database
 			GridLayout:
 				id: tag_grid
 				cols: 3
@@ -77,7 +76,7 @@ Profile:
 					keep_ratio: True
 				Label:
 					id: instagram
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -93,7 +92,7 @@ Profile:
 					height: dp(45)
 				Label:
 					id: twitter
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -109,7 +108,7 @@ Profile:
 					height: dp(35)
 				Label:
 					id: spotify
-					text: "Not Provided"
+					text: ''
 					color: 0,0,0,1
 					size_hint_x: 1
 					size_hint_y: None
@@ -119,13 +118,13 @@ Profile:
 
 
 				# Display the user's LinkedIn url
-				# Retrieve link from database
 				Image:
 					source: "data/icons/LinkedIn_Logo.png"
 					size_hint_y: None
 					height: dp(30)
 				Label:
-					text: root.getText()
+					id: linked_in
+					text: ''
 					markup: True
 					color: 0,0,0,1
 					size_hint_x: 1

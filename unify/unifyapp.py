@@ -106,6 +106,7 @@ class Register(Screen):
 			)
 			App.get_running_app().go_screen(5)
 
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.uni_email.text = ''
 		self.first_name.text = ''
@@ -122,7 +123,7 @@ class ProfileCreation(Screen):
 	# - When a photo is selected:
 	# 	- Open/close popupwindow
 	#   - Get the selection
-	#   - Send picture request !!! ADD !!!
+	#   - Send picture request
 	def select(self, filename):
 		try:
 			popupWindow = Popup(
@@ -173,6 +174,7 @@ class ProfileCreation(Screen):
 			interest_tags
 		)
 
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.description.text = ''
 		self.instagram.text = ''
@@ -211,7 +213,7 @@ class AccountVerification(Screen):
 # Config
 # ------------
 
-# Class for the profile, match & event sections
+# Class for the user profile, find friends & find event sections
 class MainSections(Screen):
 	pass
 
@@ -322,21 +324,22 @@ class MatchProfile(Screen):
 	def get_link(self, item, service):
 		if service in self._urls:
 			self._urls[service] = item
-			return "View {service} [ref={service}][color=DC143C]profile[/color][/ref]".format(
+			return "View {service} [ref={service}][color=800080]profile[/color][/ref]".format(
 				service = service
 			) if item is not None and item != '' else 'Not Provided'
 
-	# Assigns the text to the LinkedIn section of the profile
+	# Assigns text to the labels
 	def getText(self, this_user):
 		self.instagram.text = self.get_link(this_user['data']["Instagram_Link"], 'Instagram')
 		self.twitter.text = self.get_link(this_user['data']["Twitter_Link"], 'Twitter')
 		self.spotify.text = self.get_link(this_user['data']["Spotify_Link"], 'Spotify')
 		self.linked_in.text = self.get_link(this_user['data']["LinkedIn_Link"], 'LinkedIn')
 
-	# Opens LinkedIn profile in the browser
+	# Opens URLs in the browser
 	def urlLink(self, url, ref):
 		webbrowser.open(self._urls[ref], new=1)
 	
+	# - Clears widgets after leaving screen
 	def on_leave(self, *args):
 		self.user_pictures.clear_widgets()
 		self.tag_grid.clear_widgets()
@@ -393,18 +396,18 @@ class Profile(Screen):
 	def get_link(self, item, service):
 		if service in self._urls:
 			self._urls[service] = item
-			return "View {service} [ref={service}][color=DC143C]profile[/color][/ref]".format(
+			return "View {service} [ref={service}][color=800080]profile[/color][/ref]".format(
 				service = service
 			) if item is not None and item is not '' else 'Not Provided'
 
-	# Assigns the text to the LinkedIn section of the profile
+	# Assigns text to the labels
 	def getText(self, this_user):
 		self.instagram.text = self.get_link(this_user['data']["Instagram_Link"], 'Instagram')
 		self.twitter.text = self.get_link(this_user['data']["Twitter_Link"], 'Twitter')
 		self.spotify.text = self.get_link(this_user['data']["Spotify_Link"], 'Spotify')
 		self.linked_in.text = self.get_link(this_user['data']["LinkedIn_Link"], 'LinkedIn')
 
-	# Opens LinkedIn profile in the browser
+	# Opens URLs in the browser
 	def urlLink(self, url, ref):
 		webbrowser.open(self._urls[ref], new=1)
 	
@@ -414,6 +417,9 @@ class Profile(Screen):
 class FriendList(BoxLayout):
 	pass
 
+# -----
+# FriendRow 
+# -----
 class FriendRow(ButtonBehavior, BoxLayout):
 	def load_profile(self, user_id):
 		UserStore.put('curr_profile', id=user_id)
@@ -422,6 +428,9 @@ class FriendRow(ButtonBehavior, BoxLayout):
 	def on_press(self):
 		self.load_profile(self.id)
 
+# -----
+# FriendRecycle RecycleView
+# -----
 class FriendRecycle(RecycleView):
 
 	def on_parent(self,widget,parent): 
@@ -429,8 +438,7 @@ class FriendRecycle(RecycleView):
 			print('LOADING FRIENDS')
 			self.populate()
 	
-	# MatchRecycle populate:
-	# - Populates the screen with loaded json users
+	# FriendRecycle populate:
 	def populate(self):
 
 		friends = User_Requests.get_friends(
@@ -448,6 +456,9 @@ class FriendRecycle(RecycleView):
 
 		UserStore.put('friends_loaded', value=True)
 
+# -------------
+# FriendRequest Row 
+# -------------
 class FriendRequestRow(ButtonBehavior, BoxLayout):
 	def load_profile(self, user_id):
 		UserStore.put('curr_profile', id=user_id)
@@ -479,13 +490,15 @@ class FriendRequestRow(ButtonBehavior, BoxLayout):
 	def on_press(self):
 		self.load_profile(self.id)
 
+# ----------------
+# FriendRequestRecycle RecycleView
+# ----------------
 class FriendRequestRecycle(RecycleView):
 
 	def on_parent(self,widget,parent): 
 		self.populate()
 	
-	# MatchRecycle populate:
-	# - Populates the screen with loaded json users
+	# FriendRequestRecycle populate:
 	def populate(self):
 
 		self.data = []
@@ -509,15 +522,13 @@ class FriendRequestRecycle(RecycleView):
 # ------------
 # EventList Screen
 # ------------
-
-# class EventFindScreen(UnifyScreen):
-# 	def on_enter(self, *args):
-# 	 	self.efs.rvEvent.populate()
-
 class EventList(BoxLayout):
 	def getText(self):
 		return "[ref=Create][color=800080]Create[/color][/ref] your own event!"
 
+# -----
+# EventRow 
+# -----
 class EventRow(ButtonBehavior,BoxLayout):
 
 	def load_event(self, event_id):
@@ -527,6 +538,9 @@ class EventRow(ButtonBehavior,BoxLayout):
 	def on_press(self):
 		self.load_event(self.id)
 
+# ----------------
+# EventRecycle RecycleView
+# ----------------
 class EventRecycle(RecycleView):
 	def on_parent(self,widget,parent): # This function is loaded when the widget is added to the screen
 		self.populate()
@@ -601,6 +615,7 @@ class CreateEvent(Screen):
 		UserStore.put('curr_event', id=event_id)
 		App.get_running_app().go_screen(10)
 
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.event_name.text = ''
 		self.description.text = ''
@@ -627,7 +642,7 @@ class ViewEvent(Screen):
 				self.description.text = event['data']["Description"]
 				self.datetime.text = event['data']["DateTime"]
 				self.location.text = event['data']["Location"]
-				self.creator.text = '{fname} {lname}'.format(
+				self.creator.text = 'Created By: {fname} {lname}'.format(
 					fname = event['data']['Creator']['First_Name'],
 					lname = event['data']['Creator']['Last_Name']
 				)
@@ -718,9 +733,14 @@ class AppSettings(Screen):
 		UserStore.delete('user_info')
 		App.get_running_app().root.current = "initial_screen"
 
+	# - Clears text after leaving screen
 	def on_leave(self):
 		self.description.text = ''
 		self.tags.text = ''
+		self.twitter.text = ''
+		self.instagram.text = ''
+		self.spotify.text = ''
+		self.linked_in.text = ''
 
 # ------------
 # Change Password Screen
@@ -733,13 +753,13 @@ class ChangePassword(Screen):
 		)
 
 	def check_code(self, code):
-		# comparison 
+		# Comparison 
 		check = User_Requests.check_change_password_code(
 			UserStore.get('user_info')['token'],
 			code
 		)
 		if 'error' not in check:
-			# user only sees the 'enter new password' section if their code is correct
+			# User only sees the 'enter new password' section if their code is correct
 			self.prompt.text = "Enter your new password: "
 			self.new_pass.height = dp(30)
 			self.save.back_color = (192, 192, 192, 0.3)
@@ -759,14 +779,13 @@ class ChangePassword(Screen):
 				size_hint=(.5, .1)
 			).open()
 
-		# hides the 'enter new password' section again
+		# Hides the 'enter new password' section again
 		self.prompt.text = ''
 		self.new_pass.height = dp(0)
 		self.new_pass.text = ''
 		self.save.back_color = (192, 192, 192, 0)
 		self.save.height = dp(0)
 		self.save.text = ''
-
 		self.pass_code.text = ''
 		
 # ------------
@@ -801,6 +820,7 @@ class ReportUser(Screen):
 			size_hint=(.5, .1)
 		).open()
 
+	# - Clears text and sets the checkboxes to their unchecked state after leaving screen
 	def on_leave(self):
 		self.reason1.active = False
 		self.reason2.active = False
@@ -837,6 +857,7 @@ class ReportEvent(Screen):
 			size_hint=(.5, .1)
 		).open()
 
+	# - Clears text and sets the checkboxes to their unchecked state after leaving screen
 	def on_leave(self):	
 		self.reason1.active = False
 		self.reason2.active = False
@@ -931,6 +952,7 @@ class UnifyApp(App):
 		sm = self.root.ids.main.ids.sm
 		sm.switch_to(screen, direction='left') # switch the screen
 
+		# Dictionary for the titles of the app screens
 		screen_titles = {
 			0: "Settings",
 			1: "Change Your Password",
@@ -945,6 +967,7 @@ class UnifyApp(App):
 			10: "View Event"
 		}
 
+		# Sets the label text to the corresponding screen name
 		for x, y in screen_titles.items():
 			if self.index == x:
 				title = self.root.ids.main.ids.title

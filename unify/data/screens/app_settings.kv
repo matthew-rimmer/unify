@@ -12,25 +12,7 @@ AppSettings:
 		padding: dp(15)
 		spacing: dp(15)
 
-		# Main background colour
-		canvas:
-			Color:
-				rgb: utils.get_color_from_hex("#D8BFD8")
-			Rectangle:
-				size: self.size
-				pos: self.pos
-
-		Label:
-			text: "Create Your Profile"
-			font_size: 20
-			bold: True
-			text_size: self.size
-			halign: "left"
-			size_hint_y: None
-			height: dp(20)
-
-
-		# Select photos to be uploaded
+		# Select new photos to be uploaded
 		Label:
 			text: "Choose your 3 photos:"
 			halign: "center"
@@ -43,7 +25,7 @@ AppSettings:
 			cols: 1
 			canvas.before:
 				Color:
-					rgb: 0.6, 0.5, 0.6
+					rgb: 0, 0, 0
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -69,7 +51,7 @@ AppSettings:
 				padding: dp(15)
 				spacing: dp(15)
 
-				# Fill in 'About Me' section
+				# Update 'About Me' section
 				Label:
 					text: "What should be in your 'About Me'?"
 					halign: "center"
@@ -84,7 +66,7 @@ AppSettings:
 					height: dp(80)
 
 
-				# Interest tags field
+				# Update interest tags
 				Label:
 					text: "University course & interests? \n (one per line)"
 					halign: "center"
@@ -99,9 +81,9 @@ AppSettings:
 					height: dp(80)
 
 
-				# Instagram handle
+				# Instagram URL
 				Label:
-					text: "Instagram Handle:"
+					text: "Instagram URL:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -112,22 +94,9 @@ AppSettings:
 					height: dp(30)
 
 				
-				# Twitter handle
+				# Twitter URL
 				Label:
-					text: "Twitter Handle:"
-					color: 0,0,0,1
-					size_hint_y: None
-					height: dp(20)
-				TextInput:
-					id: spotify
-					multiline: False
-					size_hint_y: None
-					height: dp(30)
-
-
-				# Spotify username
-				Label:
-					text: "Spotify Username:"
+					text: "Twitter URL:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -138,7 +107,20 @@ AppSettings:
 					height: dp(30)
 
 
-				# LinkedIn public profile url
+				# Spotify URL
+				Label:
+					text: "Spotify URL:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: spotify
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+
+				# LinkedIn URL
 				Label:
 					text: "LinkedIn URL:"
 					color: 0,0,0,1

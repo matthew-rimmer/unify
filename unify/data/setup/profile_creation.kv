@@ -15,7 +15,7 @@
 		# Main background colour
 		canvas:
 			Color:
-				rgb: utils.get_color_from_hex("#D8BFD8")
+				rgb: utils.get_color_from_hex("#9999ff")
 			Rectangle:
 				size: self.size
 				pos: self.pos
@@ -43,7 +43,7 @@
 			cols: 1
 			canvas.before:
 				Color:
-					rgb: 0.6, 0.5, 0.6
+					rgb: 0, 0, 0
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -99,9 +99,9 @@
 					height: dp(80)
 
 
-				# Instagram handle
+				# Instagram URL
 				Label:
-					text: "Instagram Handle:"
+					text: "Instagram URL:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -112,22 +112,9 @@
 					height: dp(30)
 
 				
-				# Twitter handle
+				# Twitter URL
 				Label:
-					text: "Twitter Handle:"
-					color: 0,0,0,1
-					size_hint_y: None
-					height: dp(20)
-				TextInput:
-					id: spotify
-					multiline: False
-					size_hint_y: None
-					height: dp(30)
-
-
-				# Spotify username
-				Label:
-					text: "Spotify Username:"
+					text: "Twitter URL:"
 					color: 0,0,0,1
 					size_hint_y: None
 					height: dp(20)
@@ -138,7 +125,20 @@
 					height: dp(30)
 
 
-				# LinkedIn public profile url
+				# Spotify URL
+				Label:
+					text: "Spotify URL:"
+					color: 0,0,0,1
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: spotify
+					multiline: False
+					size_hint_y: None
+					height: dp(30)
+
+
+				# LinkedIn URL
 				Label:
 					text: "LinkedIn URL:"
 					color: 0,0,0,1

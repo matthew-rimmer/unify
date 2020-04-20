@@ -7,6 +7,7 @@
 #:include data/setup/profile_creation.kv
 #:include data/setup/account_verification.kv
 
+# Screen manager for the initial screens of the app (registration, verification, profile creation and login)
 ScreenManager:
 	Initial:
 		name: "initial_screen"
@@ -32,6 +33,9 @@ ScreenManager:
 		name: "main"
 		id: main
 
+
+# Contains the second screen manager for the rest of the screens
+# The title at the top of each screen and the navigation icons at the bottom of each screen remain fixed
 <MainSections>
 	BoxLayout:
 		orientation: 'vertical'
@@ -39,11 +43,12 @@ ScreenManager:
 		# Main background colour
 		canvas:
 			Color:
-				rgb: utils.get_color_from_hex("#D8BFD8")
+				rgb: utils.get_color_from_hex("#9999ff")
 			Rectangle:
 				size: self.size
 				pos: self.pos
 
+		# Title for the screens
 		Label:
 			id: title
 			text: ''
@@ -52,12 +57,14 @@ ScreenManager:
 			font_size: dp(17)
 			color: 95,158,160,1
 
+		# Screen manager which handles the transitions between the screens
 		ScreenManager:
 			id: sm
 			size_hint: 1, .6
 			on_current_screen:
 				idx = app.screen_names.index('match')
 
+		# The three main navigation icons for the app (for the user profile, find friends and find events screens)
 		GridLayout:
 			cols: 3
 			size_hint: 1, .04
@@ -99,7 +106,7 @@ ScreenManager:
 	halign: 'center'
 	background_color: (0,0,0,0)
 	background_normal: ''
-	back_color: (0, 0, 128, 0.2)
+	back_color: (255, 255, 255, 0.3)
 	border_radius: 5
 	color: (0,0,0,1)
 	size_hint_y: None

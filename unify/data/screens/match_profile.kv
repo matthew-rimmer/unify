@@ -49,9 +49,10 @@ MatchProfile:
 				text: ''
 				font_size: dp(15)
 				color: 0, 0, 0, 1
-				size_hint_x: 1
 				size_hint_y: None
 				text_size: self.width, None
+				height: self.texture_size[1]
+				halign: 'center'
 
 
 			# Display the user's interest tags
@@ -70,13 +71,11 @@ MatchProfile:
 				padding: dp(15)
 				spacing: dp(10)
 
-				# Display the user's Instagram handle
+				# Display the user's Instagram profile
 				Image:
 					source: "data/icons/Instagram_Glyph.png"
 					size_hint_y: None
 					height: dp(35)
-					#allow_stretch: True
-					keep_ratio: True
 				Label:
 					id: instagram
 					text: ''
@@ -89,7 +88,8 @@ MatchProfile:
 					halign: 'center'
 					on_ref_press: root.urlLink(*args)
 
-				# Display the user's Twitter handle
+
+				# Display the user's Twitter profile
 				Image:
 					source: "data/icons/Twitter_Logo_Blue.png"
 					size_hint_y: None
@@ -106,7 +106,8 @@ MatchProfile:
 					halign: 'center'
 					on_ref_press: root.urlLink(*args)
 
-				# Display the user's Spotify username
+
+				# Display the user's Spotify profile
 				Image:
 					source: "data/icons/Spotify_Icon.png"
 					size_hint_y: None
@@ -123,7 +124,8 @@ MatchProfile:
 					halign: 'center'
 					on_ref_press: root.urlLink(*args)
 
-				# Display the user's LinkedIn url
+
+				# Display the user's LinkedIn profile
 				Image:
 					source: "data/icons/LinkedIn_Logo.png"
 					size_hint_y: None
@@ -160,6 +162,7 @@ MatchProfile:
 					id: remove_match
 					text: "Pass"
 					on_release:
+					
 					
 			# Report user button
 			RoundedButton:

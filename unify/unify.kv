@@ -32,6 +32,11 @@ ScreenManager:
 		name: "main"
 		id: main
 
+# COLOURS
+# background: 	#E8E9E6
+# foreground: 	#F2F3EF
+# text:			#0D1012
+
 <MainSections>
 	BoxLayout:
 		orientation: 'vertical'
@@ -39,18 +44,32 @@ ScreenManager:
 		# Main background colour
 		canvas:
 			Color:
-				rgb: utils.get_color_from_hex("#D8BFD8")
+				rgb: utils.get_color_from_hex("#E8E9E6")
 			Rectangle:
 				size: self.size
 				pos: self.pos
 
-		Label:
-			id: title
-			text: ''
+		GridLayout:
+			cols: 1
+			size_hint_x: 1
 			size_hint_y: None
-			height: dp(70)
-			font_size: dp(17)
-			color: 95,158,160,1
+			height: dp(45)
+			padding: dp(5)
+			spacing: dp(20)
+
+			canvas:
+				Color:
+					rgb: utils.get_color_from_hex("#F2F3EF")
+				Rectangle:
+					size: self.size
+					pos: self.pos
+
+			Label:
+				id: title
+				text: ''
+				font_size: sp(25)
+				size: self.texture_size
+				color: utils.get_color_from_hex("#0D1012")
 
 		ScreenManager:
 			id: sm
@@ -60,18 +79,24 @@ ScreenManager:
 
 		GridLayout:
 			cols: 3
-			size_hint: 1, .04
+			size_hint: 1, .05
+			padding: dp(5)
+
+			canvas:
+				Color:
+					rgb: utils.get_color_from_hex("#F2F3EF")
+				Rectangle:
+					size: self.size
+					pos: self.pos
+
 			ImageButton:
-				# icon made by Smashicons from www.flaticon.com
-				source: "data/icons/profile_icon.png"
+				source: "data/icons/user_icon.png"
 				on_release: app.go_screen(7)
 			ImageButton:
-				# icon made by Freepik from www.flaticon.com
-				source: "data/icons/find_icon.png"
+				source: "data/icons/search_icon.png"
 				on_release: app.go_screen(5)
 			ImageButton:
-				# icon made by iconixar from www.flaticon.com
-				source: "data/icons/events_icon.png"
+				source: "data/icons/event_icon.png"
 				on_release: app.go_screen(3)
 
 
@@ -94,20 +119,20 @@ ScreenManager:
 			radius: self.border_radius
 
 <OutlinedButton>
-	font_size: dp(13)
+	font_size: sp(20)
 	text_size: self.width, None
 	halign: 'center'
 	background_color: (0,0,0,0)
 	background_normal: ''
-	back_color: (0, 0, 128, 0.2)
+	back_color: utils.get_color_from_hex("#F2F3EF")
 	border_radius: 5
 	color: (0,0,0,1)
 	size_hint_y: None
-	height: dp(30)
+	height: sp(35)
 
 	canvas.before:
 		Color:
-			rgba: self.back_color
+			rgb: utils.get_color_from_hex("#0D1012")
 		Line:                                # pos x, pos y, width, height, radius
 			rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
 			width: 0.9

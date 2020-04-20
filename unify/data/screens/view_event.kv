@@ -5,7 +5,7 @@ ViewEvent:
 	datetime: datetime
 	location: location
 	creator: creator
-#	attendees: attendees
+	attendees: attendees
 	attend: attend
 	report_event: report_event
 
@@ -92,6 +92,14 @@ ViewEvent:
 				cols: 1
 				padding: dp(25)
 				spacing: dp(10)
+
+				RoundedButton:
+					id: attendees
+					text: "View Attendees"
+					size_hint_y: None
+					height: dp(30)
+					on_release:
+						root.show_attendees()
 
 				# Attend button
 				RoundedButton:

@@ -2,7 +2,7 @@
 	orientation: 'horizontal'
 	canvas.before:
 		Color:
-			rgba: 0.5, 0.5, 0.5, 1
+			rgb: utils.get_color_from_hex("#F2F3EF")
 		Rectangle:
 			size: self.size
 			pos: self.pos
@@ -11,25 +11,29 @@
 	value: ''
 	name: 'a'
 	tags: 'a'
+	padding: dp(5)
 	
 	AsyncImage:
 		source: root.picture
 	Label:
 		text: root.name
 		text_size: self.size
+		font_size: sp(20)
+		color: utils.get_color_from_hex("#0D1012")
 		halign: 'center'
 		valign: 'center'
 	Label:
 		text: root.tags
 		text_size: self.size
+		font_size: sp(20)
+		color: utils.get_color_from_hex("#0D1012")
 		halign: 'center'	
 		valign: 'center'
-
-		
 
 <MatchList>:	
 	orientation: 'vertical'
 	id: nice
+	spacing: dp(5)
 	MatchRecycle:
 		id: rv
 
@@ -40,12 +44,12 @@
 	bar_width: dp(10)
 	viewclass: 'MatchRow'
 	RecycleBoxLayout:
-		default_size: None, dp(56)
+		default_size: None, dp(85)
 		default_size_hint: 1, None
 		size_hint_y: None
 		height: self.minimum_height
 		orientation: 'vertical'
-		spacing: dp(2)
+		spacing: dp(5)
 
 UnifyScreen:
 	MatchList:

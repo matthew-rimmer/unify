@@ -19,6 +19,8 @@ from kivy.uix.image import AsyncImage
 from kivy.uix.label import Label
 
 from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.behaviors.touchripple import TouchRippleBehavior
 from kivy.clock import Clock
 from kivy.uix.recycleview import RecycleView
@@ -27,8 +29,8 @@ from kivy.metrics import dp
 from kivy.storage.jsonstore import JsonStore
 
 from kivy.config import Config
-Config.set('graphics', 'width', '360')
-Config.set('graphics', 'height', '640')
+Config.set('graphics', 'width', '540')
+Config.set('graphics', 'height', '960')
 
 # Misc. Imports
 from os.path import dirname, join
@@ -263,6 +265,9 @@ class MatchRecycle(RecycleView):
 					'tags':tags,
 					'picture': match['Picture_Path']
 				})
+	
+	def on_pre_enter(self):
+		print('matches')
 
 # -----
 # MatchRow 
@@ -309,6 +314,7 @@ class MatchProfile(Screen):
 				OutlinedButton(text='#' + tag)
 			)
 
+		self.user_id = str(id)
 		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
 
 		if this_user['data']["Description"] is not None or this_user['data']["Description"] == '':
@@ -337,6 +343,19 @@ class MatchProfile(Screen):
 	def urlLink(self, url, ref):
 		webbrowser.open(self._urls[ref], new=1)
 	
+	def add_user(self, user_id):
+		request = User_Requests.send_friend_request(
+			user_id,
+			UserStore.get('user_info')["token"]
+		)
+		if 'error' not in requests:
+			UserStore.put('marked_request', id=user_id)
+			App.get_running_app().go_screen(5)
+	
+	def pass_user(self, user_id):
+		UserStore.put('marked_request', id=user_id)
+		App.get_running_app().go_screen(5)
+
 	def on_leave(self, *args):
 		self.user_pictures.clear_widgets()
 		self.tag_grid.clear_widgets()
@@ -467,7 +486,7 @@ class FriendRequestRow(ButtonBehavior, BoxLayout):
 			UserStore.get('user_info')["token"]
 		)
 		if 'error' not in request:
-			self.delete_entry()
+			App.get_running_app().go_screen(5)
 
 	def disable_buttons(self):
 		self.accept_button.disabled = True
@@ -611,6 +630,9 @@ class CreateEvent(Screen):
 # View Event Screen
 # ------------
 class ViewEvent(Screen):
+
+	_attendees = []
+
 	def on_parent(self, widget, parent):
 		if UserStore.exists('curr_event'):
 			self.populate_event(id=UserStore.get('curr_event')['id'])
@@ -631,21 +653,28 @@ class ViewEvent(Screen):
 					fname = event['data']['Creator']['First_Name'],
 					lname = event['data']['Creator']['Last_Name']
 				)
+				self._attendees = event['data']['Attendees']
 
 	def on_leave(self, *args):
 		#UserStore.delete('curr_event')
 		pass
 
-	def showAttendees(self):
+	def show_attendees(self):
 		layout_popup = GridLayout(cols=1, spacing=10, size_hint_y=None)
 		layout_popup.bind(minimum_height=layout_popup.setter('height'))
 		
-		for i in range(0, 15):
-			lbl = Label(text='Test', size_hint_y=None)
 
-		content_popup = ScrollView(size_hint=(1, None), size_hint=1,1)
+		for a in self._attendees:
+			lbl = Label(
+				text='{fname} {lname}'.format(
+					fname = a['First_Name'],
+					lname = a['Last_Name']
+				), 
+				size_hint_y=None)
+
+		content_popup = ScrollView(size_hint=(1, None))
 		content_popup.add_widget(layout_popup)
-		popup = Popup(title='Attendees', content=content_pop, size=200,200)
+		popup = Popup(title='Attendees', content=content_popup, size_hint=(.75,.5))
 		popup.open()
 
 		

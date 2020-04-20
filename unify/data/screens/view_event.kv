@@ -1,6 +1,7 @@
 ViewEvent:
 	event_img: event_img
 	event_name: event_name
+	creator: creator
 	description: description
 	datetime: datetime
 	location: location
@@ -10,18 +11,21 @@ ViewEvent:
 	report_event: report_event
 
 	ScrollView:
-		BoxLayout:
-			orientation: "vertical"
+		bar_width: dp(5)
+
+		GridLayout:
+			cols: 1
 			size_hint_y: None
-			height: dp(600)
-			padding: dp(8)
-			spacing: dp(6)
+			height: self.minimum_height
+			padding: dp(10)
+			spacing: dp(25)
+
 
 			# Display the event photo
 			AsyncImage:
 				id: event_img
 				size_hint_y: None
-				height: dp(180)
+				height: dp(160)
 
 
 			# Display the event name
@@ -31,8 +35,10 @@ ViewEvent:
 				font_size: dp(15)
 				bold: True
 				color: 0,0,0,1
-				size_hint: 0.5, 0.5
-				pos_hint: {"center_x": 0.5}
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
 
 
 			# Display the event creator's name
@@ -41,19 +47,21 @@ ViewEvent:
 				text: ''
 				font_size: dp(15)
 				color: 0,0,0,1
-				size_hint: 0.5, 0.5
-				pos_hint: {"center_x": 0.5}
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
 
 
 			# Display the event's description
 			Label:
 				id: description
 				text: ''
-				text_size: root.width, None
-				halign: 'center'
 				color: 0, 0, 0, 1
-				size: self.texture_size
-				padding: dp(10), dp(10)
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
 
 
 			# Event date & time
@@ -61,36 +69,47 @@ ViewEvent:
 			GridLayout:
 				cols: 2
 				size_hint_y: None
-				height: dp(70)
-				spacing: dp(10)
+				height: self.minimum_height
+				padding: dp(10)
+				spacing: dp(20)
 
 				Image:
 					# icon made by Freepik from www.flaticon.com
 					source: 'data/icons/date_time.png'
+					size_hint_y: None
+					height: dp(35)
 
 				Label:
 					id: datetime
 					text: ''
 					font_size: dp(15)
 					color: 0, 0, 0, 1
-					text_size: self.width, None
 					halign: 'center'
+					size_hint_y: None
+					text_size: self.width, None
+					height: self.texture_size[1]
 
 				Image:
 					# icon made by DinosoftLabs from www.flaticon.com
 					source: 'data/icons/location.png'
+					size_hint_y: None
+					height: dp(35)
 
 				Label:
 					id: location
 					text: ''
 					font_size: dp(15)
 					color: 0, 0, 0, 1
-					text_size: self.width, None
 					halign: 'center'
+					size_hint_y: None
+					text_size: self.width, None
+					height: self.texture_size[1]
 
 			GridLayout:
 				cols: 1
-				padding: dp(25)
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(20)
 				spacing: dp(10)
 
 				RoundedButton:
@@ -107,7 +126,6 @@ ViewEvent:
 					text: "Attend"
 					size_hint_y: None
 					height: dp(30)
-					on_release:
 
 				# Report event button
 				RoundedButton:

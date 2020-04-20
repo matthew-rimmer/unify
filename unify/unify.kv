@@ -7,6 +7,7 @@
 #:include data/setup/profile_creation.kv
 #:include data/setup/account_verification.kv
 
+# Screen manager for the initial screens of the app (registration, verification, profile creation and login)
 ScreenManager:
 	Initial:
 		name: "initial_screen"
@@ -71,12 +72,14 @@ ScreenManager:
 				size: self.texture_size
 				color: utils.get_color_from_hex("#0D1012")
 
+		# Screen manager which handles the transitions between the screens
 		ScreenManager:
 			id: sm
 			size_hint: 1, .6
 			on_current_screen:
 				idx = app.screen_names.index('match')
 
+		# The three main navigation icons for the app (for the user profile, find friends and find events screens)
 		GridLayout:
 			cols: 3
 			size_hint: 1, .05

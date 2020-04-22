@@ -1,4 +1,4 @@
-api_url = "http://DESKTOP-JITKUGS:8000" # Actual server url needed.
+api_url = "https://api.unifyapp.xyz" # Actual server url needed.
 
 routes = {
     'login':                '/login',

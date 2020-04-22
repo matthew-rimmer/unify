@@ -12,29 +12,29 @@ ViewEvent:
 
 	ScrollView:
 		bar_width: dp(5)
+		size_hint_y: 0.9
+		pos_hint: {'center_x': 0.5, 'top': 1}
 
 		GridLayout:
 			cols: 1
 			size_hint_y: None
 			height: self.minimum_height
-			padding: dp(10)
+			padding: dp(15)
 			spacing: dp(25)
-
 
 			# Display the event photo
 			AsyncImage:
 				id: event_img
 				size_hint_y: None
-				height: dp(160)
-
+				height: dp(300)
 
 			# Display the event name
 			Label:
 				id: event_name
 				text: ''
-				font_size: dp(15)
+				font_size: sp(25)
 				bold: True
-				color: 0,0,0,1
+				color: utils.get_color_from_hex("#0D1012")
 				halign: 'center'
 				size_hint_y: None
 				text_size: self.width, None
@@ -45,8 +45,8 @@ ViewEvent:
 			Label:
 				id: creator
 				text: ''
-				font_size: dp(15)
-				color: 0,0,0,1
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
 				halign: 'center'
 				size_hint_y: None
 				text_size: self.width, None
@@ -57,7 +57,8 @@ ViewEvent:
 			Label:
 				id: description
 				text: ''
-				color: 0, 0, 0, 1
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
 				halign: 'center'
 				size_hint_y: None
 				text_size: self.width, None
@@ -75,15 +76,16 @@ ViewEvent:
 
 				Image:
 					# icon made by Freepik from www.flaticon.com
-					source: 'data/icons/date_time.png'
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					source: 'data/icons/event_icon.png'
 					size_hint_y: None
 					height: dp(35)
 
 				Label:
 					id: datetime
 					text: ''
-					font_size: dp(15)
-					color: 0, 0, 0, 1
+					font_size: sp(20)
+					color: utils.get_color_from_hex("#0D1012")
 					halign: 'center'
 					size_hint_y: None
 					text_size: self.width, None
@@ -91,6 +93,7 @@ ViewEvent:
 
 				Image:
 					# icon made by DinosoftLabs from www.flaticon.com
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 					source: 'data/icons/location.png'
 					size_hint_y: None
 					height: dp(35)
@@ -98,39 +101,43 @@ ViewEvent:
 				Label:
 					id: location
 					text: ''
-					font_size: dp(15)
-					color: 0, 0, 0, 1
+					font_size: sp(20)
+					color: utils.get_color_from_hex("#0D1012")
 					halign: 'center'
 					size_hint_y: None
 					text_size: self.width, None
 					height: self.texture_size[1]
 
-			GridLayout:
-				cols: 1
+			# Report event button
+			RoundedButton:
+				id: report_event
+				text: "Report Event"
 				size_hint_y: None
-				height: self.minimum_height
-				padding: dp(20)
-				spacing: dp(10)
+				height: sp(50)
+				font_size: sp(20)
+				on_release: app.go_screen(8)
 
-				RoundedButton:
-					id: attendees
-					text: "View Attendees"
-					size_hint_y: None
-					height: dp(30)
-					on_release:
-						root.show_attendees()
+	GridLayout:
+		cols: 2
+		size_hint_x: 1
+		size_hint_y: .1
+		padding: dp(15)
+		spacing: dp(10)
 
-				# Attend button
-				RoundedButton:
-					id: attend
-					text: "Attend"
-					size_hint_y: None
-					height: dp(30)
+		RoundedButton:
+			id: attendees
+			text: "View Attendees"
+			font_size: sp(25)
+			on_release:
+				root.show_attendees()
 
-				# Report event button
-				RoundedButton:
-					id: report_event
-					text: "Report Event"
-					size_hint_y: None
-					height: dp(30)
-					on_release: app.go_screen(8)
+		# Attend button
+		RoundedButton:
+			id: attend
+			text: "Attend"
+			font_size: sp(25)
+			on_release:
+				root.attend_event()
+				app.go_screen(3)
+
+		

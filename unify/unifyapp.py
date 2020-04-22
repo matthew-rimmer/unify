@@ -40,6 +40,8 @@ from string import ascii_lowercase
 import os
 import webbrowser
 
+import re
+
 # ??? REMOVE ???
 import requests
 import json
@@ -79,7 +81,16 @@ class Login(Screen):
 				token=user_details["access_token"], 
 				id=user_details["data"]["User_ID"]
 			)
+			App.get_running_app().root.current = "main"
 			App.get_running_app().go_screen(5)
+		else:
+			Popup(
+				title=user_details['error']['title'],
+				content=Label(
+					text=user_details['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 	# Login on_leave:
 	# - Clears text after leaving screen
@@ -93,20 +104,37 @@ class Login(Screen):
 class Register(Screen):
 	def save_user(self):
 
-		j = {
-			"Email": self.uni_email.text, "First_Name": self.first_name.text,
-			"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
-			"Password": self.password.text
-		}
+		if not re.match(r'\d{4}-\d{2}-\d{2}', self.dob.text):
+			Popup(
+				title='Input Error.',
+				content=Label(
+					text='Date is in the incorrect format.'
+				),
+				size_hint=(.8, .2)
+			).open()
+		else:
+			j = {
+				"Email": self.uni_email.text, "First_Name": self.first_name.text,
+				"Last_Name": self.last_name.text, "DateOfBirth": self.dob.text, 
+				"Password": self.password.text
+			}
 
-		created_user = User_Requests.create(j)
-		if 'error' not in created_user:
-			UserStore.put(
-				'user_info',  
-				token=created_user["access_token"], 
-				id=created_user["data"]["User_ID"]
-			)
-			App.get_running_app().go_screen(5)
+			created_user = User_Requests.create(j)
+			if 'error' not in created_user:
+				UserStore.put(
+					'user_info',  
+					token=created_user["access_token"], 
+					id=created_user["data"]["User_ID"]
+				)
+				App.get_running_app().root.current = "account_verification"
+			else:
+				Popup(
+					title=created_user['error']['title'],
+					content=Label(
+						text=created_user['error']['description']
+					),
+					size_hint=(.8, .2)
+				).open()
 
 	# - Clears text after leaving screen
 	def on_leave(self):
@@ -198,14 +226,13 @@ class AccountVerification(Screen):
 		if 'error' not in verif:
 			App.get_running_app().root.current = 'profile_creation'
 		else:
-			popupWindow = Popup(
-				title="Code Incorrect!",
+			Popup(
+				title=verif['error']['title'],
 				content=Label(
-					text="Provided code was incorrect!",
-					font_size=14, halign='center'),
-				size_hint=(None, None), size=(200, 200)
-			)
-			popupWindow.open()
+					text=verif['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 # ----------------------------------------------------------------
 # Main Screens
@@ -221,6 +248,11 @@ class MainSections(Screen):
 
 class UnifyScreen(Screen):
 	fullscreen = BooleanProperty(False)
+
+	def on_enter(self, *args):
+		if self.name == 'match_screen' and UserStore.exists('marked_users'):
+			self.ids['match_list'].ids['rv'].delete_row(UserStore.get('marked_users')['id'])
+		#self.call_populate()
 
 # ------------
 # MatchList Screen
@@ -238,38 +270,59 @@ class MatchRecycle(RecycleView):
 	# - Function is loaded when the widget is added to the screen
 	# - Get match list Request from server
 	# - Populates screen
-	def on_parent(self,widget,parent): 
+	def on_parent(self, widget, parent):
 		self.populate()
 	
 	# MatchRecycle populate:
 	# - Populates the screen with loaded json users
 	def populate(self):
 
+		print('REPOPULATING')
+		self.data = []
+
 		matches = User_Requests.get_matches(
 			UserStore.get('user_info')["token"]
 		)
 
+		marked_users = []
+		if UserStore.exists('marked_users'):
+			marked_users = UserStore.get('marked_users')['id']
+
+		print(marked_users)
 		if 'error' not in matches:
 			for match in matches['data']:
-				tags = ''
-				for i in range(0,len(match['Matches'])):
-					if i < 3:
-						tags += '#{}'.format(match['Matches'][i])
-						if i != len(match['Matches']) - 1:
-							tags += '\n'
-					else:
-						tags += '...'
-						break
+				if str(match['User_ID']) not in marked_users:
+					tags = ''
+					for i in range(0,len(match['Matches'])):
+						if i < 3:
+							tags += '#{}'.format(match['Matches'][i])
+							if i != len(match['Matches']) - 1:
+								tags += '\n'
+						else:
+							tags += '...'
+							break
 
-				self.data.append({
-					'id':str(match["User_ID"]),
-					'name': match["First_Name"]+" "+match["Last_Name"],
-					'tags':tags,
-					'picture': match['Picture_Path']
-				})
-	
-	def on_pre_enter(self):
-		print('matches')
+					self.data.append({
+						'id':str(match["User_ID"]),
+						'name': match["First_Name"]+" "+match["Last_Name"],
+						'tags':tags,
+						'picture': match['Picture_Path']
+					})
+		else:
+			Popup(
+				title=matches['error']['title'],
+				content=Label(
+					text=matches['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
+				
+	def delete_row(self, user_ids):
+
+		for i in range(len(self.data) - 1):
+			if self.data[i]['id'] in user_ids:
+				self.data.pop(i)
+		
 
 # -----
 # MatchRow 
@@ -277,7 +330,7 @@ class MatchRecycle(RecycleView):
 class MatchRow(ButtonBehavior,BoxLayout):
 
 	def load_profile(self, user_id):
-		UserStore.put('curr_profile', id=user_id)
+		UserStore.put('curr_profile', id=user_id, viewed=False)
 		App.get_running_app().go_screen(6)
 
 	def on_press(self):
@@ -295,14 +348,16 @@ class MatchProfile(Screen):
 		'LinkedIn':''
 	}
 
-	def on_parent(self, widget, parent):
-		if UserStore.exists('curr_profile'):
-			self.populate_match(id=UserStore.get('curr_profile')['id'])
+	def on_enter(self):
+		if UserStore.exists('curr_profile') and UserStore.get('curr_profile')['viewed'] == False:
+			self.populate_match(uid=UserStore.get('curr_profile')['id'])
 
-	def populate_match(self, id=None):
+	def populate_match(self, uid=None):
+
+		UserStore.put('curr_profile', id=UserStore.get('curr_profile')['id'], viewed=True)
 
 		this_user = User_Requests.get_info(
-			id,
+			uid,
 			UserStore.get('user_info')["token"]
 		)
 
@@ -316,7 +371,7 @@ class MatchProfile(Screen):
 				OutlinedButton(text='#' + tag)
 			)
 
-		self.user_id = str(id)
+		self.user_id = str(uid)
 		self.fullname.text = this_user['data']["First_Name"] + " " + this_user['data']["Last_Name"]
 
 		if this_user['data']["Description"] is not None or this_user['data']["Description"] == '':
@@ -350,12 +405,27 @@ class MatchProfile(Screen):
 			user_id,
 			UserStore.get('user_info')["token"]
 		)
-		if 'error' not in requests:
-			UserStore.put('marked_request', id=user_id)
+
+		if 'error' not in request:
+			UserStore.put(
+				'marked_users', 
+				id=[user_id] if not UserStore.exists('marked_users') \
+					else UserStore.get('marked_users')['id'] + [user_id]
+			)
 			App.get_running_app().go_screen(5)
+		else:
+			Popup(
+				title=requests['error']['title'],
+				content=requests['error']['description'],
+				size_hint=(.5, .1)
+			).open()
 	
 	def pass_user(self, user_id):
-		UserStore.put('marked_request', id=user_id)
+		UserStore.put(
+				'marked_users', 
+				id=[user_id] if not UserStore.exists('marked_users') \
+					else UserStore.get('marked_users')['id'] + [user_id]
+			)
 		App.get_running_app().go_screen(5)
 
 	def on_leave(self, *args):
@@ -374,7 +444,7 @@ class Profile(Screen):
 		'LinkedIn':''
 	}
 
-	def on_parent(self, widget, parent):
+	def on_enter(self):
 		if UserStore.exists('current_user') == False:
 			self.populate_profile()
 			print('LOADING USER')
@@ -440,7 +510,7 @@ class FriendList(BoxLayout):
 # -----
 class FriendRow(ButtonBehavior, BoxLayout):
 	def load_profile(self, user_id):
-		UserStore.put('curr_profile', id=user_id)
+		UserStore.put('curr_profile', id=user_id, viewed=False)
 		App.get_running_app().go_screen(6)
 
 	def on_press(self):
@@ -471,6 +541,14 @@ class FriendRecycle(RecycleView):
 					'name': friend["First_Name"]+" "+friend["Last_Name"],
 					'picture': friend['Picture_Path']
 				})
+		else:
+			Popup(
+				title=friends['error']['title'],
+				content=Label(
+					text=friends['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 		UserStore.put('friends_loaded', value=True)
 
@@ -479,7 +557,7 @@ class FriendRecycle(RecycleView):
 # -------------
 class FriendRequestRow(ButtonBehavior, BoxLayout):
 	def load_profile(self, user_id):
-		UserStore.put('curr_profile', id=user_id)
+		UserStore.put('curr_profile', id=user_id, viewed=False)
 		App.get_running_app().go_screen(6)
 
 	def accept_request(self, user_id):
@@ -489,6 +567,14 @@ class FriendRequestRow(ButtonBehavior, BoxLayout):
 		)
 		if 'error' not in request:
 			self.delete_entry()
+		else:
+			Popup(
+				title=request['error']['title'],
+				content=Label(
+					text=request['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 	def decline_request(self, user_id):
 		request = User_Requests.decline_friend_request(
@@ -497,6 +583,14 @@ class FriendRequestRow(ButtonBehavior, BoxLayout):
 		)
 		if 'error' not in request:
 			App.get_running_app().go_screen(5)
+		else:
+			Popup(
+				title=request['error']['title'],
+				content=Label(
+					text=request['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 	def disable_buttons(self):
 		self.accept_button.disabled = True
@@ -536,6 +630,14 @@ class FriendRequestRecycle(RecycleView):
 					'index': str(index)
 				})
 				index += 1
+		else:
+			Popup(
+				title=friends['error']['title'],
+				content=Label(
+					text=friends['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 # ------------
 # EventList Screen
@@ -574,9 +676,17 @@ class EventRecycle(RecycleView):
 				self.data.append({
 					'id':str(e['Event_ID']),
 					'name': e["Name"], 
-					'imagePath': e["Picture_Path"] if e['Picture_Path'] is not None else '',
-					#'attendees': e['Attendees']
+					'imagePath': e["Picture_Path"],
+					'attendees': e['Attendees'],
 				})
+		else:
+			Popup(
+				title=events['error']['title'],
+				content=Label(
+					text=events['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 # ------------
 # Create Event Screen
@@ -603,6 +713,14 @@ class CreateEvent(Screen):
 			
 			if 'error' not in event_image:
 				self._image = event_image['data']['image']
+			else:
+				Popup(
+					title=event_image['error']['title'],
+					content=Label(
+						text=event_image['error']['description']
+					),
+					size_hint=(.8, .2)
+				).open()
 
 			self.filechooser.selection.clear()
 
@@ -628,6 +746,14 @@ class CreateEvent(Screen):
 
 		if 'error' not in event:
 			self.load_event(event['data']['Event_ID'])
+		else:
+			Popup(
+				title=event['error']['title'],
+				content=Label(
+					text=event['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 	def load_event(self, event_id):
 		UserStore.put('curr_event', id=event_id)
@@ -647,7 +773,8 @@ class ViewEvent(Screen):
 
 	_attendees = []
 
-	def on_parent(self, widget, parent):
+	#def on_parent(self, widget, parent):
+	def on_enter(self):
 		if UserStore.exists('curr_event'):
 			self.populate_event(id=UserStore.get('curr_event')['id'])
 
@@ -668,35 +795,66 @@ class ViewEvent(Screen):
 					lname = event['data']['Creator']['Last_Name']
 				)
 				self._attendees = event['data']['Attendees']
+			else:
+				Popup(
+					title=event['error']['title'],
+					content=Label(
+						text=event['error']['description']
+					),
+					size_hint=(.8, .2)
+				).open()
 
 	def on_leave(self, *args):
 		#UserStore.delete('curr_event')
 		pass
 
 	def show_attendees(self):
-		layout_popup = GridLayout(cols=1, spacing=10, size_hint_y=None)
-		layout_popup.bind(minimum_height=layout_popup.setter('height'))
-		
+		layout_popup = GridLayout(cols=1, spacing=15, size_hint_y=1)
+		content_popup = ScrollView(size_hint=(1, 1))
 
 		for a in self._attendees:
-			lbl = Label(
-				text='{fname} {lname}'.format(
-					fname = a['First_Name'],
-					lname = a['Last_Name']
-				), 
-				size_hint_y=None)
-
-		content_popup = ScrollView(size_hint=(1, None))
+			layout_popup.add_widget(
+				Label(
+					text='{fname} {lname}'.format(
+						fname = a['First_Name'],
+						lname = a['Last_Name']
+					)
+				)
+			)
+		
 		content_popup.add_widget(layout_popup)
 		popup = Popup(title='Attendees', content=content_popup, size_hint=(.75,.5))
 		popup.open()
+	
+	def attend_event(self):
+		if UserStore.exists('user_info'):
+			resp = Event_Requests.attending(
+				UserStore.get('curr_event')['id'],
+				UserStore.get('user_info')['token']
+			)
+			if 'error' not in resp:
+				Popup(
+					title='Success!',
+					content=Label(
+						text='You are now attending.'
+					),
+					size_hint=(.8, .2)
+				).open()
+			else:
+				Popup(
+					title=resp['error']['title'],
+					content=Label(
+						text=resp['error']['description']
+					),
+					size_hint=(.8, .2)
+				).open()
 
 		
 # ------------
 # App Settings Screen
 # ------------
 class AppSettings(Screen):
-	def on_parent(self, widget, parent):
+	def on_enter(self):
 		if UserStore.exists('current_user'):
 			user_data = UserStore.get('current_user')['data']
 			self.description.text = user_data['Description'] if user_data['Description'] is not None else ''
@@ -775,24 +933,39 @@ class AppSettings(Screen):
 # ------------
 class ChangePassword(Screen):
 
-	def on_parent(self, widget, parent):
+	def on_enter(self):
 		get_code = User_Requests.get_change_password_code(
 			UserStore.get('user_info')['token']
 		)
 
 	def check_code(self, code):
 		# Comparison 
-		check = User_Requests.check_change_password_code(
-			UserStore.get('user_info')['token'],
-			code
-		)
+		#check = User_Requests.check_change_password_code(
+		#	UserStore.get('user_info')['token'],
+		#	code
+		#)
+		check = {}
 		if 'error' not in check:
 			# User only sees the 'enter new password' section if their code is correct
-			self.prompt.text = "Enter your new password: "
-			self.new_pass.height = dp(30)
-			self.save.back_color = (192, 192, 192, 0.3)
-			self.save.height = dp(30)
-			self.save.text = "Save"
+			# self.prompt.size_hint_y = .75
+			# self.prompt.text = 'New Password'
+
+			# self.new_pass.size_hint_y = 0.3
+			# # self.save.back_color = (192, 192, 192, 0.3)
+
+			# self.save.size_hint_y = .45
+			# self.save.text = 'Save New Password'
+			self.prompt.opacity = 1
+			self.new_pass.opacity = 1
+			self.save.opacity = 1
+		else:
+			Popup(
+				title=check['error']['title'],
+				content=Label(
+					text=check['error']['description']
+				),
+				size_hint=(.8, .2)
+			).open()
 
 	def save_password(self, new_password):
 		change = User_Requests.change_password(
@@ -805,6 +978,14 @@ class ChangePassword(Screen):
 			Popup(
 				title="Password Successfully Changed!",
 				size_hint=(.5, .1)
+			).open()
+		else:
+			Popup(
+				title=change['error']['title'],
+				content=Label(
+					text=change['error']['description']
+				),
+				size_hint=(.8, .2)
 			).open()
 
 		# Hides the 'enter new password' section again
@@ -969,8 +1150,8 @@ class UnifyApp(App):
 			if UserStore.get('user_info')["token"] is not None:
 				query = User_Requests.login({}, auth_token=UserStore.get('user_info')["token"])
 				if 'error' not in query:
-					self.go_screen(5)
 					self.root.current = "main"
+					self.go_screen(5)
 
 		return self.root
 
@@ -1001,13 +1182,16 @@ class UnifyApp(App):
 				title = self.root.ids.main.ids.title
 				title.text = y
 		
+		return screen
+		
 	
 	def load_screen(self, index):
 		if index in self.screens:
-				return self.screens[index]
+			return self.screens[index]
 		else:
-				self.screens[index] = screen = Builder.load_file(self.available_screens[index]) # build the screen
-				return screen
+			print('Screen {} added'.format(index))
+			self.screens[index] = screen = Builder.load_file(self.available_screens[index]) # build the screen
+			return screen
 
 # main
 if __name__ == '__main__':

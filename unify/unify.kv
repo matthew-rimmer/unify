@@ -109,13 +109,13 @@ ScreenManager:
 <RoundedButton>
 	background_color: (0,0,0,0)
 	background_normal: ''
-	back_color: (192, 192, 192, 0.3)
+	back_color: utils.get_color_from_hex("#F2F3EF")
 	border_radius: [11]
-	color: (0,0,0,1)
+	color: utils.get_color_from_hex("#0D1012")
 
 	canvas.before:
 		Color:
-			rgba: self.back_color
+			rgb: utils.get_color_from_hex("#F2F3EF")
 		RoundedRectangle:
 			size: self.size
 			pos: self.pos
@@ -129,7 +129,7 @@ ScreenManager:
 	background_normal: ''
 	back_color: utils.get_color_from_hex("#F2F3EF")
 	border_radius: 5
-	color: (0,0,0,1)
+	color: utils.get_color_from_hex("#0D1012")
 	size_hint_y: None
 	height: sp(35)
 

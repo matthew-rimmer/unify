@@ -1,4 +1,4 @@
-ReportUser:
+ReportEvent:
 	reason1: reason1
 	reason2: reason2
 	reason3: reason3
@@ -6,67 +6,83 @@ ReportUser:
 
 	BoxLayout:
 		orientation: 'vertical'
+		size_hint_y: 0.8
+		size_hint_x: 0.9
+		pos_hint: {'center_x' : 0.5, 'center_y': 0.5}
 		padding: dp(20)
 		spacing: dp(10)
-
+	
 		Label:
 			text: "Please select your reason for reporting this user:"
 			halign: "center"
 			text_size: root.width, None
-			color: 0,0,0,1
+			font_size: sp(25)
 			bold: True
-
-
-		# Three predefined options and another option for text input from user
-		Label:
-			text: "1) Objectionable content in profile"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		CheckBox:
-			id: reason1
-			active: False
-			color: 0,0,0,1
-
+			color: utils.get_color_from_hex("#0D1012")
 
 		Label:
-			text: "2) Bullying and harrassment \n through social media"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		CheckBox:
-			id: reason2
-			active: False
-			color: 0,0,0,1
+			text: ''
+			size_hint_y: 0.5
 
+		GridLayout:
+			cols: 2
+			pos_hint: {'center_x' : 0.6}
+
+			# Three predefined options and another option for text input from user
+			Label:
+				text: "1) Objectionable content in profile"
+				halign: "left"
+				text_size: self.size
+				color: utils.get_color_from_hex("#0D1012")
+			CheckBox:
+				id: reason1
+				active: False
+				color: utils.get_color_from_hex("#0D1012")
+
+			Label:
+				text: "2) Bullying and harrassment \n through social media"
+				halign: "left"
+				text_size: self.size
+				color: utils.get_color_from_hex("#0D1012")
+			CheckBox:
+				id: reason2
+				active: False
+				color: utils.get_color_from_hex("#0D1012")
+
+			Label:
+				text: "3) Fake profile - student does not exist"
+				valign: 'middle'
+				halign: "left"
+				text_size: self.size
+				color: utils.get_color_from_hex("#0D1012")
+			CheckBox:
+				id: reason3
+				active: False
+				color: utils.get_color_from_hex("#0D1012")
+
+		GridLayout:
+			cols: 1
+
+			Label:
+				text: "4) Other"
+				halign: "center"
+				text_size: root.width, None
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: reason4
+				multiline:True
+				size_hint: (1, None)
+				height: dp(70)
 
 		Label:
-			text: "3) Fake profile - student does not exist"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		CheckBox:
-			id: reason3
-			active: False
-			color: 0,0,0,1
-
-
-		Label:
-			text: "4) Other"
-			halign: "center"
-			text_size: root.width, None
-			color: 0,0,0,1
-		TextInput:
-			id: reason4
-			multiline:True
-			size_hint: (1, None)
-			height: dp(70)
-
+			text: ''
+			size_hint_y: 0.5
 
 		# Submit report
 		RoundedButton:
 			text: "Submit"
 			pos_hint: {"center_x": 0.5}
-			size_hint: 0.5, 0.7
+			size_hint: 0.75, 0.6
+			font_size: sp(25)
 			on_release: root.save_user_report()
 			on_release: app.go_screen(5)

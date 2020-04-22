@@ -13,9 +13,9 @@ def get_request_headers(token=None, content_type='application/json'):
 
 def get_servable_pictures(json, picture_path):
     if 'error' not in json:
-        print(json['data'][picture_path])
+        print(json)
         if picture_path in json['data']:
-            if json['data'][picture_path] == '':
+            if json['data'][picture_path] == '' or json['data'][picture_path] is None:
                 json['data'][picture_path] = User_Requests.get_default_image()
             elif json['data'][picture_path] == []:
                 json['data'][picture_path] = [ User_Requests.get_default_image() ]
@@ -42,7 +42,7 @@ def get_list_servable_pictures(json, picture_path):
         if len(json['data']) >= 1:
             for i in range(len(json['data'])):
                 if picture_path in json['data'][i]:
-                    if json['data'][i][picture_path] == '':
+                    if json['data'][i][picture_path] == '' or json['data'][i][picture_path] is None:
                         json['data'][i][picture_path] = User_Requests.get_default_image()  
                     elif isinstance(json['data'][i][picture_path], str):
                         json['data'][i][picture_path] = get_image_url(
@@ -55,7 +55,7 @@ def check_req_success(response, picture_path=None):
     if 200 <= response.status_code <= 203:
         return response.json()
     else:
-        return { 'error': response.text }
+        return { 'error': loads(response.text) }
 
 def get_image_url(user_id, image_path):
     return api_url + get_route('images', user=user_id, image=image_path)
@@ -139,7 +139,7 @@ class User_Requests:
             api_url + get_route('user_feed', offset=offset, limit=limit),
             headers = get_request_headers(token=auth_token)
         )
-        return check_req_success(resp)
+        return get_list_servable_pictures(check_req_success(resp), 'Picture_Path')
 
     @staticmethod
     def get_matches(auth_token, offset=0, limit=15):

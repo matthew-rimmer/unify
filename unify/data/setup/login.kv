@@ -1,0 +1,60 @@
+<Login>
+	uni_email: uni_email
+	password: password
+
+	FloatLayout:
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#E8E9E6")
+			Rectangle:
+				size: self.size
+				pos:  self.pos
+
+		
+		# Email and Password fields
+		BoxLayout:
+			orientation: "vertical"
+			size_hint: 0.75, 0.4
+			pos_hint: {"center_x": 0.5, "center_y": 0.5}
+			padding: dp(10)
+			spacing: sp(15)
+
+			TextInput:
+				id: uni_email
+				size_hint_y: 0.4
+				font_size: sp(20)
+				hint_text: "University Email Address"
+				multiline: False
+			TextInput:
+				id: password
+				size_hint_y: 0.4
+				font_size: sp(20)
+				hint_text: "Password"
+				password: True
+				multiline: False
+			
+			Label:
+				text: ''
+
+			# Sign in button
+			RoundedButton:
+				text: "Sign In"
+				size_hint_y: 0.75
+				size_hint_x: 0.75
+				pos_hint: {"center_x": 0.5}
+				font_size: sp(30)
+				on_release:
+					root.login_click()
+					root.manager.transition.direction = 'left'
+
+			# Cancel button to return to the initial screen		
+			RoundedButton:
+				text: "Cancel"
+				size_hint_y: 0.75
+				size_hint_x: 0.75
+				pos_hint: {"center_x": 0.5}
+				font_size: sp(30)
+				on_release:
+					app.root.current = "initial_screen"
+					root.manager.transition.direction = 'right'

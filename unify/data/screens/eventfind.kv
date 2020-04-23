@@ -1,0 +1,62 @@
+<EventRow>:
+	orientation: 'horizontal'
+	canvas.before:
+		Color:
+			rgba: utils.get_color_from_hex("#F2F3EF")
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	name: ''
+	id: ''
+	imagePath: ''
+	attendees: ''
+
+	padding: dp(5)
+
+	AsyncImage:
+		source: root.imagePath
+	Label:
+		text: root.name
+		text_size: self.size
+		font_size: sp(15)
+		color: utils.get_color_from_hex("#0D1012")
+		halign: 'center'
+		valign: 'center'
+	Label:
+		text: root.attendees + " friends are attending."
+		text_size: self.size
+		font_size: sp(15)
+		color: utils.get_color_from_hex("#0D1012")
+		halign: 'center'	
+		valign: 'center'
+
+<EventList>:	
+	orientation: 'vertical'
+	Label:
+		text: root.getText()
+		markup: True
+		size_hint_y: None
+		height: dp(50)
+		color: 0,0,0,1
+		on_ref_press: app.go_screen(2)
+	EventRecycle:
+		id: rvEvent
+
+
+<EventRecycle>:
+	id: er
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'EventRow'
+	RecycleBoxLayout:
+		default_size: None, dp(56)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(5)
+
+UnifyScreen:
+	EventList:
+		id: efs

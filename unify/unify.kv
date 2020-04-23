@@ -1,5 +1,141 @@
-#:kivy 1.8.0
+#:kivy 1.8
 
-Button:
-    text: 'Hello World'
+#:import utils kivy.utils
+#:include data/setup/initial.kv
+#:include data/setup/login.kv
+#:include data/setup/register.kv
+#:include data/setup/profile_creation.kv
+#:include data/setup/account_verification.kv
 
+# Screen manager for the initial screens of the app (registration, verification, profile creation and login)
+ScreenManager:
+	Initial:
+		name: "initial_screen"
+		id: initial_screen
+
+	Login:
+		name: "login_screen"
+		id: login_screen
+
+	Register:
+		name: "register"
+		id: register
+
+	ProfileCreation:
+		name: "profile_creation"
+		id: profile_creation
+
+	AccountVerification:
+		name: "account_verification"
+		id: account_verification
+
+	MainSections:
+		name: "main"
+		id: main
+
+# COLOURS
+# background: 	#E8E9E6
+# foreground: 	#F2F3EF
+# text:			#0D1012
+
+<MainSections>
+	BoxLayout:
+		orientation: 'vertical'
+
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#E8E9E6")
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
+		GridLayout:
+			cols: 1
+			size_hint_x: 1
+			size_hint_y: None
+			height: dp(45)
+			padding: dp(5)
+			spacing: dp(20)
+
+			canvas:
+				Color:
+					rgb: utils.get_color_from_hex("#F2F3EF")
+				Rectangle:
+					size: self.size
+					pos: self.pos
+
+			Label:
+				id: title
+				text: ''
+				font_size: sp(25)
+				size: self.texture_size
+				color: utils.get_color_from_hex("#0D1012")
+
+		# Screen manager which handles the transitions between the screens
+		ScreenManager:
+			id: sm
+			size_hint: 1, .6
+			on_current_screen:
+				idx = app.screen_names.index('match')
+
+		# The three main navigation icons for the app (for the user profile, find friends and find events screens)
+		GridLayout:
+			cols: 3
+			size_hint: 1, .05
+			padding: dp(5)
+
+			canvas:
+				Color:
+					rgb: utils.get_color_from_hex("#F2F3EF")
+				Rectangle:
+					size: self.size
+					pos: self.pos
+
+			ImageButton:
+				source: "data/icons/user_icon.png"
+				on_release: app.go_screen(7)
+			ImageButton:
+				source: "data/icons/search_icon.png"
+				on_release: app.go_screen(5)
+			ImageButton:
+				source: "data/icons/event_icon.png"
+				on_release: app.go_screen(3)
+
+
+# Code for RoundedButton & OutlinedButton adapted from Youtuber 'Samuel Courses'
+# Available at https://www.youtube.com/watch?v=Xv57jB_Xvqo
+
+<RoundedButton>
+	background_color: (0,0,0,0)
+	background_normal: ''
+	back_color: utils.get_color_from_hex("#F2F3EF")
+	border_radius: [11]
+	color: utils.get_color_from_hex("#0D1012")
+
+	canvas.before:
+		Color:
+			rgb: utils.get_color_from_hex("#F2F3EF")
+		RoundedRectangle:
+			size: self.size
+			pos: self.pos
+			radius: self.border_radius
+
+<OutlinedButton>
+	font_size: sp(20)
+	text_size: self.width, None
+	halign: 'center'
+	background_color: (0,0,0,0)
+	background_normal: ''
+	back_color: utils.get_color_from_hex("#F2F3EF")
+	border_radius: 5
+	color: utils.get_color_from_hex("#0D1012")
+	size_hint_y: None
+	height: sp(35)
+
+	canvas.before:
+		Color:
+			rgb: utils.get_color_from_hex("#0D1012")
+		Line:                                # pos x, pos y, width, height, radius
+			rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+			width: 0.9

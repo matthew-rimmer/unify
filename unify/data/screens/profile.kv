@@ -1,0 +1,167 @@
+Profile:
+	user_pictures: user_pictures
+	fullname: fullname
+	description: description
+	tag_grid: tag_grid
+	instagram: instagram
+	twitter: twitter
+	spotify: spotify
+	linked_in: linked_in
+
+	GridLayout:
+		cols: 1
+
+		ScrollView:
+			bar_width: dp(5)
+
+			GridLayout:
+				cols: 1
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(15)
+				spacing: sp(30)
+
+				# Display the user's photos as a carousel
+				BoxLayout:
+					orientation: 'vertical'
+					size_hint_y: None
+					height: dp(300)
+
+					Carousel:
+						id: user_pictures
+						direction: 'right'
+						loop: True
+
+				# Display the user's name
+				Label:
+					id: fullname
+					text: ''
+					font_size: sp(25)
+					bold: True
+					color: utils.get_color_from_hex("#0D1012")
+
+
+				# Display the user's 'About Me' message
+				Label:
+					id: description
+					text: ''
+					font_size: dp(15)
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_x: 1
+					size_hint_y: None
+					text_size: self.width, None
+
+
+				# Display the user's interest tags
+				GridLayout:
+					id: tag_grid
+					cols: 3
+					size_hint_y: None
+					height: self.minimum_height
+					spacing: dp(10)
+					font_size: sp(25)
+
+				
+				GridLayout:
+					cols: 2
+					size_hint_y: None
+					height: self.minimum_height
+					size_hint_x: 0.5
+					padding: dp(15)
+					spacing: dp(10)
+
+					# Display the user's Instagram handle
+					Image:
+						source: "data/icons/Instagram_Glyph.png"
+						size_hint_y: None
+						height: sp(50)
+						#allow_stretch: True
+						keep_ratio: True
+					Label:
+						id: instagram
+						text: ''
+						markup: True
+						color: utils.get_color_from_hex("#0D1012")
+						size_hint_x: 1
+						size_hint_y: None
+						height: sp(40)
+						font_size: sp(20)
+						text_size: self.width, None
+						halign: 'center'
+						on_ref_press: root.urlLink(*args)
+
+					# Display the user's Twitter handle
+					Image:
+						source: "data/icons/Twitter_Logo_Blue.png"
+						size_hint_y: None
+						height: sp(50)
+					Label:
+						id: twitter
+						text: ''
+						markup: True
+						color: utils.get_color_from_hex("#0D1012")
+						size_hint_x: 1
+						size_hint_y: None
+						height: sp(50)
+						font_size: sp(20)
+						text_size: self.width, None
+						halign: 'center'
+						on_ref_press: root.urlLink(*args)
+
+					# Display the user's Spotify username
+					Image:
+						source: "data/icons/Spotify_Icon.png"
+						size_hint_y: None
+						height: sp(50)
+					Label:
+						id: spotify
+						text: ''
+						markup: True
+						color: utils.get_color_from_hex("#0D1012")
+						size_hint_x: 1
+						size_hint_y: None
+						height: sp(50)
+						font_size: sp(20)
+						text_size: self.width, None
+						halign: 'center'
+						on_ref_press: root.urlLink(*args)
+
+					# Display the user's LinkedIn url
+					Image:
+						source: "data/icons/LinkedIn_Logo.png"
+						size_hint_y: None
+						height: sp(50)
+					Label:
+						id: linked_in
+						text: ''
+						markup: True
+						color: utils.get_color_from_hex("#0D1012")
+						size_hint_x: 1
+						size_hint_y: None
+						height: sp(50)
+						font_size: sp(20)
+						text_size: self.width, None
+						halign: 'center'
+						on_ref_press: root.urlLink(*args)
+
+
+		GridLayout:
+			cols: 2
+			size_hint_x: 1
+			size_hint_y: .08
+			padding: dp(5)
+			spacing: dp(10)
+
+			# Access the friends list
+			RoundedButton:
+				text: "My Friends"
+				font_size: sp(25)
+				on_release: app.go_screen(4)
+
+
+			# Access the settings
+			RoundedButton:
+				text: "Settings"
+				font_size: sp(25)
+				on_release: app.go_screen(0)
+

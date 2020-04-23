@@ -1,0 +1,128 @@
+<Register>
+	first_name: first_name
+	last_name: last_name
+	dob: dob
+	uni_email: uni_email
+	password: password
+
+	FloatLayout:
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#E8E9E6")
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
+		# Request data from user (First Name, Last Name, Date of Birth, University Email & Password)
+		BoxLayout:
+			orientation: 'vertical'
+			#padding: sp(5)
+			size_hint: 0.8, 0.7
+			pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+			# First name field
+			Label:
+				text: "First name:"
+				font_size: sp(20)
+				text_size: self.size
+				halign: 'left'
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: first_name
+				multiline: False
+				size_hint_y: 0.75
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+
+
+			# Last name field
+			Label:
+				text: "Last name:"
+				font_size: sp(20)
+				text_size: self.size
+				halign: 'left'
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: last_name
+				multiline: False
+				size_hint_y: 0.75
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+
+
+			# Date of birth field
+			Label:
+				text: "Date of Birth (YYYY-MM-DD):"
+				font_size: sp(20)
+				text_size: self.size
+				halign: 'left'
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: dob
+				multiline: False
+				size_hint_y: 0.75
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+
+
+			# University Email field
+			Label:
+				text: "University email address:"
+				font_size: sp(20)
+				text_size: self.size
+				halign: 'left'
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: uni_email
+				multiline: False
+				size_hint_y: 0.75
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+
+
+			# Password field
+			Label:
+				text: "Password:"
+				font_size: sp(20)
+				text_size: self.size
+				halign: 'left'
+				color: utils.get_color_from_hex("#0D1012")
+			TextInput:
+				id: password
+				password: True
+				multiline: False
+				size_hint_y: 0.75
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+
+			Label:
+				text: ''
+				size_hint_y: 0.5
+
+
+			# Register button
+			RoundedButton:
+				text: "Register"
+				font_size: sp(30)
+				size_hint_x: 0.6
+				size_hint_y: 1.5
+				pos_hint: {"center_x": 0.5}
+				on_release: root.save_user()
+				on_release:
+					root.manager.transition.direction = 'left'
+
+			Label:
+				text: ''
+				size_hint_y: 0.5
+
+			# Cancel button to return to the initial screen
+			RoundedButton:
+				text: "Cancel"
+				font_size: sp(30)
+				size_hint_x: 0.6
+				size_hint_y: 1.5
+				pos_hint: {"center_x": 0.5}
+				on_release:
+					app.root.current = "initial_screen"
+					root.manager.transition.direction = 'right'

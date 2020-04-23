@@ -1,0 +1,90 @@
+<FriendRow>:
+	orientation: 'horizontal'
+	id: ''
+	picture: ''
+	name: ''
+	AsyncImage:
+		source: root.picture
+	Label:
+		text: root.name
+		color: 0, 0, 0, 1
+
+
+<FriendRecycle>:
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'FriendRow'
+	RecycleBoxLayout:
+		default_size: None, dp(56)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(2)
+
+<FriendRequestRow>:
+	accept_button: accept_button
+	decline_button: decline_button
+	orientation: 'horizontal'
+	id: ''
+	index: ''
+	picture: ''
+	name: ''
+	AsyncImage:
+		source: root.picture
+	Label:
+		text: root.name
+		color: 0, 0, 0, 1
+	Button:
+		id: accept_button
+		text: 'ACCEPT'
+		on_press:
+			root.disable_buttons()
+			root.accept_request(root.id)
+	Button:
+		id: decline_button
+		text: 'DECLINE'
+		on_press:
+			root.disable_buttons() 
+			root.decline_request(root.id)
+
+
+<FriendRequestRecycle>:
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'FriendRequestRow'
+	RecycleBoxLayout:
+		default_size: None, dp(56)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(2)
+
+
+<FriendList>:
+	orientation: 'vertical'
+
+	TabbedPanel:
+		background_color: (237,223,247,0.2)
+		do_default_tab: False
+		size_hint: 1, 1
+		tab_width: self.parent.width / 2
+
+		TabbedPanelItem:
+			text: "Friends"
+
+			FriendRecycle:
+				id: rvFriend
+
+		TabbedPanelItem:
+			text: "Friend Requests"
+
+			FriendRequestRecycle:
+				id: rvFriendRequest
+
+
+UnifyScreen:
+	FriendList:

@@ -1,0 +1,38 @@
+<Initial>:
+	FloatLayout:
+		# Main background colour
+		canvas:
+			Color:
+				rgb: utils.get_color_from_hex("#E8E9E6")
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
+		# Display the Unify logo
+		GridLayout:
+			rows: 1
+			pos_hint: {"center_x": 0.5, "top": 0.9}
+			size_hint: 0.8, 0.5
+			Image:
+				source: "data/images/UnifyLogoBlack.png"
+
+		# Display the 'Login' & 'Register' buttons
+		GridLayout:
+			cols: 1
+			pos_hint: {"center_x": 0.5, "top": 0.4}
+			size_hint: 0.5, 0.175
+			spacing: sp(20)
+
+			RoundedButton:
+				text: "Login"
+				font_size: sp(30)
+				on_release:
+					app.root.current = "login_screen"
+					root.manager.transition.direction = 'left'
+
+			RoundedButton:
+				text: "Register"
+				font_size: sp(30)
+				on_release:
+					app.root.current = "register"
+					root.manager.transition.direction = 'left'

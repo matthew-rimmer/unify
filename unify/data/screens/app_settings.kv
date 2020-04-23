@@ -1,0 +1,197 @@
+AppSettings:
+	filechooser: filechooser
+	description: description
+	tags: tags
+	instagram: instagram
+	twitter: twitter
+	spotify: spotify
+	linked_in: linked_in
+		
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: dp(12)
+		size_hint: 0.8, 0.9
+		pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+		Label:
+			text: "Account Details"
+			color: utils.get_color_from_hex("#0D1012")
+			font_size: sp(30)
+			size_hint_y: 0.1
+			bold: True
+			halign: "center"
+			spacing: 0
+
+		# Select photos to be uploaded
+		Label:
+			text: "Choose your 3 photos:"
+			color: utils.get_color_from_hex("#0D1012")
+			halign: "center"
+			font_size: sp(20)
+			text_size: root.width, None
+			size_hint_y: None
+			height: dp(20)
+
+		GridLayout:
+			cols: 1
+			size_hint_y: 0.55
+
+			canvas.before:
+				Color:
+					rgb: utils.get_color_from_hex("#0D1012")
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			FileChooserIconView:
+				id: filechooser
+				color: utils.get_color_from_hex("#0D1012")
+				size_hint_x: 1
+				size_hint_y: None
+				halign: "center"
+				height: sp(200)
+				multiselect: True
+				filters: ["*.png", "*.jpg"]
+				on_selection:
+					root.select(filechooser.selection)
+
+		ScrollView:
+			bar_width: dp(5)
+
+			GridLayout:
+				cols: 1
+				size_hint_x: 1
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(15)
+				spacing: dp(10)
+
+				# Fill in 'About Me' section
+				Label:
+					text: "What should be in your 'About Me'?"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: description
+					multiline: True
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(80)
+
+				Label:
+					text: ''
+
+				# Interest tags field
+				Label:
+					text: "University course & interests? (one per line)"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: tags
+					multiline: True
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(80)
+
+				Label:
+					text: ''
+
+				# Instagram URL
+				Label:
+					text: "Instagram URL:"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+				TextInput:
+					id: instagram
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+				Label:
+					text: ''
+				
+				# Twitter URL
+				Label:
+					text: "Twitter URL:"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+				TextInput:
+					id: twitter
+					multiline: False
+					size_hint_y: None
+					font_size: sp(20)
+					height: dp(40)
+
+				Label:
+					text: ''
+
+				# Spotify URL
+				Label:
+					text: "Spotify URL:"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+				TextInput:
+					id: spotify
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+				Label:
+					text: ''
+
+				# LinkedIn URL
+				Label:
+					text: "LinkedIn URL:"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+				TextInput:
+					id: linked_in
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+				# Submit new data
+				RoundedButton:
+					text: "Update Profile"
+					font_size: sp(30)
+					size_hint_y: None
+					height: sp(60)
+					pos_hint: {"center_x": 0.5}
+					on_release: root.change_profile()
+
+		GridLayout:
+			cols: 2
+			size_hint_y: 0.175
+			spacing: sp(10)
+			pos_hint: {"center_x": 0.5}
+
+			# Change password button
+			RoundedButton:
+				text: "Change Password"
+				font_size: sp(25)
+				on_release: app.go_screen(1)
+
+			# Log out button
+			RoundedButton:
+				text: "Log Out"
+				font_size: sp(25)
+				on_release: root.log_out()

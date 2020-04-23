@@ -1,0 +1,132 @@
+CreateEvent:
+	filechooser: filechooser
+	event_name: event_name
+	description: description
+	datetime: datetime
+	location: location
+
+	GridLayout:
+		cols: 1
+		padding: dp(5)
+		spacing: dp(15)
+		size_hint: 0.9, 0.9
+		pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+		# Select photos to be uploaded
+		Label:
+			text: "Choose your 3 photos:"
+			color: utils.get_color_from_hex("#0D1012")
+			halign: "center"
+			font_size: sp(20)
+			text_size: root.width, None
+			size_hint_y: None
+			height: dp(20)
+
+		GridLayout:
+			cols: 1
+			size_hint_y: 0.55
+
+			canvas.before:
+				Color:
+					rgb: utils.get_color_from_hex("#0D1012")
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			FileChooserIconView:
+				id: filechooser
+				color: utils.get_color_from_hex("#0D1012")
+				size_hint_x: 1
+				size_hint_y: None
+				halign: "center"
+				height: dp(200)
+				multiselect: True
+				filters: ["*.png", "*.jpg"]
+				on_selection:
+					root.select(filechooser.selection)
+
+		ScrollView:
+			bar_width: dp(5)
+
+			GridLayout:
+				cols: 1
+				size_hint_x: 1
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(15)
+				spacing: dp(10)
+
+				# Name of event
+				Label:
+					text: "What is the name of the event?"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: event_name
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+
+				# Event description
+				Label:
+					text: "What is the event all about?"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: description
+					multiline: True
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(80)
+
+
+				# Event date and time
+				Label:
+					text: "When is the event? (YYYY-MM-DD hh:mm:ss)"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: datetime
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+
+				# Event location
+				Label:
+					text: "Where is the location of the event?"
+					halign: "left"
+					font_size: sp(20)
+					text_size: self.size
+					color: utils.get_color_from_hex("#0D1012")
+					size_hint_y: None
+					height: dp(20)
+				TextInput:
+					id: location
+					multiline: False
+					font_size: sp(20)
+					size_hint_y: None
+					height: dp(40)
+
+		RoundedButton:
+			text: "Create Event"
+			font_size: sp(30)
+			size_hint_x: 0.6
+			size_hint_y: 0.175
+			pos_hint: {"center_x": 0.5}
+			on_release: root.save_event()

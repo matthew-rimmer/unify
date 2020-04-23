@@ -1,0 +1,57 @@
+<MatchRow>:
+	orientation: 'horizontal'
+	canvas.before:
+		Color:
+			rgb: utils.get_color_from_hex("#F2F3EF")
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	id: ''
+	picture: ''
+	value: ''
+	name: 'a'
+	tags: 'a'
+	padding: dp(5)
+	
+	AsyncImage:
+		source: root.picture
+	Label:
+		text: root.name
+		text_size: self.size
+		font_size: sp(20)
+		color: utils.get_color_from_hex("#0D1012")
+		halign: 'center'
+		valign: 'center'
+	Label:
+		text: root.tags
+		text_size: self.size
+		font_size: sp(20)
+		color: utils.get_color_from_hex("#0D1012")
+		halign: 'center'	
+		valign: 'center'
+
+<MatchList>:	
+	orientation: 'vertical'
+	id: nice
+	spacing: dp(5)
+	MatchRecycle:
+		id: rv
+
+
+<MatchRecycle>:
+	scroll_type: ['bars', 'content']
+	scroll_wheel_distance: dp(114)
+	bar_width: dp(10)
+	viewclass: 'MatchRow'
+	RecycleBoxLayout:
+		default_size: None, dp(85)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+		spacing: dp(5)
+
+UnifyScreen:
+	name: 'match_screen'
+	MatchList:
+		id: match_list

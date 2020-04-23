@@ -1,0 +1,143 @@
+ViewEvent:
+	event_img: event_img
+	event_name: event_name
+	creator: creator
+	description: description
+	datetime: datetime
+	location: location
+	creator: creator
+	attendees: attendees
+	attend: attend
+	report_event: report_event
+
+	ScrollView:
+		bar_width: dp(5)
+		size_hint_y: 0.9
+		pos_hint: {'center_x': 0.5, 'top': 1}
+
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: self.minimum_height
+			padding: dp(15)
+			spacing: dp(25)
+
+			# Display the event photo
+			AsyncImage:
+				id: event_img
+				size_hint_y: None
+				height: dp(300)
+
+			# Display the event name
+			Label:
+				id: event_name
+				text: ''
+				font_size: sp(25)
+				bold: True
+				color: utils.get_color_from_hex("#0D1012")
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
+
+
+			# Display the event creator's name
+			Label:
+				id: creator
+				text: ''
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
+
+
+			# Display the event's description
+			Label:
+				id: description
+				text: ''
+				font_size: sp(20)
+				color: utils.get_color_from_hex("#0D1012")
+				halign: 'center'
+				size_hint_y: None
+				text_size: self.width, None
+				height: self.texture_size[1]
+
+
+			# Event date & time
+			# Event location
+			GridLayout:
+				cols: 2
+				size_hint_y: None
+				height: self.minimum_height
+				padding: dp(10)
+				spacing: dp(20)
+
+				Image:
+					# icon made by Freepik from www.flaticon.com
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					source: 'data/icons/event_icon.png'
+					size_hint_y: None
+					height: dp(35)
+
+				Label:
+					id: datetime
+					text: ''
+					font_size: sp(20)
+					color: utils.get_color_from_hex("#0D1012")
+					halign: 'center'
+					size_hint_y: None
+					text_size: self.width, None
+					height: self.texture_size[1]
+
+				Image:
+					# icon made by DinosoftLabs from www.flaticon.com
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					source: 'data/icons/location.png'
+					size_hint_y: None
+					height: dp(35)
+
+				Label:
+					id: location
+					text: ''
+					font_size: sp(20)
+					color: utils.get_color_from_hex("#0D1012")
+					halign: 'center'
+					size_hint_y: None
+					text_size: self.width, None
+					height: self.texture_size[1]
+
+			# Report event button
+			RoundedButton:
+				id: report_event
+				text: "Report Event"
+				size_hint_y: None
+				height: sp(50)
+				font_size: sp(20)
+				on_release: app.go_screen(8)
+
+	GridLayout:
+		cols: 2
+		size_hint_x: 1
+		size_hint_y: .1
+		padding: dp(15)
+		spacing: dp(10)
+
+		RoundedButton:
+			id: attendees
+			text: "View Attendees"
+			font_size: sp(25)
+			on_release:
+				root.show_attendees()
+
+		# Attend button
+		RoundedButton:
+			id: attend
+			text: "Attend"
+			font_size: sp(25)
+			on_release:
+				root.attend_event()
+				app.go_screen(3)
+
+		
